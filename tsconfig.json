@@ -1,0 +1,119 @@
+{
+  "compilerOptions": {
+    // 指定ECMAScript目标版本，这里选择ES2017以支持现代浏览器
+    "target": "ES2017",
+    
+    // 指定要包含的库文件，包括DOM、DOM迭代器和最新的ECMAScript特性
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    
+    // 允许编译JavaScript文件，对于混合项目很有用
+    "allowJs": true,
+    
+    // 跳过声明文件的类型检查，加快编译速度
+    "skipLibCheck": true,
+    
+    // 启用所有严格类型检查选项，包括null检查等
+    "strict": true,
+    
+    // 不输出编译后的文件，由Next.js自己处理编译
+    "noEmit": true,
+    
+    // 允许导入CommonJS模块，为了兼容非ESM的npm包
+    "esModuleInterop": true,
+    
+    // 指定模块代码生成方式为ESNext
+    "module": "esnext",
+    
+    // 指定模块解析策略为"bundler"，专为打包工具如webpack、vite优化
+    "moduleResolution": "bundler",
+    
+    // 允许导入JSON文件作为模块
+    "resolveJsonModule": true,
+    
+    // 确保每个文件都是一个模块，避免全局作用域污染
+    "isolatedModules": true,
+    
+    // 保留JSX以便Next.js可以处理，不在TypeScript编译阶段转换
+    "jsx": "preserve",
+    
+    // 启用增量编译，提高重复构建速度
+    "incremental": true,
+    
+    // TypeScript插件配置，添加Next.js特定的类型检查
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    
+    // 路径别名配置，简化导入路径
+    "paths": {
+      // 根路径别名，可用@/直接引用src目录下的文件
+      "@/*": [
+        "./src/*"
+      ],
+      // 页面组件路径别名
+      "@pages/*": [
+        "./src/pages/*"
+      ],
+      // 布局组件路径别名
+      "@layouts/*": [
+        "./src/layouts/*"
+      ],
+      // 钩子函数路径别名
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      // 工具函数路径别名
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      // UI组件路径别名
+      "@components/*": [
+        "./src/components/*"
+      ],
+      // 智能合约ABI文件路径别名
+      "@abis/*": [
+        "./src/abis/*"
+      ],
+      // Web3连接器路径别名
+      "@connectors/*": [
+        "./src/connectors/*"
+      ],
+      // 路由配置路径别名
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      // 状态管理路径别名
+      "@states/*": [
+        "./src/states/*"
+      ]
+    }
+  },
+  // 需要TypeScript处理的文件模式
+  "include": [
+    // 递归处理所有TypeScript文件
+    "**/**/*.ts",
+    "**/**/*.tsx",
+    // 处理根目录和一级子目录的TypeScript文件
+    "**/*.ts",
+    "**/*.tsx",
+    // Next.js生成的类型文件
+    ".next/types/**/*.ts",
+    // 构建输出的类型文件
+    "build/types/**/*.ts",
+    // Next.js环境声明文件
+    "next-env.d.ts",
+    // 分发目录中的类型文件
+    "./dist/types/**/*.ts"
+  ],
+  // 从编译中排除的文件
+  "exclude": [
+    // 排除所有node_modules下的文件，避免处理第三方库代码
+    "node_modules"
+  ]
+}
