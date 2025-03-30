@@ -1,0 +1,105 @@
+import { TranslationDict } from "./types";
+
+const enTranslations: TranslationDict = {
+  // Header
+  "nav.home": "Home",
+  "nav.knowledgeBase": "Knowledge Base",
+  "nav.videos": "Videos",
+  "button.connectWallet": "Connect Wallet",
+
+  // Hero Section
+  "hero.welcome": "Welcome to YD University",
+  "hero.subtitle":
+    "Explore cutting-edge blockchain knowledge and enhance your professional skills",
+  "hero.browseCourses": "Browse Courses",
+  "hero.resources": "Learning Resources",
+
+  // Featured Courses
+  "courses.title": "Featured Courses",
+  "courses.subtitle":
+    "From basics to advanced, we offer comprehensive blockchain technology education",
+  "courses.level.beginner": "Beginner",
+  "courses.level.intermediate": "Intermediate",
+  "courses.level.advanced": "Advanced",
+  "courses.blockchain.title": "Blockchain Fundamentals",
+  "courses.blockchain.desc":
+    "Understand the basic concepts, history and applications of blockchain technology",
+  "courses.smartContract.title": "Smart Contract Development",
+  "courses.smartContract.desc":
+    "Learn how to develop and deploy smart contracts using Solidity",
+  "courses.defi.title": "DeFi Protocol Analysis",
+  "courses.defi.desc":
+    "In-depth analysis of DeFi protocol architecture, risk management and investment strategies",
+  "courses.lessons": "lessons",
+  "courses.learnMore": "Learn More",
+  "courses.viewAll": "View All Courses",
+
+  // Statistics
+  "stats.title": "Our Achievements",
+  "stats.subtitle": "Continuously contributing to blockchain education",
+  "stats.students": "Students",
+  "stats.courses": "Courses",
+  "stats.instructors": "Instructors",
+  "stats.employmentRate": "Employment Rate",
+
+  // Testimonials
+  "testimonials.title": "Student Testimonials",
+  "testimonials.subtitle": "Hear what our students say",
+
+  // Partners
+  "partners.title": "Our Partners",
+  "partners.subtitle":
+    "Collaborating with industry-leading blockchain companies and institutions",
+
+  // Resources Section
+  "resources.title": "Explore Our Learning Resources",
+  "resources.subtitle":
+    "Rich video tutorials, technical documentation and project cases to help you master blockchain technology",
+  "resources.browse": "Browse Resource Library",
+
+  // Footer
+  "footer.about": "About Us",
+  "footer.aboutDesc":
+    "YD University is an online learning platform focused on blockchain education, dedicated to cultivating professionals in the blockchain field.",
+  "footer.quickLinks": "Quick Links",
+  "footer.home": "Home",
+  "footer.courses": "Courses",
+  "footer.about": "About Us",
+  "footer.contact": "Contact Us",
+  "footer.contactInfo": "Contact Information",
+  "footer.email": "Email: info@ydu.edu",
+  "footer.phone": "Phone: (123) 456-7890",
+  "footer.address": "Address: Zhongguancun, Haidian District, Beijing",
+  "footer.followUs": "Follow Us",
+  "footer.copyright": "© 2025 YD University. All rights reserved.",
+
+  // Language Selection
+  "language.zh": "Chinese",
+  "language.en": "English",
+  "language.ja": "Japanese",
+  "language.ko": "Korean",
+  
+  // Knowledge Base Page
+  "kb.title": "Blockchain Knowledge Base",
+  "kb.subtitle": "Explore the most comprehensive blockchain technology resource library, from beginner to expert",
+  "kb.searchPlaceholder": "Search articles, tags or keywords...",
+  "kb.categories": "Article Categories",
+  "kb.allCategories": "All Categories",
+  "kb.category.blockchain": "Blockchain Basics",
+  "kb.category.smartContracts": "Smart Contracts",
+  "kb.category.defi": "Decentralized Finance",
+  "kb.category.nft": "Non-Fungible Tokens",
+  "kb.category.security": "Security & Privacy",
+  "kb.popularTags": "Popular Tags",
+  "kb.readTime": "min read",
+  "kb.readMore": "Read More",
+  "kb.noResults": "No matching articles found",
+  "kb.tryAdjusting": "Try adjusting your search criteria or selecting another category",
+  "kb.clearFilters": "Clear Filters",
+  "kb.stayUpdated": "Stay Updated",
+  "kb.newsletterDesc": "Subscribe to our newsletter to receive the latest blockchain technology and industry developments",
+  "kb.emailPlaceholder": "Enter your email address",
+  "kb.subscribe": "Subscribe",
+};
+
+export default enTranslations;
