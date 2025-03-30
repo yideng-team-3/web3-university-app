@@ -22,7 +22,7 @@ const Header = () => {
                 </svg>
               </div>
               <div>
-                <span className="text-gray-900 font-medium text-xl">YD University</span>
+                <span className="text-gray-900 font-medium text-xl">Web3 University</span>
               </div>
             </a>
           </div>

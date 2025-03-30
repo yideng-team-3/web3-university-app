@@ -8,7 +8,7 @@ const enTranslations: TranslationDict = {
   "button.connectWallet": "Connect Wallet",
 
   // Hero Section
-  "hero.welcome": "Welcome to YD University",
+  "hero.welcome": "Welcome to Web3 University",
   "hero.subtitle":
     "Explore cutting-edge blockchain knowledge and enhance your professional skills",
   "hero.browseCourses": "Browse Courses",
@@ -60,7 +60,7 @@ const enTranslations: TranslationDict = {
   // Footer
   "footer.about": "About Us",
   "footer.aboutDesc":
-    "YD University is an online learning platform focused on blockchain education, dedicated to cultivating professionals in the blockchain field.",
+    "Web3 University is an online learning platform focused on blockchain education, dedicated to cultivating professionals in the blockchain field.",
   "footer.quickLinks": "Quick Links",
   "footer.home": "Home",
   "footer.courses": "Courses",
@@ -71,7 +71,7 @@ const enTranslations: TranslationDict = {
   "footer.phone": "Phone: (123) 456-7890",
   "footer.address": "Address: Zhongguancun, Haidian District, Beijing",
   "footer.followUs": "Follow Us",
-  "footer.copyright": "© 2025 YD University. All rights reserved.",
+  "footer.copyright": "© 2025 Web3 University. All rights reserved.",
 
   // Language Selection
   "language.zh": "Chinese",
