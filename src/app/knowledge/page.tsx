@@ -206,7 +206,7 @@ const KnowledgeBasePage = () => {
                       className="bg-white rounded-lg shadow-sm overflow-hidden transition-transform hover:translate-y-[-4px] hover:shadow-md"
                     >
                       {article.image ? (
-                        <Image
+                        <img
                           src={article.image}
                           alt={article.title}
                           className="w-full h-40 object-cover"

@@ -6026,6 +6026,13 @@ crc-32@^1.2.0:
   resolved "https://registry.yarnpkg.com/crc-32/-/crc-32-1.2.2.tgz#3cad35a934b8bf71f25ca524b6da51fb7eace2ff"
   integrity sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==
 
+cross-env@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-7.0.3.tgz#865264b29677dc015ba8418918965dd232fc54cf"
+  integrity sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==
+  dependencies:
+    cross-spawn "^7.0.1"
+
 cross-fetch@^3.1.4:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.2.0.tgz#34e9192f53bc757d6614304d9e5e6fb4edb782e3"
@@ -6040,7 +6047,7 @@ cross-fetch@^4.0.0:
   dependencies:
     node-fetch "^2.7.0"
 
-cross-spawn@^7.0.3, cross-spawn@^7.0.6:
+cross-spawn@^7.0.1, cross-spawn@^7.0.3, cross-spawn@^7.0.6:
   version "7.0.6"
   resolved "https://registry.npmmirror.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
   integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
@@ -6783,7 +6790,7 @@ eslint-plugin-import@^2.31.0:
     string.prototype.trimend "^1.0.8"
     tsconfig-paths "^3.15.0"
 
-eslint-plugin-jsx-a11y@^6.10.0:
+eslint-plugin-jsx-a11y@^6.10.0, eslint-plugin-jsx-a11y@^6.10.2:
   version "6.10.2"
   resolved "https://registry.npmmirror.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.10.2.tgz#d2812bb23bf1ab4665f1718ea442e8372e638483"
   integrity sha512-scB3nz4WmG75pV8+3eRUQOHZlNSUhFNq37xnpgRkCCELU3XMvXAxLk1eqWWyE22Ki4Q01Fnsw9BA3cJHDPgn2Q==
@@ -6804,64 +6811,14 @@ eslint-plugin-jsx-a11y@^6.10.0:
     safe-regex-test "^1.0.3"
     string.prototype.includes "^2.0.1"
 
-eslint-plugin-jsx-a11y@^6.10.2:
-  version "6.10.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.10.2.tgz#d2812bb23bf1ab4665f1718ea442e8372e638483"
-  integrity sha512-scB3nz4WmG75pV8+3eRUQOHZlNSUhFNq37xnpgRkCCELU3XMvXAxLk1eqWWyE22Ki4Q01Fnsw9BA3cJHDPgn2Q==
-  dependencies:
-    aria-query "^5.3.2"
-    array-includes "^3.1.8"
-    array.prototype.flatmap "^1.3.2"
-    ast-types-flow "^0.0.8"
-    axe-core "^4.10.0"
-    axobject-query "^4.1.0"
-    damerau-levenshtein "^1.0.8"
-    emoji-regex "^9.2.2"
-    hasown "^2.0.2"
-    jsx-ast-utils "^3.3.5"
-    language-tags "^1.0.9"
-    minimatch "^3.1.2"
-    object.fromentries "^2.0.8"
-    safe-regex-test "^1.0.3"
-    string.prototype.includes "^2.0.1"
-
-eslint-plugin-react-hooks@^5.0.0:
+eslint-plugin-react-hooks@^5.0.0, eslint-plugin-react-hooks@^5.2.0:
   version "5.2.0"
   resolved "https://registry.npmmirror.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.2.0.tgz#1be0080901e6ac31ce7971beed3d3ec0a423d9e3"
   integrity sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg==
 
-eslint-plugin-react-hooks@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.2.0.tgz#1be0080901e6ac31ce7971beed3d3ec0a423d9e3"
-  integrity sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg==
-
-eslint-plugin-react@^7.37.0:
+eslint-plugin-react@^7.37.0, eslint-plugin-react@^7.37.4:
   version "7.37.4"
   resolved "https://registry.npmmirror.com/eslint-plugin-react/-/eslint-plugin-react-7.37.4.tgz#1b6c80b6175b6ae4b26055ae4d55d04c414c7181"
-  integrity sha512-BGP0jRmfYyvOyvMoRX/uoUeW+GqNj9y16bPQzqAHf3AYII/tDs+jMN0dBVkl88/OZwNGwrVFxE7riHsXVfy/LQ==
-  dependencies:
-    array-includes "^3.1.8"
-    array.prototype.findlast "^1.2.5"
-    array.prototype.flatmap "^1.3.3"
-    array.prototype.tosorted "^1.1.4"
-    doctrine "^2.1.0"
-    es-iterator-helpers "^1.2.1"
-    estraverse "^5.3.0"
-    hasown "^2.0.2"
-    jsx-ast-utils "^2.4.1 || ^3.0.0"
-    minimatch "^3.1.2"
-    object.entries "^1.1.8"
-    object.fromentries "^2.0.8"
-    object.values "^1.2.1"
-    prop-types "^15.8.1"
-    resolve "^2.0.0-next.5"
-    semver "^6.3.1"
-    string.prototype.matchall "^4.0.12"
-    string.prototype.repeat "^1.0.0"
-
-eslint-plugin-react@^7.37.4:
-  version "7.37.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.37.4.tgz#1b6c80b6175b6ae4b26055ae4d55d04c414c7181"
   integrity sha512-BGP0jRmfYyvOyvMoRX/uoUeW+GqNj9y16bPQzqAHf3AYII/tDs+jMN0dBVkl88/OZwNGwrVFxE7riHsXVfy/LQ==
   dependencies:
     array-includes "^3.1.8"

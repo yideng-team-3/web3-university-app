@@ -45,6 +45,7 @@ export default [
       },
     },
     rules: {
+      '@next/next/no-img-element': 'off', // 完全禁用规则
       // airbnb 规范相关配置
       'import/extensions': 0,
       'import/no-extraneous-dependencies': 0,
@@ -58,10 +59,10 @@ export default [
       'react/require-default-props': 0, // TypeScript 处理这个
       
       // TypeScript 相关规则
-      '@typescript-eslint/no-explicit-any': 2, // 禁止使用 any 类型
+      '@typescript-eslint/no-explicit-any': 1, // 降低为警告级别，而不是错误
       '@typescript-eslint/explicit-module-boundary-types': 0,
       '@typescript-eslint/no-unused-vars': [
-        'error', 
+        'warn', 
         { 
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_'

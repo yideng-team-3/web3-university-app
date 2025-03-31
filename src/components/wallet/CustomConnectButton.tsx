@@ -74,7 +74,7 @@ export const CustomConnectButton = () => {
                         }}
                       >
                         {chain.iconUrl && (
-                          <Image
+                          <img
                             alt={chain.name ?? t('wallet.chainIcon')}
                             src={chain.iconUrl}
                             style={{ width: '100%', height: '100%' }}

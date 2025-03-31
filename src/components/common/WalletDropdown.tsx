@@ -99,7 +99,7 @@ export const WalletDropdown =
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       {network.icon ? (
-                        <Image
+                        <img
                           src={network.icon}
                           alt={network.name}
                           className="w-6 h-6 rounded-full"

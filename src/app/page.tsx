@@ -30,7 +30,7 @@ const LocalizedHomePage = () => {
               </div>
             </div>
             <div className="hidden md:block">
-              <Image 
+              <img 
                 src="/api/placeholder/600/400" 
                 alt="Learning Blockchain" 
                 className="rounded-lg shadow-xl"
