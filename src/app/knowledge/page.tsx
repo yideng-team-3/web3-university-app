@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Header from '@/components/common/Header';
 import { useLanguage } from '@/components/common/LanguageContext';
+import Image from 'next/image';
+import Link from 'next/link';
 
 // 定义知识库文章类型
 interface Article {
@@ -204,7 +206,7 @@ const KnowledgeBasePage = () => {
                       className="bg-white rounded-lg shadow-sm overflow-hidden transition-transform hover:translate-y-[-4px] hover:shadow-md"
                     >
                       {article.image ? (
-                        <img
+                        <Image
                           src={article.image}
                           alt={article.title}
                           className="w-full h-40 object-cover"
@@ -225,9 +227,9 @@ const KnowledgeBasePage = () => {
                         </div>
                         
                         <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                          <a href={`/kb/${article.id}`} className="hover:text-indigo-600">
+                          <Link href={`/kb/${article.id}`} className="hover:text-indigo-600">
                             {article.title}
-                          </a>
+                          </Link>
                         </h2>
                         
                         <p className="text-gray-600 mb-4 line-clamp-3">
@@ -242,12 +244,12 @@ const KnowledgeBasePage = () => {
                             <span className="ml-2 text-sm text-gray-600">{article.author}</span>
                           </div>
                           
-                          <a
+                          <Link
                             href={`/kb/${article.id}`}
                             className="text-sm font-medium text-indigo-600 hover:text-indigo-800"
                           >
                             {t("kb.readMore")} →
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </article>
@@ -306,10 +308,10 @@ const KnowledgeBasePage = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">{t("footer.quickLinks")}</h3>
               <ul className="space-y-2">
-                <li><a href="/" className="text-gray-400 hover:text-white">{t("footer.home")}</a></li>
-                <li><a href="/courses" className="text-gray-400 hover:text-white">{t("footer.courses")}</a></li>
-                <li><a href="/about" className="text-gray-400 hover:text-white">{t("footer.about")}</a></li>
-                <li><a href="/contact" className="text-gray-400 hover:text-white">{t("footer.contact")}</a></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white">{t("footer.home")}</Link></li>
+                <li><Link href="/courses" className="text-gray-400 hover:text-white">{t("footer.courses")}</Link></li>
+                <li><Link href="/about" className="text-gray-400 hover:text-white">{t("footer.about")}</Link></li>
+                <li><Link href="/contact" className="text-gray-400 hover:text-white">{t("footer.contact")}</Link></li>
               </ul>
             </div>
             <div>
@@ -324,10 +326,10 @@ const KnowledgeBasePage = () => {
               <h3 className="text-lg font-semibold mb-4">{t("footer.followUs")}</h3>
               <div className="flex space-x-4">
                 {['facebook', 'twitter', 'instagram', 'linkedin'].map((social) => (
-                  <a key={social} href={`https://${social}.com`} className="text-gray-400 hover:text-white">
+                  <Link key={social} href={`https://${social}.com`} className="text-gray-400 hover:text-white">
                     <span className="sr-only">{social}</span>
                     <div className="w-6 h-6 bg-gray-600 rounded"></div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

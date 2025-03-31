@@ -5,13 +5,21 @@ import { formatUnits, parseEther } from '@ethersproject/units';
 import { Web3ReactProvider, useWeb3React } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
 import { initializeConnector } from '@web3-react/core';
-
+import Link from 'next/link';
 
 
 // 导入合约 ABI
 import YiDengTokenABI from '@/contracts/abis/YiDengToken.json';
 import CourseCertificateABI from '@/contracts/abis/AccessControl.json';
 import CourseMarketABI from '@/contracts/abis/CourseMarket.json';
+
+// 定义一个自定义类型来处理区块链错误
+interface BlockchainError extends Error {
+  code?: string;
+  receipt?: { status: number };
+  data?: string;
+  transactionHash?: string;
+}
 
 const [metaMask, metaMaskHooks] = initializeConnector(
   (actions) => new MetaMask({ actions })
@@ -160,7 +168,9 @@ const ContractTestPage = () => {
         if (totalSupply.add(tokenAmount).gt(maxSupply)) {
           throw new Error(`购买将超过最大供应量。当前: ${formatUnits(totalSupply, 0)}, 最大: ${formatUnits(maxSupply, 0)}`);
         }
-      } catch (err) {
+      } catch (error) {
+        const err = error as BlockchainError;
+        
         if (err.message && err.message.includes('购买将超过最大供应量')) {
           throw err;
         }
@@ -194,7 +204,8 @@ const ContractTestPage = () => {
         getEthBalance();
         initTokenInfo(); // 更新合约信息
       }, 2000); // 延迟 2 秒更新余额，确保区块链状态已更新
-    } catch (err) {
+    } catch (error) {
+      const err = error as BlockchainError;
       console.error('购买代币错误:', err);
       
       // 提供更详细的错误信息
@@ -381,7 +392,7 @@ const ContractTestPage = () => {
       }
       
       // 尝试从事件中获取课程ID
-      const event = receipt.events?.find(e => e.event === 'CourseAdded');
+      const event = receipt.events?.find((e: any) => e.event === 'CourseAdded');
       if (event && event.args) {
         const newCourseId = event.args.courseId.toString();
         setCourseId(newCourseId);
@@ -394,7 +405,8 @@ const ContractTestPage = () => {
       setCourseName('');
       setCourseDescription('');
       setCoursePrice('100');
-    } catch (err) {
+    } catch (error) {
+      const err = error as BlockchainError;
       console.error('添加课程错误:', err);
       
       if (err.code === 'ACTION_REJECTED') {
@@ -489,7 +501,7 @@ const ContractTestPage = () => {
       }
       
       // 尝试从事件中获取课程ID
-      const event = receipt.events?.find(e => e.event === 'CourseAdded');
+      const event = receipt.events?.find((e:any) => e.event === 'CourseAdded');
       if (event && event.args) {
         const newCourseId = event.args.courseId.toString();
         setMarketCourseId(newCourseId);
@@ -501,7 +513,8 @@ const ContractTestPage = () => {
       // 清空表单
       setCourseName('');
       setCoursePrice('100');
-    } catch (err) {
+    } catch (error) {
+      const err = error as BlockchainError;
       console.error('添加课程错误:', err);
       
       if (err.code === 'ACTION_REJECTED') {
@@ -579,7 +592,8 @@ const ContractTestPage = () => {
       
       // 更新代币余额
       getTokenBalance();
-    } catch (err) {
+    } catch (error) {
+      const err = error as BlockchainError;
       console.error('购买课程错误:', err);
       
       if (err.code === 'ACTION_REJECTED') {
@@ -637,14 +651,15 @@ const ContractTestPage = () => {
       }
       
       // 尝试从事件中获取证书ID
-      const event = receipt.events?.find(e => e.event === 'CourseCompleted');
+      const event = receipt.events?.find((e:any) => e.event === 'CourseCompleted');
       if (event && event.args) {
         const certificateId = event.args.certificateId.toString();
         addLog(`课程完成验证成功，证书ID: ${certificateId}`);
       } else {
         addLog('课程完成验证成功');
       }
-    } catch (err) {
+    } catch (error) {
+      const err = error as BlockchainError;
       console.error('验证课程完成错误:', err);
       
       if (err.code === 'ACTION_REJECTED') {
@@ -732,7 +747,8 @@ const ContractTestPage = () => {
           
           courses.push(courseData);
           addLog(`获取到课程 #${i}: ${course.name}`);
-        } catch (err) {
+        } catch (error) {
+          const err = error as BlockchainError;
           addLog(`获取课程 #${i} 失败: ${err.message}`);
         }
       }
@@ -958,14 +974,14 @@ const ContractTestPage = () => {
             <div className="mt-2 p-2 bg-gray-50 rounded">
               <p className="text-sm">
                 <span className="font-medium">交易哈希:</span>{' '}
-                <a
+                <Link
                   href={`https://sepolia.etherscan.io/tx/${txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline break-all"
                 >
                   {txHash}
-                </a>
+                </Link>
               </p>
             </div>
           )}

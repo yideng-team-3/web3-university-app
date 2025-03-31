@@ -3,6 +3,7 @@
 import React from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useLanguage } from '@/components/common/LanguageContext';
+import Image from 'next/image';
 
 export const CustomConnectButton = () => {
   const { t } = useLanguage();
@@ -73,7 +74,7 @@ export const CustomConnectButton = () => {
                         }}
                       >
                         {chain.iconUrl && (
-                          <img
+                          <Image
                             alt={chain.name ?? t('wallet.chainIcon')}
                             src={chain.iconUrl}
                             style={{ width: '100%', height: '100%' }}

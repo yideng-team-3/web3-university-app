@@ -9,7 +9,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "lint:style": "stylelint \"**/*.{css,less,scss,sass}\"",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,less,scss,sass,md}\"",
+    "prepare": "husky install",
     "build:worker": "opennextjs-cloudflare",
     "dev:worker": "wrangler dev --port 8771",
     "preview": "npm run build:worker && npm run dev:worker",
@@ -44,11 +48,38 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
     "eslint": "^9",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "15.1.5",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
+    "stylelint": "^16.17.0",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-standard": "^37.0.0",
     "tailwindcss": "^4.0.9",
     "typescript": "^5",
     "wrangler": "^3.103.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,less,scss,sass}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

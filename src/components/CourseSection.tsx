@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '@/components/common/LanguageContext';
+import Link from 'next/link';
 interface CourseSectionProps {
   className?: string;
 }
@@ -36,9 +37,9 @@ const CourseSection: React.FC<CourseSectionProps> = ({ className = '' }) => {
               </p>
               <div className="flex justify-between items-center">
                 <span className="text-indigo-600 font-medium">8 {t('courses.lessons')}</span>
-                <a href="/course/blockchain-basics" className="text-indigo-600 hover:text-indigo-800 font-medium">
+                <Link href="/course/blockchain-basics" className="text-indigo-600 hover:text-indigo-800 font-medium">
                   {t('courses.learnMore')} &rarr;
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -60,9 +61,9 @@ const CourseSection: React.FC<CourseSectionProps> = ({ className = '' }) => {
               </p>
               <div className="flex justify-between items-center">
                 <span className="text-indigo-600 font-medium">12 {t('courses.lessons')}</span>
-                <a href="/course/smart-contracts" className="text-indigo-600 hover:text-indigo-800 font-medium">
+                <Link href="/course/smart-contracts" className="text-indigo-600 hover:text-indigo-800 font-medium">
                   {t('courses.learnMore')} &rarr;
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -86,21 +87,21 @@ const CourseSection: React.FC<CourseSectionProps> = ({ className = '' }) => {
               </p>
               <div className="flex justify-between items-center">
                 <span className="text-indigo-600 font-medium">15 {t('courses.lessons')}</span>
-                <a href="/course/defi-analysis" className="text-indigo-600 hover:text-indigo-800 font-medium">
+                <Link href="/course/defi-analysis" className="text-indigo-600 hover:text-indigo-800 font-medium">
                   {t('courses.learnMore')} &rarr;
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
         
         <div className="text-center mt-12">
-          <a href="/courses" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+          <Link href="/courses" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
             {t('courses.viewAll')}
             <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>
