@@ -3,7 +3,6 @@
 import React from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useLanguage } from '@/components/common/LanguageContext';
-import Image from 'next/image';
 
 export const CustomConnectButton = () => {
   const { t } = useLanguage();

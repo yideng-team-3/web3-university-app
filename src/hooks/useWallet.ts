@@ -59,7 +59,7 @@ export function useWallet() {
     }
     try {
       const address = accounts[0];
-      const response = await fetch('http://localhost:3001/auth/check-login-status?walletAddress=' + address);
+      const response = await fetch(`http://localhost:3001/auth/check-login-status?walletAddress=${  address}`);
 
       if (!response.ok) {
         throw new Error('检查登录状态失败');
@@ -69,10 +69,10 @@ export function useWallet() {
         console.log('用户已登录:', data.user);
         localStorage.setItem('auth_token', data.accesstoken);
         return true;
-      } else {
+      } 
         console.log('用户未登录');
         return false;
-      }
+      
   } catch (error) {
       console.error('检查登录状态出错:', error);
       throw error;
@@ -133,15 +133,13 @@ export function useWallet() {
     }
   }, [isActive]);
 
-  const formatAddress = useCallback((address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  }, []);
+  const formatAddress = useCallback((address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`, []);
 
   const connect = async () => {
     const resetWalletState = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const ethereum = (window as any).ethereum;
+        const {ethereum} = (window as any);
 
         // 先尝试直接处理掉待处理的请求
         if (ethereum?.request) {

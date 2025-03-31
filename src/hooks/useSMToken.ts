@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Contract } from '@ethersproject/contracts';
 import { parseEther, formatEther } from '@ethersproject/units';
 import contractConfig from '@/config/abi.json';
-import { useWallet } from './useWallet';
 import type { ContractConfig } from '@/types/contract';
+import { useWallet } from './useWallet';
 
 export const useSMToken = () => {
   const { provider, account } = useWallet();

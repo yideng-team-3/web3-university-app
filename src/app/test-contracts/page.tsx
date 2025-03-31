@@ -1,10 +1,10 @@
 'use client';
+
 import React, { useState } from 'react';
 import { Contract } from '@ethersproject/contracts';
 import { formatUnits, parseEther } from '@ethersproject/units';
-import { Web3ReactProvider, useWeb3React } from '@web3-react/core';
+import { Web3ReactProvider, useWeb3React , initializeConnector } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
-import { initializeConnector } from '@web3-react/core';
 import Link from 'next/link';
 
 
@@ -552,7 +552,7 @@ const ContractTestPage = () => {
       }
       
       const course = await marketContract.courses(courseId);
-      const price = course.price;
+      const {price} = course;
       
       addLog(`准备购买课程: ${course.name} (ID: ${courseId}), 价格: ${formatUnits(price, 0)} YD`);
       

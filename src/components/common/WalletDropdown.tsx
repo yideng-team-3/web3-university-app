@@ -3,7 +3,6 @@ import { ChevronDown, LogOut, Loader2 } from 'lucide-react';
 import { useWalletBalances } from '@hooks/useWalletBalances';
 import Jazzicon from 'react-jazzicon';
 import { metaMask } from '@connectors/metaMask';
-import Image from 'next/image';
 
 interface WalletDropdownProps {
   account: string;
@@ -21,9 +20,7 @@ export const WalletDropdown =
     const networks = useWalletBalances();
 
     // 生成以太坊地址的头像
-    const generateSeed = (address: string) => {
-      return parseInt(address.slice(2, 10), 16);
-    };
+    const generateSeed = (address: string) => parseInt(address.slice(2, 10), 16);
 
     // 处理链切换
     const handleSwitchChain = async (chainId: number) => {
@@ -41,9 +38,7 @@ export const WalletDropdown =
     };
 
     // 获取首字母
-    const getInitials = (name: string) => {
-      return name.charAt(0).toUpperCase();
-    };
+    const getInitials = (name: string) => name.charAt(0).toUpperCase();
 
     // 点击外部关闭下拉菜单
     useEffect(() => {

@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { useLanguage } from '@/components/common/LanguageContext';

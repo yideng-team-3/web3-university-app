@@ -3,9 +3,8 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { RainbowKitProvider, lightTheme, Locale } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, http } from "wagmi";
+import { WagmiProvider, http , createConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
-import { createConfig } from "wagmi";
 import { useLanguage } from "@/components/common/LanguageContext";
 
 // 创建查询客户端

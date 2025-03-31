@@ -1,9 +1,9 @@
 'use client';
+
 import React from 'react';
 import Header from '@/components/common/Header';
 import { useLanguage } from '@/components/common/LanguageContext';
 import CourseSection from '@/components/CourseSection';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const LocalizedHomePage = () => {

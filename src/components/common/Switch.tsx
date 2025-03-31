@@ -5,8 +5,7 @@ interface SwitchProps {
   onChange: () => void;
 }
 
-const Switch = ({ checked, onChange }: SwitchProps) => {
-  return (
+const Switch = ({ checked, onChange }: SwitchProps) => (
     <button
       type="button"
       role="switch"
@@ -45,6 +44,5 @@ const Switch = ({ checked, onChange }: SwitchProps) => {
       </span>
     </button>
   );
-};
 
 export default Switch;

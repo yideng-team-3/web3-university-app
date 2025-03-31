@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -6,7 +7,6 @@ import { Menu, X, Wallet, Home, Wallet2, Sun, Moon } from 'lucide-react';
 import { useWallet } from '@hooks/useWallet';
 import Switch from './Switch';
 import { WalletDropdown } from './WalletDropdown';
-import Image from 'next/image';
 
 const Header = () => {
   const {

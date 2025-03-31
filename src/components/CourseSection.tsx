@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '@/components/common/LanguageContext';
 import Link from 'next/link';
+
 interface CourseSectionProps {
   className?: string;
 }
