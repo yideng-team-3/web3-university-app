@@ -120,18 +120,18 @@ export function useWallet() {
     });
   }, []);
 
-  useEffect(() => {
-    if (isActive) {
-      // 连接成功后，验证签名
-      checkLoginStatus().then((isLoggedIn) => {
-        if (!isLoggedIn) {
-          console.log('用户未登录');
-          // 这里可以调用 signIn() 方法进行登录
-          signIn();
-        }
-      });
-    }
-  }, [isActive]);
+  // useEffect(() => {
+  //   if (isActive) {
+  //     // 连接成功后，验证签名
+  //     checkLoginStatus().then((isLoggedIn) => {
+  //       if (!isLoggedIn) {
+  //         console.log('用户未登录');
+  //         // 这里可以调用 signIn() 方法进行登录
+  //         signIn();
+  //       }
+  //     });
+  //   }
+  // }, [isActive]);
 
   const formatAddress = useCallback((address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`, []);
 
