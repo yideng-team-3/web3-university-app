@@ -28,10 +28,31 @@ cd web3-university-app
 yarn install
 ```
 
+### 本地开发环境配置
+
+在开始开发之前，你需要设置必要的环境变量：
+
+1. 创建 `.env.local` 文件在项目根目录 (已在 .gitignore 中被忽略)
+2. 添加以下环境变量：
+
+```bash
+# WalletConnect ProjectID (必须配置)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=你的WalletConnect项目ID
+```
+
+注意：一个 ProjectID 可以用于开发环境中的多个项目，但在生产环境中最好为每个项目使用单独的 ProjectID。
+
+#### 获取 WalletConnect ProjectID
+
+1. 访问 [WalletConnect Cloud](https://cloud.walletconnect.com/)
+2. 创建账户并登录
+3. 创建一个新项目
+4. 复制生成的 ProjectID 添加到 `.env.local` 文件
+
 ### 开发
 
 ```bash
-# 使用 Turbopack 启动开发服务器
+# 启动开发服务器
 yarn dev
 ```
 
@@ -56,85 +77,43 @@ yarn deploy
 # 构建 Worker 并启动本地预览
 yarn preview
 
-# 仅构建 Worker
-yarn build:worker
-
-# 本地开发 Worker
+# 开发 Worker
 yarn dev:worker
-
-# 生成 Cloudflare 环境类型定义
-yarn cf-typegen
 ```
 
 ## 代码规范
 
-项目使用严格的代码规范配置，包括 ESLint（基于 Airbnb 规范）、Prettier、Stylelint 和 Husky。
-
-### 代码检查和格式化
+项目使用 ESLint、Prettier、Stylelint 和 Husky 进行代码规范管理。
 
 ```bash
 # 运行 ESLint
 yarn lint
 
-# 运行 Stylelint
-yarn lint:style
-
 # 格式化代码
 yarn format
 ```
 
-Git 提交前会自动运行 lint-staged，确保代码符合规范。
+## 常见问题解决
 
-## 主要依赖
+### WagmiProviderNotFoundError
 
-### 核心框架
+如果遇到此错误，请检查：
 
-- [Next.js](https://nextjs.org/) - React 框架
-- [React](https://react.dev/) - 用户界面库
-
-### Web3 集成
-
-- [RainbowKit](https://www.rainbowkit.com/) - 以太坊钱包连接 UI 组件
-- [wagmi](https://wagmi.sh/) - React Hooks for Ethereum
-- [viem](https://viem.sh/) - 以太坊交互工具库
-- [web3-react](https://github.com/Uniswap/web3-react) - 以太坊钱包连接库
-
-### UI 组件
-
-- [Radix UI](https://www.radix-ui.com/) - 无样式、可访问的 UI 组件
-- [Lucide React](https://lucide.dev/) - 图标库
-- [React Hot Toast](https://react-hot-toast.com/) - 通知组件
-- [React Jazzicon](https://github.com/NoahZinsmeister/react-jazzicon) - 以太坊风格头像
-
-### 开发工具
-
-- [TypeScript](https://www.typescriptlang.org/) - JavaScript 类型系统
-- [ESLint](https://eslint.org/) - 代码检查工具
-- [Prettier](https://prettier.io/) - 代码格式化工具
-- [Stylelint](https://stylelint.io/) - CSS 检查工具
-- [Husky](https://typicode.github.io/husky/) - Git hooks 工具
-- [lint-staged](https://github.com/okonet/lint-staged) - 对暂存的 Git 文件运行检查
+1. 确保配置了有效的 `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
+2. 重启开发服务器以应用环境变量更改
 
 ## 项目结构
 
 ```
 web3-university-app/
-├── .husky/                # Git hooks
 ├── public/                # 静态资源
 ├── src/
 │   ├── app/               # 应用路由和页面
 │   ├── components/        # React 组件
+│   │   ├── common/        # 通用组件
+│   │   └── wallet/        # 钱包相关组件
 │   ├── config/            # 应用配置
 │   ├── hooks/             # 自定义 React Hooks
-│   ├── lib/               # 工具函数和库
-│   ├── services/          # API 服务
-│   ├── store/             # 状态管理
-│   └── types/             # TypeScript 类型定义
-├── .eslintrc.js           # ESLint 配置
-├── .prettierrc.js         # Prettier 配置
-├── .stylelintrc.js        # Stylelint 配置
-├── next.config.js         # Next.js 配置
-├── tailwind.config.js     # Tailwind CSS 配置
-└── tsconfig.json          # TypeScript 配置
+│   └── lib/               # 工具函数和库
 ```
 
