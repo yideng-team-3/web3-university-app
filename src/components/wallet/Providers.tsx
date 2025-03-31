@@ -3,17 +3,51 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { RainbowKitProvider, lightTheme, Locale } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, http , createConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
+import { WagmiProvider, createConfig, http } from "wagmi";
+import { mainnet, polygon, optimism, arbitrum, base, zora, sepolia } from "wagmi/chains";
 import { useLanguage } from "@/components/common/LanguageContext";
+
+// 导入 RainbowKit 相关配置
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import {
+  metaMaskWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  rainbowWallet
+} from '@rainbow-me/rainbowkit/wallets';
 
 // 创建查询客户端
 const queryClient = new QueryClient();
 
-// 配置你想支持的链
-const config = createConfig({
-  chains: [mainnet, polygon, optimism, arbitrum, base, zora],
+// 设置 WalletConnect projectId (必须配置)
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID'; 
+
+// 配置支持的链
+const chains = [sepolia, mainnet, polygon, optimism, arbitrum, base, zora] as const;
+
+// 配置钱包连接器
+const walletList = [
+  {
+    groupName: '推荐钱包',
+    wallets: [
+      metaMaskWallet,
+      coinbaseWallet,
+      walletConnectWallet,
+      rainbowWallet
+    ]
+  }
+];
+
+const connectors = connectorsForWallets(walletList, {
+  appName: 'Web3 University',
+  projectId
+});
+
+// 创建 Wagmi 配置
+const wagmiConfig = createConfig({
+  chains,
   transports: {
+    [sepolia.id]: http(),
     [mainnet.id]: http(),
     [polygon.id]: http(),
     [optimism.id]: http(),
@@ -21,34 +55,22 @@ const config = createConfig({
     [base.id]: http(),
     [zora.id]: http(),
   },
+  connectors,
   ssr: true,
 });
 
-// Create the providers component separately from the hook consuming component
-export function Providers({ children }: { children: ReactNode }) {
-  return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <LocalizedRainbowKitProvider>
-          {children}
-        </LocalizedRainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
-  );
-}
-
-// This component will handle the locale logic
-function LocalizedRainbowKitProvider({ children }: { children: ReactNode }) {
+// 导出最终的提供者组件
+export function Web3Providers({ children }: { children: ReactNode }) {
   const { language } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [locale, setLocale] = useState<Locale>("zh-CN" as Locale);
 
-  // Handle hydration mismatch
+  // 处理客户端水合不匹配
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Update locale based on language
+  // 根据语言更新区域设置
   useEffect(() => {
     switch (language) {
       case "ja":
@@ -67,31 +89,31 @@ function LocalizedRainbowKitProvider({ children }: { children: ReactNode }) {
     }
   }, [language]);
 
-  if (!mounted) {
-    // Return a placeholder with the same structure to avoid layout shift
-    return <div style={{ visibility: "hidden" }}>{children}</div>;
-  }
-
   return (
-    <RainbowKitProvider
-      theme={lightTheme({
-        accentColor: "#4F46E5", // 配合你的 UI 主题颜色 (indigo-600)
-        accentColorForeground: "white",
-        borderRadius: "medium",
-        fontStack: "system",
-      })}
-      locale={locale}
-    >
-      {children}
-    </RainbowKitProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider
+          theme={lightTheme({
+            accentColor: "#4F46E5", // 配合你的 UI 主题颜色 (indigo-600)
+            accentColorForeground: "white",
+            borderRadius: "medium",
+            fontStack: "system",
+          })}
+          locale={locale}
+          showRecentTransactions={true}
+          appInfo={{
+            appName: 'Web3 University',
+            learnMoreUrl: '/about',
+          }}
+        >
+          {/* 重要：始终使用一个包装元素，即使隐藏也保持DOM结构一致 */}
+          {!mounted ? (
+            <div style={{ visibility: "hidden" }}>{children}</div>
+          ) : (
+            children
+          )}
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
-}
-
-// This is your original exported component, now using the Providers
-interface Web3ProvidersProps {
-  children: ReactNode;
-}
-
-export function Web3Providers({ children }: Web3ProvidersProps) {
-  return <Providers>{children}</Providers>;
 }

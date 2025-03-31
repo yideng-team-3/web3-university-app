@@ -32,7 +32,7 @@ const ContractTestPage = () => {
   // 状态管理
   const [tokenBalance, setTokenBalance] = useState<string>('0');
   const [ydCoin, setYdCoin] = useState<string>('0xa2dE221F0b8d753DE24DE527c16CC4F695984cbB');
-  const [certificateAddress, setCertificateAddress] = useState<string>('');
+  const [certificateAddress, _setCertificateAddress] = useState<string>('');
   const [txHash, setTxHash] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -52,7 +52,7 @@ const ContractTestPage = () => {
   const [courseDescription, setCourseDescription] = useState<string>('');
   const [coursePrice, setCoursePrice] = useState<string>('100');
   const [courseId, setCourseId] = useState<string>('');
-  const [courseInfo, setCourseInfo] = useState<any>(null);
+  const [_courseInfo, setCourseInfo] = useState<any>(null);
   const [marketAddress, setMarketAddress] = useState<string>('0x9997724adc7EF6aba0d31fEF46D3a9fC8bCE897E');
   const [web2CourseId, setWeb2CourseId] = useState<string>('');
   const [marketCourseId, setMarketCourseId] = useState<string>('');
