@@ -1,8 +1,10 @@
 'use client';
+
 import React from 'react';
 import Header from '@/components/common/Header';
 import { useLanguage } from '@/components/common/LanguageContext';
 import CourseSection from '@/components/CourseSection';
+import Link from 'next/link';
 
 const LocalizedHomePage = () => {
   const { t } = useLanguage();
@@ -19,12 +21,12 @@ const LocalizedHomePage = () => {
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('hero.welcome')}</h1>
               <p className="text-lg md:text-xl mb-8 text-indigo-100">{t('hero.subtitle')}</p>
               <div className="flex flex-wrap gap-4">
-                <a href="/courses" className="px-6 py-3 bg-white text-indigo-700 font-medium rounded-md hover:bg-gray-100 transition-colors">
+                <Link href="/courses" className="px-6 py-3 bg-white text-indigo-700 font-medium rounded-md hover:bg-gray-100 transition-colors">
                   {t('hero.browseCourses')}
-                </a>
-                <a href="/resources" className="px-6 py-3 bg-transparent border border-white text-white font-medium rounded-md hover:bg-indigo-600 transition-colors">
+                </Link>
+                <Link href="/resources" className="px-6 py-3 bg-transparent border border-white text-white font-medium rounded-md hover:bg-indigo-600 transition-colors">
                   {t('hero.resources')}
-                </a>
+                </Link>
               </div>
             </div>
             <div className="hidden md:block">
@@ -180,9 +182,9 @@ const LocalizedHomePage = () => {
               {t('resources.subtitle')}
             </p>
             <div className="flex justify-center">
-              <a href="/resources" className="px-6 py-3 bg-white text-indigo-700 font-medium rounded-md hover:bg-gray-100 transition-colors">
+              <Link href="/resources" className="px-6 py-3 bg-white text-indigo-700 font-medium rounded-md hover:bg-gray-100 transition-colors">
                 {t('resources.browse')}
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -201,10 +203,10 @@ const LocalizedHomePage = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
               <ul className="space-y-2">
-                <li><a href="/" className="text-gray-400 hover:text-white">{t('footer.home')}</a></li>
-                <li><a href="/courses" className="text-gray-400 hover:text-white">{t('footer.courses')}</a></li>
-                <li><a href="/about" className="text-gray-400 hover:text-white">{t('footer.about')}</a></li>
-                <li><a href="/contact" className="text-gray-400 hover:text-white">{t('footer.contact')}</a></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white">{t('footer.home')}</Link></li>
+                <li><Link href="/courses" className="text-gray-400 hover:text-white">{t('footer.courses')}</Link></li>
+                <li><Link href="/about" className="text-gray-400 hover:text-white">{t('footer.about')}</Link></li>
+                <li><Link href="/contact" className="text-gray-400 hover:text-white">{t('footer.contact')}</Link></li>
               </ul>
             </div>
             <div>
@@ -219,10 +221,10 @@ const LocalizedHomePage = () => {
               <h3 className="text-lg font-semibold mb-4">{t('footer.followUs')}</h3>
               <div className="flex space-x-4">
                 {['facebook', 'twitter', 'instagram', 'linkedin'].map((social) => (
-                  <a key={social} href={`https://${social}.com`} className="text-gray-400 hover:text-white">
+                  <Link key={social} href={`https://${social}.com`} className="text-gray-400 hover:text-white">
                     <span className="sr-only">{social}</span>
                     <div className="w-6 h-6 bg-gray-600 rounded"></div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

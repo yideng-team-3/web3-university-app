@@ -1,9 +1,8 @@
 "use client";
+
 import { DepositForm } from '@components/DepositForm';
 
-const DappTest = () => {
-  return (
+const DappTest = () => (
     <DepositForm />
   );
-};
 export default DappTest;

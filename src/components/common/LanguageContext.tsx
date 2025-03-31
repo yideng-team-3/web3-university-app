@@ -44,9 +44,7 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   };
 
   // 翻译函数
-  const t = (key: string): string => {
-    return getTranslation(language, key);
-  };
+  const t = (key: string): string => getTranslation(language, key);
 
   return (
     <LanguageContext.Provider

@@ -188,7 +188,7 @@ export const DepositForm = () => {
           const message = err?.message || '操作失败';
           if (message.includes('user rejected')) return '用户取消交易';
           if (message.includes('insufficient funds')) return '余额不足';
-          return '操作失败: ' + message;
+          return `操作失败: ${  message}`;
         },
       });
 

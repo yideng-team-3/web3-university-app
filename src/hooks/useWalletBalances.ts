@@ -15,11 +15,9 @@ export interface NetworkInfo {
 }
 
 export function useWalletBalances() {
-  return useMemo(() => {
-    return Object.entries(CHAINS).map(([id, chain]) => ({
+  return useMemo(() => Object.entries(CHAINS).map(([id, chain]) => ({
       name: chain.name,
       chainId: Number(id),
       icon: CHAIN_ICONS[Number(id)] || null,
-    }));
-  }, []);
+    })), []);
 }

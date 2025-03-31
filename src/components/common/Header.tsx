@@ -1,8 +1,10 @@
 'use client';
+
 import React from 'react';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { useLanguage } from '@/components/common/LanguageContext';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
 
 const Header = () => {
   const { t } = useLanguage();
@@ -13,7 +15,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo 部分 */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3">
               <div className="flex items-center justify-center">
                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect width="40" height="40" rx="8" fill="#4F46E5" />
@@ -25,29 +27,29 @@ const Header = () => {
               <div>
                 <span className="text-gray-900 font-medium text-xl">Web3 University</span>
               </div>
-            </a>
+            </Link>
           </div>
 
           {/* 中间导航部分 */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a 
+            <Link 
               href="/"
               className="px-1 py-2 text-gray-600 font-medium text-sm hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-colors duration-200"
             >
               {t('nav.home')}
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/knowledge"
               className="px-1 py-2 text-gray-600 font-medium text-sm hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-colors duration-200"
             >
               {t('nav.knowledgeBase')}
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/videos"
               className="px-1 py-2 text-gray-600 font-medium text-sm hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-colors duration-200"
             >
               {t('nav.videos')}
-            </a>
+            </Link>
           </nav>
 
           {/* 右侧操作区: 语言切换 + RainbowKit 连接钱包按钮 */}

@@ -112,7 +112,7 @@ export function getAddChainParameters(chainId: number): AddEthereumChainParamete
       rpcUrls: chainInformation.urls,
       blockExplorerUrls: chainInformation.blockExplorerUrls,
     };
-  } else {
+  } 
     return chainId;
-  }
+  
 }

@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState, useEffect } from 'react';
 import { parseEther, formatEther } from '@ethersproject/units';
 import { Contract } from '@ethersproject/contracts';
 import contractConfig from '@/config/abi.json';
-import { useWallet } from './useWallet';
 import type { ContractConfig } from '@/types/contract';
+import { useWallet } from './useWallet';
 
 // ETH的特殊标识地址（零地址）
 const NATIVE_ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
