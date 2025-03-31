@@ -117,7 +117,7 @@ contract YiDengToken is ERC20, Ownable {
     function buyWithETH() external payable {
         require(msg.value > 0, "Must send ETH");
 
-        uint256 tokenAmount = msg.value * TOKENS_PER_ETH;
+      uint256 tokenAmount = (msg.value * TOKENS_PER_ETH) / 1 ether;
         require(
             totalSupply() + tokenAmount <= MAX_SUPPLY,
             "Would exceed max supply"

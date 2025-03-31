@@ -23,7 +23,7 @@ const ContractTestPage = () => {
 
   // 状态管理
   const [tokenBalance, setTokenBalance] = useState<string>('0');
-  const [ydCoin, setYdCoin] = useState<string>('0xa2dE221F0b8d753DE24DE527c16CC4F695984cbB');
+  const [ydCoin, setYdCoin] = useState<string>('0x41cb388B29EfC443d5aC1dD511B186249bD0fe45');
   const [certificateAddress, setCertificateAddress] = useState<string>('');
   const [txHash, setTxHash] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,7 +45,7 @@ const ContractTestPage = () => {
   const [coursePrice, setCoursePrice] = useState<string>('100');
   const [courseId, setCourseId] = useState<string>('');
   const [courseInfo, setCourseInfo] = useState<any>(null);
-  const [marketAddress, setMarketAddress] = useState<string>('0x9997724adc7EF6aba0d31fEF46D3a9fC8bCE897E');
+  const [marketAddress, setMarketAddress] = useState<string>('0x436CbE7D8DC5593B3B7B137698a37212f4a4227a');
   const [web2CourseId, setWeb2CourseId] = useState<string>('');
   const [marketCourseId, setMarketCourseId] = useState<string>('');
   const [marketCourseInfo, setMarketCourseInfo] = useState<any>(null);
@@ -754,6 +754,7 @@ const ContractTestPage = () => {
       // 添加延迟确保 provider 已完全初始化
       setTimeout(() => {
         getEthBalance();
+        getTokenBalance();
       }, 500);
     }
   }, [account, provider]);
@@ -818,6 +819,13 @@ const ContractTestPage = () => {
                 >
                   刷新
                 </button>
+              </div>
+            )}
+            {/* 当前代币余额 */}
+            {account && (
+              <div className="flex items-center">
+                <span className="text-sm text-gray-600 mr-2">当前代币余额:</span>
+                <span className="text-sm font-mono bg-gray-100 p-1 rounded">{tokenBalance ? tokenBalance : '0'} YD</span>
               </div>
             )}
           </div>
