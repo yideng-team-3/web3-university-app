@@ -5,12 +5,15 @@ import Header from '@/components/common/Header';
 import { useLanguage } from '@/components/common/LanguageContext';
 import CourseSection from '@/components/CourseSection';
 import Link from 'next/link';
+import WalletAuthListener from '@components/common/WalletAuthListener';
 
 const LocalizedHomePage = () => {
   const { t } = useLanguage();
   
   return (
     <div className="min-h-screen bg-gray-50">
+
+      <WalletAuthListener />
       <Header />
       
       {/* 英雄区块 */}
