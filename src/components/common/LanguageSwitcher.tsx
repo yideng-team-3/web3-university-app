@@ -1,12 +1,7 @@
-'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import { useLanguage,  } from '@/components/common/LanguageContext';
-import {
-    getTranslation,
-    Language,
-    LanguageContextType,
-    LanguageProviderProps,
-  } from "@/utils/languages";
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import { useLanguage } from "@/components/common/LanguageContext";
+import { Language } from "@/utils/languages";
 
 const LanguageSwitcher: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -15,14 +10,14 @@ const LanguageSwitcher: React.FC = () => {
 
   // 语言选项
   const languages: { code: Language; name: string; flag: string }[] = [
-    { code: 'zh', name: t('language.zh'), flag: '🇨🇳' },
-    { code: 'en', name: t('language.en'), flag: '🇬🇧' },
-    { code: 'ja', name: t('language.ja'), flag: '🇯🇵' },
-    { code: 'ko', name: t('language.ko'), flag: '🇰🇷' },
+    { code: "zh", name: t("language.zh"), flag: "🇨🇳" },
+    { code: "en", name: t("language.en"), flag: "🇬🇧" },
+    { code: "ja", name: t("language.ja"), flag: "🇯🇵" },
+    { code: "ko", name: t("language.ko"), flag: "🇰🇷" },
   ];
 
   // 获取当前选择的语言
-  const currentLanguage = languages.find(lang => lang.code === language);
+  const currentLanguage = languages.find((lang) => lang.code === language);
 
   // 切换下拉菜单
   const toggleDropdown = () => {
@@ -38,14 +33,17 @@ const LanguageSwitcher: React.FC = () => {
   // 点击外部关闭下拉菜单
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -58,7 +56,9 @@ const LanguageSwitcher: React.FC = () => {
         <span className="mr-1">{currentLanguage?.flag}</span>
         <span className="hidden sm:inline">{currentLanguage?.name}</span>
         <svg
-          className={`ml-1 h-5 w-5 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`ml-1 h-5 w-5 transform transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -82,8 +82,8 @@ const LanguageSwitcher: React.FC = () => {
                 onClick={() => handleLanguageSelect(lang.code)}
                 className={`block w-full text-left px-4 py-2 text-sm ${
                   language === lang.code
-                    ? 'bg-indigo-50 text-indigo-600'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? "bg-indigo-50 text-indigo-600"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
                 role="menuitem"
               >

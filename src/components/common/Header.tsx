@@ -2,6 +2,7 @@
 import React from 'react';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { useLanguage } from '@/components/common/LanguageContext';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const Header = () => {
   const { t } = useLanguage();
@@ -49,18 +50,12 @@ const Header = () => {
             </a>
           </nav>
 
-          {/* 右侧操作区: 语言切换 + 钱包连接按钮 */}
+          {/* 右侧操作区: 语言切换 + RainbowKit 连接钱包按钮 */}
           <div className="flex items-center space-x-3">
             <LanguageSwitcher />
             
-            <button 
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              {t('button.connectWallet')}
-            </button>
+            {/* 替换原来的按钮为 RainbowKit 的 ConnectButton */}
+            <ConnectButton />
           </div>
 
           {/* 移动端菜单按钮 - 仅在小屏幕显示 */}
