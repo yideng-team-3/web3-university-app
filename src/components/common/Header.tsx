@@ -3,19 +3,25 @@
 import React from 'react';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { useLanguage } from '@/components/common/LanguageContext';
-import CustomConnectButton from '@/components/wallet/CustomConnectButton';
+import {CustomConnectButton} from '@/components/wallet/CustomConnectButton';
 import { BuyTokenButton } from '@/components/wallet/BuyTokenButton';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAtom } from 'jotai';
+import { walletConnectedAtom } from '@/stores/walletStore';
 
 const Header = () => {
   const { t } = useLanguage();
   const pathname = usePathname();
   const { isConnected } = useAccount();
+  const [walletConnected] = useAtom(walletConnectedAtom);
   
   // 判断当前路径是否激活
   const isActive = (path: string) => pathname === path;
+  
+  // Use either wagmi's isConnected or our persisted walletConnected state
+  const effectivelyConnected = isConnected || walletConnected;
   
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-20 shadow-sm">
@@ -76,7 +82,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <LanguageSwitcher />
             <CustomConnectButton />
-            {isConnected && <BuyTokenButton />}
+            {effectivelyConnected && <BuyTokenButton />}
           </div>
 
           {/* 移动端菜单按钮 - 仅在小屏幕显示 */}

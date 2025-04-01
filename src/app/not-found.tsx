@@ -1,4 +1,10 @@
-import PageNotFoundView from "@components/common/PageNotFoundView";
+import PageNotFoundView from "@/components/common/PageNotFoundView";
+import MainLayout from "@/components/common/MainLayout";
 
-const NotFound = () => <PageNotFoundView />;
+const NotFound = () => (
+  <MainLayout>
+    <PageNotFoundView />
+  </MainLayout>
+);
+
 export default NotFound;
