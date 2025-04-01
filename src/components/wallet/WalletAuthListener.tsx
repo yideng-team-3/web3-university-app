@@ -1,59 +1,87 @@
-// 在任意组件中 (例如 _app.tsx 或专门的 AuthProvider 组件)
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { toast } from 'react-hot-toast';
+import { useAtom } from 'jotai';
+import { walletConnectedAtom, isAuthenticatedAtom, walletAddressAtom } from '@/stores/walletStore';
 import useWeb3Auth from '@/hooks/useWeb3Login';
-import { toast } from 'react-hot-toast'; // 假设使用toast来提示用户
 
 const WalletAuthListener = () => {
   const { isConnected, address } = useAccount();
   const { login, isLoggedIn, isLoading, error } = useWeb3Auth();
-  const [hasAttemptedLogin, setHasAttemptedLogin] = useState(false);
+  const [, setWalletConnected] = useAtom(walletConnectedAtom);
+  const [isAuthenticated, setIsAuthenticated] = useAtom(isAuthenticatedAtom);
+  const [storedAddress, setStoredAddress] = useAtom(walletAddressAtom);
 
-  // 监听钱包连接状态变化
+  // Sync wallet connection state
   useEffect(() => {
-    // 如果钱包已连接、还未登录且没有尝试过登录
-    if (isConnected && address && !isLoggedIn && !hasAttemptedLogin && !isLoading) {
-      // 设置标志，防止多次触发登录
-      setHasAttemptedLogin(true);
+    if (isConnected && address) {
+      setWalletConnected(true);
+      setStoredAddress(address);
+    } else if (!isConnected) {
+      setWalletConnected(false);
+      setStoredAddress('');
+      setIsAuthenticated(false);
+    }
+  }, [isConnected, address, setWalletConnected, setStoredAddress, setIsAuthenticated]);
+
+  // Monitor auth state
+  useEffect(() => {
+    setIsAuthenticated(!!isLoggedIn);
+  }, [isLoggedIn, setIsAuthenticated]);
+
+  // Handle automatic login when wallet is connected but not authenticated
+  useEffect(() => {
+    // Only attempt login if:
+    // 1. Wallet is connected
+    // 2. We have an address
+    // 3. User is not already logged in
+    // 4. Not currently loading
+    // 5. We haven't tried to authenticate with this address yet
+    const shouldAttemptLogin = 
+      isConnected && 
+      address && 
+      !isLoggedIn && 
+      !isLoading && 
+      address === storedAddress && 
+      !isAuthenticated;
+    
+    if (shouldAttemptLogin) {
+      // Display loading toast
+      const loadingToast = toast.loading('正在准备登录...');
       
-      // 显示准备登录提示
-      toast.loading('正在准备登录...');
-      
-      // 执行登录流程
+      // Attempt login
       login()
         .then((user) => {
           if (user) {
             toast.success('登录成功！');
+            setIsAuthenticated(true);
             console.log('用户已登录:', user);
           } else {
             toast.error('登录失败，请手动尝试登录');
             console.error('登录返回结果为空');
+            setIsAuthenticated(false);
           }
         })
         .catch((err) => {
-          toast.error('登录失败: ' + (err?.message || '未知错误'));
+          toast.error(`登录失败: ${err?.message || '未知错误'}`);
           console.error('登录出错:', err);
+          setIsAuthenticated(false);
         })
         .finally(() => {
-          // 清除登录中状态
-          toast.dismiss();
+          // Dismiss loading toast
+          toast.dismiss(loadingToast);
         });
     }
-    
-    // 如果钱包断开连接，重置登录尝试标志
-    if (!isConnected) {
-      setHasAttemptedLogin(false);
-    }
-  }, [isConnected, address, isLoggedIn, hasAttemptedLogin, isLoading, login]);
+  }, [isConnected, address, isLoggedIn, isLoading, storedAddress, isAuthenticated, login, setIsAuthenticated]);
 
-  // 显示错误消息
+  // Display error messages
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
 
-  // 这个组件不需要渲染任何UI
+  // This component doesn't render anything
   return null;
 };
 

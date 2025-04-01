@@ -2,8 +2,8 @@
 
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
-import Header from '@/components/common/Header';
 import { useLanguage } from '@/components/common/LanguageContext';
+import Header from '@/components/common/Header';
 import WalletAuthListener from '@/components/wallet/WalletAuthListener';
 
 interface LayoutProps {

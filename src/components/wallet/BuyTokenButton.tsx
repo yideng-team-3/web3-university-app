@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { parseEther, formatEther } from 'viem';
+import { parseEther } from 'viem';
 import { useAccount, useBalance, useWriteContract, useChainId, useWaitForTransactionReceipt, useSwitchChain, useReadContract } from 'wagmi';
 import YiDengTokenABI from '@/contracts/abis/YiDengToken.json';
 import { toast } from 'react-hot-toast';
 import { getContractAddress } from '@/config/contracts';
 import { sepolia } from 'wagmi/chains';
-
-interface Error {
-  message: string;
-}
+import { useAtom } from 'jotai';
+import { walletConnectedAtom, chainIdAtom } from '@/stores/walletStore';
 
 export const BuyTokenButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +16,11 @@ export const BuyTokenButton: React.FC = () => {
   const { address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
+  const [walletConnected] = useAtom(walletConnectedAtom);
+  const [storedChainId] = useAtom(chainIdAtom);
+  
+  // Use stored chainId if available, otherwise use the one from Wagmi
+  const effectiveChainId = chainId || storedChainId;
   
   // 获取用户 ETH 余额
   const { data: balance } = useBalance({
@@ -25,10 +28,10 @@ export const BuyTokenButton: React.FC = () => {
   });
 
   // 检查是否在 Sepolia 测试网
-  const isCorrectNetwork = chainId === sepolia.id;
+  const isCorrectNetwork = effectiveChainId === sepolia.id;
 
   // 获取当前网络的合约地址
-  const contractAddress = chainId ? getContractAddress(chainId).YIDENG_TOKEN : null;
+  const contractAddress = effectiveChainId ? getContractAddress(effectiveChainId).YIDENG_TOKEN : null;
 
   // 读取 YiDeng 代币余额
   const { data: ydBalance } = useReadContract({
@@ -36,6 +39,8 @@ export const BuyTokenButton: React.FC = () => {
     abi: YiDengTokenABI.abi,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
+    // 移除 enabled 属性，使用条件渲染
+    // 只有当地址和合约地址存在时才调用
   });
 
   // 合约写入函数
@@ -60,7 +65,7 @@ export const BuyTokenButton: React.FC = () => {
     try {
       await switchChain({ chainId: sepolia.id });
       toast.success('已切换到 Sepolia 测试网');
-    } catch (error) {
+    } catch (_error) {
       toast.error('网络切换失败');
     }
   };
@@ -89,7 +94,7 @@ export const BuyTokenButton: React.FC = () => {
         functionName: 'buyWithETH',
         value,
       });
-    } catch (error) {
+    } catch (_error) {
       toast.error('输入金额无效');
     }
   };
@@ -98,6 +103,11 @@ export const BuyTokenButton: React.FC = () => {
   const buttonText = isPending ? '等待确认...' : isConfirming ? '交易确认中...' : '确认购买';
 
   const formattedYdBalance = ydBalance ? ydBalance.toString() : '0';
+
+  // Only render if wallet is connected - this uses our persisted state
+  if (!walletConnected) {
+    return null;
+  }
 
   return (
     <div className="relative">
@@ -126,7 +136,7 @@ export const BuyTokenButton: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <>
+              <div>
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500">
                     ETH 余额: {balance?.formatted} {balance?.symbol}
@@ -164,11 +174,11 @@ export const BuyTokenButton: React.FC = () => {
                     {buttonText}
                   </button>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>
       )}
     </div>
   );
-}; 
+};
