@@ -27,9 +27,10 @@ const Header = () => {
     <header className="bg-white border-b border-gray-100 sticky top-0 z-20 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo 部分 */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-3">
+          {/* 左侧: Logo + 导航链接 */}
+          <div className="flex items-center space-x-8">
+            {/* Logo 部分 */}
+            <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
               <div className="flex items-center justify-center">
                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <rect width="40" height="40" rx="8" fill="#4F46E5" />
@@ -42,44 +43,44 @@ const Header = () => {
                 <span className="text-gray-900 font-medium text-xl">Web3 University</span>
               </div>
             </Link>
+
+            {/* 导航链接 - 移到左侧和Logo在一起 */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link 
+                href="/"
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                  isActive('/') 
+                    ? 'text-indigo-600 border-indigo-600' 
+                    : 'text-gray-600 border-transparent hover:text-indigo-600 hover:border-indigo-600'
+                }`}
+              >
+                {t('nav.home') || '首页'}
+              </Link>
+              <Link 
+                href="/knowledge"
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                  isActive('/knowledge') 
+                    ? 'text-indigo-600 border-indigo-600' 
+                    : 'text-gray-600 border-transparent hover:text-indigo-600 hover:border-indigo-600'
+                }`}
+              >
+                {t('nav.knowledgeBase') || '知识库'}
+              </Link>
+              <Link 
+                href="/videos"
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                  isActive('/videos') 
+                    ? 'text-indigo-600 border-indigo-600' 
+                    : 'text-gray-600 border-transparent hover:text-indigo-600 hover:border-indigo-600'
+                }`}
+              >
+                {t('nav.videos') || '视频'}
+              </Link>
+            </nav>
           </div>
 
-          {/* 中间导航部分 */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              href="/"
-              className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
-                isActive('/') 
-                  ? 'text-indigo-600 border-indigo-600' 
-                  : 'text-gray-600 border-transparent hover:text-indigo-600 hover:border-indigo-600'
-              }`}
-            >
-              {t('nav.home') || '首页'}
-            </Link>
-            <Link 
-              href="/knowledge"
-              className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
-                isActive('/knowledge') 
-                  ? 'text-indigo-600 border-indigo-600' 
-                  : 'text-gray-600 border-transparent hover:text-indigo-600 hover:border-indigo-600'
-              }`}
-            >
-              {t('nav.knowledgeBase') || '知识库'}
-            </Link>
-            <Link 
-              href="/videos"
-              className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
-                isActive('/videos') 
-                  ? 'text-indigo-600 border-indigo-600' 
-                  : 'text-gray-600 border-transparent hover:text-indigo-600 hover:border-indigo-600'
-              }`}
-            >
-              {t('nav.videos') || '视频'}
-            </Link>
-          </nav>
-
           {/* 右侧操作区: 语言切换 + 自定义连接钱包按钮 */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-shrink-0">
             <LanguageSwitcher />
             <CustomConnectButton />
             {effectivelyConnected && <BuyTokenButton />}
