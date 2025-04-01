@@ -4,12 +4,15 @@ import React from 'react';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { useLanguage } from '@/components/common/LanguageContext';
 import CustomConnectButton from '@/components/wallet/CustomConnectButton';
+import { BuyTokenButton } from '@/components/wallet/BuyTokenButton';
+import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const Header = () => {
   const { t } = useLanguage();
   const pathname = usePathname();
+  const { isConnected } = useAccount();
   
   // 判断当前路径是否激活
   const isActive = (path: string) => pathname === path;
@@ -72,9 +75,8 @@ const Header = () => {
           {/* 右侧操作区: 语言切换 + 自定义连接钱包按钮 */}
           <div className="flex items-center space-x-3">
             <LanguageSwitcher />
-            
-            {/* 使用自定义的 CustomConnectButton */}
             <CustomConnectButton />
+            {isConnected && <BuyTokenButton />}
           </div>
 
           {/* 移动端菜单按钮 - 仅在小屏幕显示 */}
