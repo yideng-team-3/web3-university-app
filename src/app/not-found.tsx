@@ -1,10 +1,10 @@
-import { Web3Providers } from "@/components/wallet/Providers";
-import PageNotFoundView from "@components/common/PageNotFoundView";
+import PageNotFoundView from "@/components/common/PageNotFoundView";
+import MainLayout from "@/components/common/MainLayout";
 
 const NotFound = () => (
-  <Web3Providers>
+  <MainLayout>
     <PageNotFoundView />
-  </Web3Providers>
+  </MainLayout>
 );
 
 export default NotFound;

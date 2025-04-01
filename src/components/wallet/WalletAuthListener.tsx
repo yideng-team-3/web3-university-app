@@ -1,28 +1,60 @@
+'use client';
+
 import { useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import { toast } from 'react-hot-toast';
 import { useAtom } from 'jotai';
-import { walletConnectedAtom, isAuthenticatedAtom, walletAddressAtom } from '@/stores/walletStore';
+import {  isAuthenticatedAtom, walletAddressAtom, syncWalletStateAtom } from '@/stores/walletStore';
 import useWeb3Auth from '@/hooks/useWeb3Login';
 
 const WalletAuthListener = () => {
   const { isConnected, address } = useAccount();
+  const chainId = useChainId();
   const { login, isLoggedIn, isLoading, error } = useWeb3Auth();
-  const [, setWalletConnected] = useAtom(walletConnectedAtom);
   const [isAuthenticated, setIsAuthenticated] = useAtom(isAuthenticatedAtom);
-  const [storedAddress, setStoredAddress] = useAtom(walletAddressAtom);
+  const [storedAddress] = useAtom(walletAddressAtom);
+  const [, syncWalletState] = useAtom(syncWalletStateAtom);
 
-  // Sync wallet connection state
+  // 监听 storage 事件，确保跨页面状态同步
   useEffect(() => {
-    if (isConnected && address) {
-      setWalletConnected(true);
-      setStoredAddress(address);
-    } else if (!isConnected) {
-      setWalletConnected(false);
-      setStoredAddress('');
-      setIsAuthenticated(false);
-    }
-  }, [isConnected, address, setWalletConnected, setStoredAddress, setIsAuthenticated]);
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'walletConnected' || event.key === 'walletAddress' || event.key === 'isAuthenticated') {
+        // 如果是其他标签页更改了钱包状态，重新加载页面以获取最新状态
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+// 在监听钱包状态变化的 useEffect 中添加防抖处理
+useEffect(() => {
+  // Initialize with undefined and use a more compatible type
+  let syncTimer: ReturnType<typeof setTimeout> | undefined;
+  
+  if (isConnected && address) {
+    console.log("【钱包监听器】检测到钱包已连接:", address);
+    // 使用防抖处理避免页面切换时出现状态抖动
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+      syncWalletState({ connected: true, address, chainId });
+    }, 150);
+  } else if (!isConnected) {
+    console.log("【钱包监听器】检测到钱包已断开");
+    // 断开连接时也需要防抖
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+      syncWalletState({ connected: false, address: '' });
+    }, 150);
+  }
+  
+  return () => {
+    if (syncTimer) clearTimeout(syncTimer);
+  };
+}, [isConnected, address, chainId, syncWalletState]);
 
   // Monitor auth state
   useEffect(() => {
@@ -46,6 +78,7 @@ const WalletAuthListener = () => {
       !isAuthenticated;
     
     if (shouldAttemptLogin) {
+      console.log("【钱包监听器】尝试自动登录...");
       // Display loading toast
       const loadingToast = toast.loading('正在准备登录...');
       

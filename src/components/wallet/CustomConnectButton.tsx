@@ -27,15 +27,24 @@ export const CustomConnectButton = () => {
   // Sync Wagmi state with our Jotai atoms
   useEffect(() => {
     if (isConnected && address) {
-      setWalletConnected(true);
-      setStoredAddress(address);
-    } else if (!isConnected) {
-      // Only reset if we're actually disconnected
-      // This prevents the button from flashing during page transitions
+      // 添加延迟, 确保状态更新在页面转换后稳定执行
+      const timer = setTimeout(() => {
+        setWalletConnected(true);
+        setStoredAddress(address);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+    
+    if (!isConnected && isMounted) {
+      // 只有当组件完全挂载后，才重置状态，避免闪烁
+      // 仍然保留防止闪烁的判断
       setWalletConnected(false);
       setStoredAddress('');
     }
-  }, [isConnected, address, setWalletConnected, setStoredAddress]);
+    
+    // Return empty cleanup function for consistent return
+    return () => {};
+  }, [isConnected, address, setWalletConnected, setStoredAddress, isMounted]);
 
   // Debug logging
   useEffect(() => {
