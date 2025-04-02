@@ -1,11 +1,8 @@
 @import 'tailwindcss';
-@custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-  --color-primary: var(--color-green-500);
-}
+@import './performance-optimizations.css';
 
 :root {
+  --color-primary: var(--color-green-500);
   /* 原始变量 */
   --background: #ffffff;
   --foreground: #171717;
@@ -19,7 +16,7 @@
   --darker-bg: #0a0118;
   --cyberpunk-gradient: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
   --glitch-shadow: 0 0 10px var(--neon-pink), 0 0 20px rgba(255, 42, 109, 0.5);
-  --terminal-font: 'Share Tech Mono', var(--font-geist-mono), monospace;
+  --terminal-font: var(--font-share-tech-mono), var(--font-geist-mono), monospace;
 
   /* rainbowkit */
   --rk-colors-accentColor: var(--neon-blue); /* 更改为霓虹蓝 */
@@ -83,6 +80,7 @@ body.cyberpunk-theme::-webkit-scrollbar-thumb:hover {
   text-transform: uppercase;
   background: var(--cyberpunk-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
   letter-spacing: 2px;

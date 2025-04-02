@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { MoveLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import ParticlesBackground from '@/components/effects/ParticlesBackground';
-import CursorTracker from '@/components/effects/CursorTracker';
+import ParticlesBackground from '@components/effects/ParticlesBackground';
+import CursorTracker from '@components/effects/CursorTracker';
 
 const CyberpunkPageNotFoundView = () => {
   const router = useRouter();

@@ -83,8 +83,14 @@ const AutonomousParticlesBackground = memo(() => {
         return 'lowPerformance';
       }
       
-      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-      const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : '';
+      // 修复类型错误：判断是否为WebGLRenderingContext
+      let renderer = '';
+      if (gl instanceof WebGLRenderingContext) {
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        if (debugInfo) {
+          renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+        }
+      }
       
       if (renderer) {
         // 简单判断高端显卡
@@ -335,46 +341,55 @@ const AutonomousParticlesBackground = memo(() => {
         const pulseFactor = Math.sin(particleSystem.userData.time * pulseFrequency) * pulseAmplitude + 1;
         
         // 更新粒子位置 - 采用隔帧更新粒子位置的方式节约性能
-        const updateFraction = performanceLevel === 'lowPerformance' ? 0.3 : 
-                              performanceLevel === 'mediumPerformance' ? 0.6 : 1.0;
+        // 修复嵌套三元表达式
+        let updateFraction;
+        if (performanceLevel === 'lowPerformance') {
+          updateFraction = 0.3;
+        } else if (performanceLevel === 'mediumPerformance') {
+          updateFraction = 0.6;
+        } else {
+          updateFraction = 1.0;
+        }
         
         for (let i = 0; i < count; i += 1) {
           // 性能优化：部分粒子不更新位置
-          if (Math.random() > updateFraction) continue;
-          
-          // 获取初始位置
-          const ix = initialPositions[i * 3];
-          const iy = initialPositions[i * 3 + 1];
-          const iz = initialPositions[i * 3 + 2];
-          
-          // 计算到焦点的距离影响 - 简化计算
-          const dx = ix - focalPoint.x;
-          const dy = iy - focalPoint.y;
-          const dz = iz - focalPoint.z;
-          const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
-          const distanceFactor = 1 / (1 + distance * 0.1);
-          
-          // 复杂的波动效果
-          const time = particleSystem.userData.time * waveSpeed + phaseArray[i];
-          const xWave = Math.sin(time + ix) * waveAmplitude;
-          const yWave = Math.cos(time * 0.8 + iy * 2) * waveAmplitude;
-          const zWave = Math.sin(time * 1.2 + iz * 1.5) * waveAmplitude;
-          
-          // 全局波动效果 - 简化计算
-          const globalFactor = performanceLevel === 'lowPerformance' ? 0.01 : 0.01;
-          const globalX = Math.sin(globalMotionTime + i * globalFactor) * globalMotionAmplitude;
-          const globalY = Math.cos(globalMotionTime * 1.3 + i * globalFactor) * globalMotionAmplitude;
-          const globalZ = Math.sin(globalMotionTime * 0.7 + i * globalFactor) * globalMotionAmplitude;
-          
-          // 综合所有效果计算新位置
-          positions[i * 3] = ix + xWave * pulseFactor + globalX;
-          positions[i * 3 + 1] = iy + yWave * pulseFactor + globalY;
-          positions[i * 3 + 2] = iz + zWave * pulseFactor + globalZ;
-          
-          // 朝焦点方向轻微吸引
-          positions[i * 3] -= dx * distanceFactor * 0.03;
-          positions[i * 3 + 1] -= dy * distanceFactor * 0.03;
-          positions[i * 3 + 2] -= dz * distanceFactor * 0.03;
+          if (Math.random() > updateFraction) {
+            // 修复ESLint no-continue错误，改用if-else结构
+          } else {
+            // 获取初始位置
+            const ix = initialPositions[i * 3];
+            const iy = initialPositions[i * 3 + 1];
+            const iz = initialPositions[i * 3 + 2];
+            
+            // 计算到焦点的距离影响 - 简化计算
+            const dx = ix - focalPoint.x;
+            const dy = iy - focalPoint.y;
+            const dz = iz - focalPoint.z;
+            const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+            const distanceFactor = 1 / (1 + distance * 0.1);
+            
+            // 复杂的波动效果
+            const time = particleSystem.userData.time * waveSpeed + phaseArray[i];
+            const xWave = Math.sin(time + ix) * waveAmplitude;
+            const yWave = Math.cos(time * 0.8 + iy * 2) * waveAmplitude;
+            const zWave = Math.sin(time * 1.2 + iz * 1.5) * waveAmplitude;
+            
+            // 全局波动效果 - 简化计算
+            const globalFactor = performanceLevel === 'lowPerformance' ? 0.01 : 0.01;
+            const globalX = Math.sin(globalMotionTime + i * globalFactor) * globalMotionAmplitude;
+            const globalY = Math.cos(globalMotionTime * 1.3 + i * globalFactor) * globalMotionAmplitude;
+            const globalZ = Math.sin(globalMotionTime * 0.7 + i * globalFactor) * globalMotionAmplitude;
+            
+            // 综合所有效果计算新位置
+            positions[i * 3] = ix + xWave * pulseFactor + globalX;
+            positions[i * 3 + 1] = iy + yWave * pulseFactor + globalY;
+            positions[i * 3 + 2] = iz + zWave * pulseFactor + globalZ;
+            
+            // 朝焦点方向轻微吸引
+            positions[i * 3] -= dx * distanceFactor * 0.03;
+            positions[i * 3 + 1] -= dy * distanceFactor * 0.03;
+            positions[i * 3 + 2] -= dz * distanceFactor * 0.03;
+          }
         }
         
         // 更新位置缓冲区
@@ -424,8 +439,10 @@ const AutonomousParticlesBackground = memo(() => {
           animationFrameId = null;
         }
       } else {
-        // 页面可见，恢复动画
-        if (animationFrameId === null && isParticlesInitialized) {
+        // 页面可见且初始化完成，恢复动画
+        // 修复孤立 if 错误
+        const shouldRestartAnimation = animationFrameId === null && isParticlesInitialized;
+        if (shouldRestartAnimation) {
           lastTime = performance.now();
           animationFrameId = requestAnimationFrame(animate);
         }
@@ -479,5 +496,8 @@ const AutonomousParticlesBackground = memo(() => {
   
   return <div ref={mountRef} id="particles-canvas" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }} />;
 });
+
+// 添加显示名称以修复 react/display-name 警告
+AutonomousParticlesBackground.displayName = 'AutonomousParticlesBackground';
 
 export default AutonomousParticlesBackground;

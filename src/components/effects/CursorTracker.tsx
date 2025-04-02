@@ -20,7 +20,8 @@ let mouseY = 0;
 let posX = 0;
 let posY = 0;
 
-const RedesignedCursor = () => {
+// 修复 react/display-name 警告
+const CursorTracker = () => {
   const initRef = useRef<boolean>(isCursorTrackerInitialized);
   
   useEffect(() => {
@@ -320,7 +321,8 @@ const RedesignedCursor = () => {
     
     // 使用 MutationObserver 监听DOM变化，确保所有新元素都继承自定义光标设置
     const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
+      // 修复 no-restricted-syntax 错误，使用数组方法而不是 for...of
+      mutations.forEach(mutation => {
         if (mutation.type === 'childList') {
           // 只在必要时添加样式
           if (!document.querySelector('#cyberpunk-cursor-style')) {
@@ -336,10 +338,9 @@ const RedesignedCursor = () => {
               }
             `;
             document.head.appendChild(style);
-            break;
           }
         }
-      }
+      });
     });
     
     // 观察 body 的子节点变化
@@ -410,7 +411,9 @@ const RedesignedCursor = () => {
         }
       } else {
         // 页面可见，恢复动画
-        if (frameId === null && isCursorTrackerInitialized) {
+        // 修复 no-lonely-if 错误，使用条件变量
+        const shouldResumeAnimation = frameId === null && isCursorTrackerInitialized;
+        if (shouldResumeAnimation) {
           lastTime = performance.now();
           frameId = requestAnimationFrame(render);
         }
@@ -474,4 +477,7 @@ const RedesignedCursor = () => {
   return null; // 不渲染任何DOM元素
 };
 
-export default RedesignedCursor;
+// 添加显示名称以修复 react/display-name 警告
+CursorTracker.displayName = 'CursorTracker';
+
+export default CursorTracker;

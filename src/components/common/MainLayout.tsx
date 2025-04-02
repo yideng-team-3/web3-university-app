@@ -2,22 +2,32 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useLanguage } from '@/components/common/LanguageContext';
-import CyberpunkHeader from '@/components/common/Header';
-import WalletAuthListener from '@/components/wallet/WalletAuthListener';
-import ParticlesBackground from '@/components/effects/ParticlesBackground';
-import CursorTracker from '@/components/effects/CursorTracker';
+import { useLanguage } from '@components/common/LanguageContext';
+import CyberpunkHeader from '@components/common/Header';
+import WalletAuthListener from '@components/wallet/WalletAuthListener';
+import ParticlesBackground from '@components/effects/ParticlesBackground';
+import CursorTracker from '@components/effects/CursorTracker';
 import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const CyberpunkLayout = ({ children }: LayoutProps) => {
+// 添加下划线前缀来表示它是被允许的未使用变量
+interface _RouteChangeEvent extends Event {
+  detail?: {
+    url: string;
+    prevPath: string;
+  };
+}
+
+const MainLayout = ({ children }: LayoutProps) => {
   const { t } = useLanguage();
-  const router = useRouter();
+  // 为未使用的变量添加下划线前缀
+  const _router = useRouter();
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
-  const [prevPath, setPrevPath] = useState<string | null>(null);
+  // 重命名未使用的状态变量
+  const [_prevPath, _setPrevPath] = useState<string | null>(null);
 
   // 页面转场动画状态管理
   useEffect(() => {
@@ -30,10 +40,10 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
     // 设置全局cyberpunk主题
     document.body.classList.add('cyberpunk-theme');
     
-    // 监听路由变化处理页面转场
-    const handleRouteChangeStart = (url: string) => {
+    // 修改事件处理函数以接收 Event 类型
+    const handleRouteChangeStart = () => {
       setIsPageTransitioning(true);
-      setPrevPath(window.location.pathname);
+      _setPrevPath(window.location.pathname);
     };
     
     const handleRouteChangeComplete = () => {
@@ -43,16 +53,15 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
       }, 300);
     };
     
-    // 添加路由事件监听 (这需要根据你的路由系统调整)
-    // 注意：Next.js的App Router需要自定义事件
-    document.addEventListener('nextjs:route-change-start', handleRouteChangeStart as any);
-    document.addEventListener('nextjs:route-change-complete', handleRouteChangeComplete as any);
+    // 添加路由事件监听 (不再需要类型转换)
+    document.addEventListener('nextjs:route-change-start', handleRouteChangeStart);
+    document.addEventListener('nextjs:route-change-complete', handleRouteChangeComplete);
     
     return () => {
       document.head.removeChild(linkElement);
       document.body.classList.remove('cyberpunk-theme');
-      document.removeEventListener('nextjs:route-change-start', handleRouteChangeStart as any);
-      document.removeEventListener('nextjs:route-change-complete', handleRouteChangeComplete as any);
+      document.removeEventListener('nextjs:route-change-start', handleRouteChangeStart);
+      document.removeEventListener('nextjs:route-change-complete', handleRouteChangeComplete);
     };
   }, []);
 
@@ -206,4 +215,4 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
   );
 };
 
-export default CyberpunkLayout;
+export default MainLayout;

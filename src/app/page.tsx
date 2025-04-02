@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useLanguage } from '@/components/common/LanguageContext';
+import { useLanguage } from '@components/common/LanguageContext';
 import Link from 'next/link';
-import MainLayout from '@/components/common/MainLayout';
-import ParticlesBackground from '@/components/effects/ParticlesBackground';
-import CursorTracker from '@/components/effects/CursorTracker';
-import YiDengCoinChart from '@/components/charts/YiDengCoinChart';
+import MainLayout from '@components/common/MainLayout';
+import ParticlesBackground from '@components/effects/ParticlesBackground';
+import CursorTracker from '@components/effects/CursorTracker';
+import YiDengCoinChart from '@components/charts/YiDengCoinChart';
 
 const CyberpunkHomePage = () => {
   const { t } = useLanguage();

@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono as GeistMono, Rajdhani } from "next/font/google";
-import { LanguageProvider } from "@/components/common/LanguageContext";
-import { Web3Providers } from "@/components/wallet/Providers";
+import { Geist, Geist_Mono as GeistMono, Rajdhani, Share_Tech_Mono as ShareTechMono } from "next/font/google";
+import { LanguageProvider } from "@components/common/LanguageContext";
+import { Web3Providers } from "@components/wallet/Providers";
+import NavigationEventsHandler from "@components/common/NavigationEventsHandler";
 
 import "./globals.css";
 import '@rainbow-me/rainbowkit/styles.css';
 
+// 导入字体并配置预加载
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const geistMono = GeistMono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 // 添加赛博朋克风格所需的字体
@@ -21,10 +25,16 @@ const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: 'swap',
 });
 
-// Share Tech Mono不在next/font/google中，我们可以通过CSS导入，或者使用其他字体代替
-// 这里我们暂时使用Geist Mono作为替代
+// 加载 Share Tech Mono 字体（使用 Google Fonts）
+const shareTechMono = ShareTechMono({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-share-tech-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "web3-university",
@@ -38,15 +48,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* 由于Share Tech Mono不在next/font中，通过link标签导入 */}
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" />
-      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${rajdhani.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${rajdhani.variable} ${shareTechMono.variable} antialiased font-sans`}
       >
         <LanguageProvider>
-          <Web3Providers>{children}</Web3Providers>
+          <Web3Providers>
+            {/* 添加路由事件监听器 */}
+            <NavigationEventsHandler />
+            {children}
+          </Web3Providers>
         </LanguageProvider>
       </body>
     </html>

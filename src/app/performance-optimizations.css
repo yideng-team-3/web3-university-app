@@ -1,0 +1,209 @@
+/* 
+  添加到 globals.css 文件末尾
+  或者创建新的 performance-optimizations.css 文件并导入
+*/
+
+/* 页面过渡动画 */
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  
+  .page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  .page-transition-exit {
+    opacity: 1;
+  }
+  
+  .page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  /* 优化性能的装饰元素 */
+  .cyber-grid-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(to right, rgba(5, 217, 232, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(5, 217, 232, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: -1;
+    will-change: transform;
+  }
+  
+  /* 优化跑马灯效果 */
+  @keyframes optimized-marquee {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+  
+  .optimized-marquee {
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .optimized-marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: optimized-marquee 15s linear infinite;
+    will-change: transform;
+  }
+  
+  /* 优化故障效果 */
+  @keyframes optimized-glitch {
+    0% {
+      transform: translate(0);
+      text-shadow: 0 0 5px var(--neon-blue);
+    }
+    10% {
+      transform: translate(-2px, 2px);
+      text-shadow: -3px 0 3px rgba(255, 42, 109, 0.7), 3px 0 3px rgba(5, 217, 232, 0.7);
+    }
+    20% {
+      transform: translate(2px, -2px);
+      text-shadow: 3px 0 3px rgba(255, 42, 109, 0.7), -3px 0 3px rgba(5, 217, 232, 0.7);
+    }
+    30% {
+      transform: translate(-1px, 1px);
+      text-shadow: -2px 0 2px rgba(255, 42, 109, 0.7), 2px 0 2px rgba(5, 217, 232, 0.7);
+    }
+    40% {
+      transform: translate(1px, -1px);
+      text-shadow: 2px 0 2px rgba(255, 42, 109, 0.7), -2px 0 2px rgba(5, 217, 232, 0.7);
+    }
+    50% {
+      transform: translate(0);
+      text-shadow: 0 0 5px var(--neon-blue);
+    }
+    100% {
+      transform: translate(0);
+      text-shadow: 0 0 5px var(--neon-blue);
+    }
+  }
+  
+  /* 仅在需要时激活故障效果，而不是一直运行 */
+  .cyberpunk-glitch {
+    position: relative;
+    animation: none; /* 默认状态下不运行动画 */
+  }
+  
+  .cyberpunk-glitch.active {
+    animation: optimized-glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+  
+  /* 优化的装饰性扫描线 */
+  .optimized-scan-line {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(
+      to right,
+      rgba(255, 42, 109, 0) 0%,
+      rgba(255, 42, 109, 0.3) 50%,
+      rgba(255, 42, 109, 0) 100%
+    );
+    box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
+    top: -5px;
+    animation: scan-line 8s linear infinite;
+    pointer-events: none;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  /* 使用 GPU 加速的元素 */
+  .gpu-accelerated {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+  
+  /* 优化的卡片悬停效果 */
+  .optimized-card {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, box-shadow, border-color;
+  }
+  
+  /* 媒体查询优化 - 在移动设备简化或关闭特效 */
+  @media (max-width: 768px) {
+    .cyberpunk-glitch {
+      animation: none !important; /* 移动设备禁用闪烁动画 */
+    }
+    
+    .scan-line {
+      display: none; /* 移动设备不显示扫描线 */
+    }
+    
+    /* 网格背景变大，减少渲染压力 */
+    .cyber-grid-fixed {
+      background-size: 60px 60px;
+    }
+    
+    /* 简化移动设备上的文字发光效果 */
+    .cyberpunk-glow {
+      text-shadow: 0 0 5px currentColor;
+    }
+  }
+  
+  /* 延迟加载图像的过渡效果 */
+  .lazy-image {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .lazy-image.loaded {
+    opacity: 1;
+  }
+  
+  /* 加载指示器 */
+  .loading-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .loading-dots div {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--neon-blue);
+  }
+  
+  .loading-dots div:nth-child(1) {
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  .loading-dots div:nth-child(2) {
+    animation: pulse 1.5s infinite ease-in-out 0.2s;
+  }
+  
+  .loading-dots div:nth-child(3) {
+    animation: pulse 1.5s infinite ease-in-out 0.4s;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { 
+      opacity: 0.3; 
+      transform: scale(0.8); 
+    }
+    50% { 
+      opacity: 1; 
+      transform: scale(1.2); 
+    }
+  }

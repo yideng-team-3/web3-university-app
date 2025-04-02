@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import LanguageSwitcher from '@/components/common/LanguageSwitcher';
-import { useLanguage } from '@/components/common/LanguageContext';
-import {CustomConnectButton} from '@/components/wallet/CustomConnectButton';
-import { BuyTokenButton } from '@/components/wallet/BuyTokenButton';
+import LanguageSwitcher from '@components/common/LanguageSwitcher';
+import { useLanguage } from '@components/common/LanguageContext';
+import {CustomConnectButton} from '@components/wallet/CustomConnectButton';
+import { BuyTokenButton } from '@components/wallet/BuyTokenButton';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
