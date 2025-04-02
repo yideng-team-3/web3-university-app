@@ -1,11 +1,11 @@
 "use client";
 
 import React, { ReactNode, useEffect, useState } from "react";
-import { RainbowKitProvider, lightTheme, Locale, connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, darkTheme, Locale, connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base, zora, sepolia } from "wagmi/chains";
-import { useLanguage } from "@/components/common/LanguageContext";
+import { useLanguage } from "@components/common/LanguageContext";
 import { Provider as JotaiProvider } from 'jotai';
 
 // 导入 RainbowKit 相关配置
@@ -94,7 +94,7 @@ export function Web3Providers({ children }: { children: ReactNode }) {
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider
-            theme={lightTheme({
+            theme={darkTheme({
               accentColor: "#4F46E5", // 配合你的 UI 主题颜色 (indigo-600)
               accentColorForeground: "white",
               borderRadius: "medium",

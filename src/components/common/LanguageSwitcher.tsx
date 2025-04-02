@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { useLanguage } from "@/components/common/LanguageContext";
+import { useLanguage } from "@components/common/LanguageContext";
 import { Language } from "@/utils/languages";
 
 const LanguageSwitcher: React.FC = () => {

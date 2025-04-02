@@ -841,7 +841,7 @@ const ContractTestPage = () => {
             {account && (
               <div className="flex items-center">
                 <span className="text-sm text-gray-600 mr-2">当前代币余额:</span>
-                <span className="text-sm font-mono bg-gray-100 p-1 rounded">{tokenBalance ? tokenBalance : '0'} YD</span>
+                <span className="text-sm font-mono bg-gray-100 p-1 rounded">{tokenBalance || '0'} YD</span>
               </div>
             )}
           </div>

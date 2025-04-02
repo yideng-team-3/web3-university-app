@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useLanguage } from '@/components/common/LanguageContext';
+import { useLanguage } from '@components/common/LanguageContext';
 import { useAccount } from 'wagmi';
 import { useAtom } from 'jotai';
 import { walletConnectedAtom, walletAddressAtom, chainIdAtom } from '@/stores/walletStore';
@@ -14,7 +14,7 @@ export const CustomConnectButton = () => {
   const [, setStoredAddress] = useAtom(walletAddressAtom);
   const [, setChainId] = useAtom(chainIdAtom);
   
-  // State to track the chain ID at component level
+  // 使用状态来存储当前链ID
   const [currentChainId, setCurrentChainId] = useState<number | undefined>(undefined);
   // State to track if the component is mounted
   const [isMounted, setIsMounted] = useState(false);
@@ -37,7 +37,6 @@ export const CustomConnectButton = () => {
     
     if (!isConnected && isMounted) {
       // 只有当组件完全挂载后，才重置状态，避免闪烁
-      // 仍然保留防止闪烁的判断
       setWalletConnected(false);
       setStoredAddress('');
     }
@@ -52,12 +51,22 @@ export const CustomConnectButton = () => {
     console.log('Stored wallet connection:', walletConnected ? 'Connected' : 'Disconnected');
   }, [isConnected, walletConnected]);
   
-  // Update chain ID in global store when our local state changes
+  // 当 currentChainId 变化时更新 chainIdAtom
   useEffect(() => {
     if (currentChainId) {
       setChainId(currentChainId);
     }
   }, [currentChainId, setChainId]);
+
+  // 创建一个引用，用于存储最新的chain对象
+  const chainRef = useRef<any>(null);
+  
+  // 使用一个单独的effect同步chainRef中的chain.id到state
+  useEffect(() => {
+    if (chainRef.current?.id !== currentChainId) {
+      setCurrentChainId(chainRef.current?.id);
+    }
+  }, [chainRef.current?.id, currentChainId]);
 
   return (
     <ConnectButton.Custom>
@@ -69,12 +78,8 @@ export const CustomConnectButton = () => {
         openConnectModal,
         mounted,
       }) => {
-        // Update local state when chain changes
-        // This is safe because we're not calling a Hook here,
-        // just updating state from a prop
-        if (chain?.id !== currentChainId) {
-          setCurrentChainId(chain?.id);
-        }
+        // 使用普通赋值更新ref，这不违反Hooks规则
+        chainRef.current = chain;
 
         // 修改这里：使用组件本地的挂载状态和 RainbowKit 的挂载状态
         const ready = mounted && isMounted;
