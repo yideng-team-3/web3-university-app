@@ -1,5 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import * as THREE from 'three';
+
+// 单例模式控制器
+let isParticlesInitialized = false;
+let animationFrameId: number | null = null;
+let sceneInstance: THREE.Scene | null = null;
+let cameraInstance: THREE.PerspectiveCamera | null = null;
+let rendererInstance: THREE.WebGLRenderer | null = null;
+let particleGroupsInstance: ParticleGroup[] = [];
 
 // 为粒子系统创建自定义类型
 interface ParticleSystemUserData {
@@ -21,15 +29,80 @@ interface ParticleGroup extends THREE.Points<THREE.BufferGeometry, THREE.PointsM
   material: THREE.PointsMaterial;
 }
 
-const AutonomousParticlesBackground = () => {
+// 性能配置对象
+const performanceConfig = {
+  highPerformance: {
+    particleCount1: 2000,
+    particleCount2: 1000,
+    particleCount3: 500,
+    particleCount4: 200
+  },
+  mediumPerformance: {
+    particleCount1: 1000,
+    particleCount2: 500,
+    particleCount3: 250,
+    particleCount4: 100
+  },
+  lowPerformance: {
+    particleCount1: 500, 
+    particleCount2: 250,
+    particleCount3: 125,
+    particleCount4: 50
+  }
+};
+
+const AutonomousParticlesBackground = memo(() => {
   const mountRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    // 如果已经初始化，不再重复创建
+    if (isParticlesInitialized) {
+      return undefined;
+    }
+    
     // 如果挂载点不存在，则提前返回
     if (!mountRef.current) return undefined;
+
+    // 检测设备性能
+    const getPerformanceLevel = () => {
+      // 检测是否为移动设备
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // 检测是否为低端设备 (根据处理器核心数粗略判断)
+      const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+      
+      if (isMobile || isLowEndDevice) {
+        return 'lowPerformance';
+      }
+      
+      // 判断显卡性能 (粗略估计，可根据实际情况调整)
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      
+      if (!gl) {
+        return 'lowPerformance';
+      }
+      
+      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+      const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : '';
+      
+      if (renderer) {
+        // 简单判断高端显卡
+        if (/(rtx|rx|geforce|radeon)/i.test(renderer) && !/(mobile)/i.test(renderer)) {
+          return 'highPerformance';
+        }
+      }
+      
+      // 默认使用中等配置
+      return 'mediumPerformance';
+    };
+    
+    const performanceLevel = getPerformanceLevel();
+    const config = performanceConfig[performanceLevel as keyof typeof performanceConfig];
     
     // 场景设置
     const scene = new THREE.Scene();
+    sceneInstance = scene;
     
     // 摄像机设置
     const camera = new THREE.PerspectiveCamera(
@@ -39,14 +112,18 @@ const AutonomousParticlesBackground = () => {
       1000
     );
     camera.position.z = 5;
+    cameraInstance = camera;
     
     // 渲染器设置
     const renderer = new THREE.WebGLRenderer({ 
       alpha: true,
-      antialias: true 
+      antialias: performanceLevel !== 'lowPerformance', // 低端设备关闭抗锯齿
+      powerPreference: 'high-performance' // 性能优先
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1); // 限制像素比
+    rendererInstance = renderer;
     
     // 添加渲染器到DOM
     const currentRef = mountRef.current;
@@ -54,6 +131,7 @@ const AutonomousParticlesBackground = () => {
     
     // 创建粒子组
     const particleGroups: ParticleGroup[] = [];
+    particleGroupsInstance = particleGroups;
     
     // 创建不同类型的粒子组
     function createParticleGroup(
@@ -137,7 +215,7 @@ const AutonomousParticlesBackground = () => {
     }
     
     // 1. 密集近距离粒子
-    createParticleGroup(2000, 4, 0.01, 
+    createParticleGroup(config.particleCount1, 4, 0.01, 
       new THREE.Color(0x05d9e8), // 霓虹蓝色
       0.6, 0.8,
       0.0015, // 旋转速度
@@ -146,7 +224,7 @@ const AutonomousParticlesBackground = () => {
     );
     
     // 2. 中等距离粒子
-    createParticleGroup(1000, 10, 0.02, 
+    createParticleGroup(config.particleCount2, 10, 0.02, 
       new THREE.Color(0xff2a6d), // 霓虹粉色
       0.3, 0.7,
       0.0010, // 旋转速度
@@ -155,7 +233,7 @@ const AutonomousParticlesBackground = () => {
     );
     
     // 3. 远距离大型粒子
-    createParticleGroup(500, 15, 0.03, 
+    createParticleGroup(config.particleCount3, 15, 0.03, 
       new THREE.Color(0xd300c5), // 霓虹紫色
       0.2, 0.5,
       0.0005, // 旋转速度
@@ -164,7 +242,7 @@ const AutonomousParticlesBackground = () => {
     );
     
     // 4. 稀疏闪烁粒子
-    createParticleGroup(200, 20, 0.04, 
+    createParticleGroup(config.particleCount4, 20, 0.04, 
       new THREE.Color(0x39ff14), // 霓虹绿色
       0.1, 0.9,
       0.0020, // 旋转速度
@@ -172,9 +250,9 @@ const AutonomousParticlesBackground = () => {
       1.2     // 波动幅度
     );
     
-    // 创建慢速旋转的全局运动
-    const globalMotionAmplitude = 0.5; // 全局运动幅度
-    const globalMotionSpeed = 0.0002;  // 全局运动速度
+    // 创建慢速旋转的全局运动 - 降低复杂度
+    const globalMotionAmplitude = performanceLevel === 'lowPerformance' ? 0.3 : 0.5; // 全局运动幅度
+    const globalMotionSpeed = performanceLevel === 'lowPerformance' ? 0.0001 : 0.0002;  // 全局运动速度
     let globalMotionTime = 0;          // 全局运动时间计数器
     
     // 创建慢速漂移的焦点区域
@@ -188,33 +266,56 @@ const AutonomousParticlesBackground = () => {
       changeTime: 0
     };
     
-    // 动画循环
+    // 动画循环优化
     const clock = new THREE.Clock();
+    let lastTime = 0;
+    const targetFPS = performanceLevel === 'lowPerformance' ? 30 : 60; // 目标帧率
+    const interval = 1000 / targetFPS; // 每帧间隔时间(ms)
     
     const animate = () => {
+      // 帧率控制
+      const currentTime = performance.now();
+      const elapsed = currentTime - lastTime;
+      
+      // 如果经过的时间小于目标帧率间隔，跳过此帧
+      if (elapsed < interval) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      
+      // 更新上次渲染时间
+      lastTime = currentTime - (elapsed % interval);
+      
       const delta = clock.getDelta();
       
       // 更新全局运动时间
       globalMotionTime += delta * globalMotionSpeed;
       
-      // 更新焦点区域
-      focalPoint.changeTime += delta;
-      
-      // 每隔10秒更换一次焦点目标
-      if (focalPoint.changeTime > 10) {
-        focalPoint.targetX = (Math.random() - 0.5) * 2;
-        focalPoint.targetY = (Math.random() - 0.5) * 2;
-        focalPoint.targetZ = (Math.random() - 0.5) * 2;
-        focalPoint.changeTime = 0;
+      // 更新焦点区域 - 频率降低，减少计算
+      if (performanceLevel !== 'lowPerformance' || Math.random() < 0.05) {
+        focalPoint.changeTime += delta;
+        
+        // 每隔10秒更换一次焦点目标
+        if (focalPoint.changeTime > 10) {
+          focalPoint.targetX = (Math.random() - 0.5) * 2;
+          focalPoint.targetY = (Math.random() - 0.5) * 2;
+          focalPoint.targetZ = (Math.random() - 0.5) * 2;
+          focalPoint.changeTime = 0;
+        }
+        
+        // 平滑过渡焦点位置
+        focalPoint.x += (focalPoint.targetX - focalPoint.x) * 0.01;
+        focalPoint.y += (focalPoint.targetY - focalPoint.y) * 0.01;
+        focalPoint.z += (focalPoint.targetZ - focalPoint.z) * 0.01;
       }
-      
-      // 平滑过渡焦点位置
-      focalPoint.x += (focalPoint.targetX - focalPoint.x) * 0.01;
-      focalPoint.y += (focalPoint.targetY - focalPoint.y) * 0.01;
-      focalPoint.z += (focalPoint.targetZ - focalPoint.z) * 0.01;
       
       // 更新所有粒子组
       particleGroups.forEach((particleSystem, groupIndex) => {
+        // 低性能设备跳过部分组的更新
+        if (performanceLevel === 'lowPerformance' && groupIndex > 0 && Math.random() < 0.3) {
+          return;
+        }
+        
         const { 
           phaseArray, 
           initialPositions,
@@ -233,14 +334,20 @@ const AutonomousParticlesBackground = () => {
         const pulseFrequency = 0.2 + groupIndex * 0.1; // 各组有不同的脉动频率
         const pulseFactor = Math.sin(particleSystem.userData.time * pulseFrequency) * pulseAmplitude + 1;
         
-        // 更新粒子位置和外观
+        // 更新粒子位置 - 采用隔帧更新粒子位置的方式节约性能
+        const updateFraction = performanceLevel === 'lowPerformance' ? 0.3 : 
+                              performanceLevel === 'mediumPerformance' ? 0.6 : 1.0;
+        
         for (let i = 0; i < count; i += 1) {
+          // 性能优化：部分粒子不更新位置
+          if (Math.random() > updateFraction) continue;
+          
           // 获取初始位置
           const ix = initialPositions[i * 3];
           const iy = initialPositions[i * 3 + 1];
           const iz = initialPositions[i * 3 + 2];
           
-          // 计算到焦点的距离影响
+          // 计算到焦点的距离影响 - 简化计算
           const dx = ix - focalPoint.x;
           const dy = iy - focalPoint.y;
           const dz = iz - focalPoint.z;
@@ -253,10 +360,11 @@ const AutonomousParticlesBackground = () => {
           const yWave = Math.cos(time * 0.8 + iy * 2) * waveAmplitude;
           const zWave = Math.sin(time * 1.2 + iz * 1.5) * waveAmplitude;
           
-          // 全局波动效果
-          const globalX = Math.sin(globalMotionTime + i * 0.01) * globalMotionAmplitude;
-          const globalY = Math.cos(globalMotionTime * 1.3 + i * 0.02) * globalMotionAmplitude;
-          const globalZ = Math.sin(globalMotionTime * 0.7 + i * 0.03) * globalMotionAmplitude;
+          // 全局波动效果 - 简化计算
+          const globalFactor = performanceLevel === 'lowPerformance' ? 0.01 : 0.01;
+          const globalX = Math.sin(globalMotionTime + i * globalFactor) * globalMotionAmplitude;
+          const globalY = Math.cos(globalMotionTime * 1.3 + i * globalFactor) * globalMotionAmplitude;
+          const globalZ = Math.sin(globalMotionTime * 0.7 + i * globalFactor) * globalMotionAmplitude;
           
           // 综合所有效果计算新位置
           positions[i * 3] = ix + xWave * pulseFactor + globalX;
@@ -272,55 +380,104 @@ const AutonomousParticlesBackground = () => {
         // 更新位置缓冲区
         particleSystem.geometry.attributes.position.needsUpdate = true;
         
-        // 脉动透明度效果 - 确保 material 是 PointsMaterial 类型
+        // 脉动透明度效果
         particleSystem.material.opacity = 0.6 + Math.sin(particleSystem.userData.time * 0.5) * 0.2;
         
-        // 自动旋转
-        particleSystem.rotation.x += rotationSpeed * (groupIndex % 2 === 0 ? 1 : -1);
-        particleSystem.rotation.y += rotationSpeed * 1.5;
-        particleSystem.rotation.z += rotationSpeed * 0.5 * (groupIndex % 2 === 0 ? -1 : 1);
+        // 自动旋转 - 降低旋转速度
+        const rotFactor = performanceLevel === 'lowPerformance' ? 0.5 : 1.0;
+        particleSystem.rotation.x += rotationSpeed * (groupIndex % 2 === 0 ? 1 : -1) * rotFactor;
+        particleSystem.rotation.y += rotationSpeed * 1.5 * rotFactor;
+        particleSystem.rotation.z += rotationSpeed * 0.5 * (groupIndex % 2 === 0 ? -1 : 1) * rotFactor;
       });
       
       // 渲染场景
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
     
     // 启动动画
     animate();
+    isParticlesInitialized = true;
     
-    // 处理窗口大小变化
+    // 处理窗口大小变化 - 添加节流控制
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      
+      resizeTimeout = setTimeout(() => {
+        if (cameraInstance && rendererInstance) {
+          cameraInstance.aspect = window.innerWidth / window.innerHeight;
+          cameraInstance.updateProjectionMatrix();
+          rendererInstance.setSize(window.innerWidth, window.innerHeight);
+        }
+      }, 200); // 200ms节流
     };
     
     window.addEventListener('resize', handleResize);
     
+    // 添加可见性变化监听，当页面不可见时暂停动画
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // 页面不可见，暂停动画
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      } else {
+        // 页面可见，恢复动画
+        if (animationFrameId === null && isParticlesInitialized) {
+          lastTime = performance.now();
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
     // 清理函数
-    const cleanup = () => {
-      if (currentRef && currentRef.contains(renderer.domElement)) {
-        currentRef.removeChild(renderer.domElement);
+    return () => {
+      isParticlesInitialized = false;
+      
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      
+      if (currentRef && rendererInstance && currentRef.contains(rendererInstance.domElement)) {
+        currentRef.removeChild(rendererInstance.domElement);
       }
       
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       
       // 清理场景
-      particleGroups.forEach(system => {
-        scene.remove(system);
-        system.geometry.dispose();
-        // 确保material是单个材质而不是数组
-        if (system.material instanceof THREE.Material) {
-          system.material.dispose();
-        }
-      });
+      if (sceneInstance && particleGroupsInstance.length > 0) {
+        particleGroupsInstance.forEach(system => {
+          sceneInstance?.remove(system);
+          system.geometry.dispose();
+          // 确保material是单个材质而不是数组
+          if (system.material instanceof THREE.Material) {
+            system.material.dispose();
+          }
+        });
+        
+        // 清空粒子组
+        particleGroupsInstance = [];
+      }
+      
+      // 清理渲染器
+      if (rendererInstance) {
+        rendererInstance.dispose();
+        rendererInstance = null;
+      }
+      
+      // 清理相机和场景
+      cameraInstance = null;
+      sceneInstance = null;
     };
-    
-    return cleanup;
   }, []);
   
-  return <div ref={mountRef} id="particles-canvas" />;
-};
+  return <div ref={mountRef} id="particles-canvas" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }} />;
+});
 
 export default AutonomousParticlesBackground;

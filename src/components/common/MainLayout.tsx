@@ -1,10 +1,13 @@
 'use client';
 
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/components/common/LanguageContext';
 import CyberpunkHeader from '@/components/common/Header';
 import WalletAuthListener from '@/components/wallet/WalletAuthListener';
+import ParticlesBackground from '@/components/effects/ParticlesBackground';
+import CursorTracker from '@/components/effects/CursorTracker';
+import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,17 +15,44 @@ interface LayoutProps {
 
 const CyberpunkLayout = ({ children }: LayoutProps) => {
   const { t } = useLanguage();
+  const router = useRouter();
+  const [isPageTransitioning, setIsPageTransitioning] = useState(false);
+  const [prevPath, setPrevPath] = useState<string | null>(null);
 
-  // 确保在挂载时加载样式
+  // 页面转场动画状态管理
   useEffect(() => {
-    // 引入字体
+    // 确保在挂载时加载样式
     const linkElement = document.createElement('link');
     linkElement.rel = 'stylesheet';
     linkElement.href = 'https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap';
     document.head.appendChild(linkElement);
     
+    // 设置全局cyberpunk主题
+    document.body.classList.add('cyberpunk-theme');
+    
+    // 监听路由变化处理页面转场
+    const handleRouteChangeStart = (url: string) => {
+      setIsPageTransitioning(true);
+      setPrevPath(window.location.pathname);
+    };
+    
+    const handleRouteChangeComplete = () => {
+      // 延迟一点关闭转场动画状态，确保新页面内容已加载
+      setTimeout(() => {
+        setIsPageTransitioning(false);
+      }, 300);
+    };
+    
+    // 添加路由事件监听 (这需要根据你的路由系统调整)
+    // 注意：Next.js的App Router需要自定义事件
+    document.addEventListener('nextjs:route-change-start', handleRouteChangeStart as any);
+    document.addEventListener('nextjs:route-change-complete', handleRouteChangeComplete as any);
+    
     return () => {
       document.head.removeChild(linkElement);
+      document.body.classList.remove('cyberpunk-theme');
+      document.removeEventListener('nextjs:route-change-start', handleRouteChangeStart as any);
+      document.removeEventListener('nextjs:route-change-complete', handleRouteChangeComplete as any);
     };
   }, []);
 
@@ -31,9 +61,30 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
       <WalletAuthListener />
       <CyberpunkHeader />
       
+      {/* 全局共享的背景效果 - 只初始化一次 */}
+      <div className="fixed inset-0 pointer-events-none z-[-2]">
+        <ParticlesBackground />
+      </div>
+      
+      {/* 全局共享的光标效果 - 只初始化一次 */}
+      <CursorTracker />
+      
+      {/* 页面转场动画层 */}
+      {isPageTransitioning && (
+        <div className="fixed inset-0 z-50 bg-darker-bg transition-opacity duration-300 pointer-events-none">
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="cyberpunk-glitch text-4xl font-bold text-neon-blue" data-text="LOADING...">
+              LOADING...
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* 主要内容区域 */}
       <main className="relative">
-        {children}
+        <div className={`transition-opacity duration-300 ${isPageTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+          {children}
+        </div>
       </main>
       
       {/* 页脚 */}
@@ -55,7 +106,7 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/courses" className="text-gray-400 hover:text-neon-pink transition-colors">
+                  <Link href="/knowledge" className="text-gray-400 hover:text-neon-pink transition-colors">
                     {t('footer.courses')}
                   </Link>
                 </li>
@@ -134,7 +185,7 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
         <div className="absolute top-0 left-0 w-full h-px bg-neon-blue opacity-30"></div>
       </footer>
       
-      {/* 装饰性网格线 */}
+      {/* 装饰性网格线 - 移到这里以避免重复创建 */}
       <div className="fixed inset-0 pointer-events-none z-[-1]">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -145,7 +196,7 @@ const CyberpunkLayout = ({ children }: LayoutProps) => {
         }}></div>
       </div>
       
-      {/* 装饰性扫描线 */}
+      {/* 装饰性扫描线 - 移到这里以避免重复创建 */}
       <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="scan-line"></div>
