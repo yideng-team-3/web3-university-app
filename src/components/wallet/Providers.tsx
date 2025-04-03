@@ -13,7 +13,6 @@ import {
   metaMaskWallet,
   coinbaseWallet,
   walletConnectWallet,
-  rainbowWallet
 } from '@rainbow-me/rainbowkit/wallets';
 
 // 创建查询客户端
@@ -33,7 +32,6 @@ const walletList = [
       metaMaskWallet,
       coinbaseWallet,
       walletConnectWallet,
-      rainbowWallet
     ]
   }
 ];
@@ -94,6 +92,7 @@ export function Web3Providers({ children }: { children: ReactNode }) {
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider
+            modalSize="compact"
             theme={darkTheme({
               accentColor: "#4F46E5", // 配合你的 UI 主题颜色 (indigo-600)
               accentColorForeground: "white",
