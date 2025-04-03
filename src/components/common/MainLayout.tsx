@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@components/language/Context';
 import CyberpunkHeader from '@components/common/Header';
 import WalletAuthListener from '@components/wallet/WalletAuthListener';
 import ParticlesBackground from '@components/effects/ParticlesBackground';

@@ -5,7 +5,7 @@ import { RainbowKitProvider, darkTheme, Locale, connectorsForWallets } from "@ra
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base, zora, sepolia } from "wagmi/chains";
-import { useLanguage } from "@components/common/LanguageContext";
+import { useLanguage } from "@components/language/Context";
 import { Provider as JotaiProvider } from 'jotai';
 
 // 导入 RainbowKit 相关配置

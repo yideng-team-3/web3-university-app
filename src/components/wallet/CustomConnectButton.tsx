@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@components/language/Context';
 import { useAccount } from 'wagmi';
 import { useAtom } from 'jotai';
 import { walletConnectedAtom, walletAddressAtom, chainIdAtom } from '@/stores/walletStore';

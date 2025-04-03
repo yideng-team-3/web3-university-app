@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@components/language/Context';
 import Link from 'next/link';
 import MainLayout from '@components/common/MainLayout';
 import ParticlesBackground from '@components/effects/ParticlesBackground';

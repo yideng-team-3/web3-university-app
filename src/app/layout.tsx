@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono as GeistMono, Rajdhani, Share_Tech_Mono as ShareTechMono } from "next/font/google";
-import { LanguageProvider } from "@components/common/LanguageContext";
+import { LanguageProvider } from "@components/language/Context";
 import { Web3Providers } from "@components/wallet/Providers";
 import NavigationEventsHandler from "@components/common/NavigationEventsHandler";
 

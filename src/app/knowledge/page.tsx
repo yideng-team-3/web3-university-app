@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@components/language/Context';
 import MainLayout from '@components/common/MainLayout';
 import ParticlesBackground from '@components/effects/ParticlesBackground';
 import CursorTracker from '@components/effects/CursorTracker';
