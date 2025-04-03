@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useWallet } from './useWallet';
 
 // 定义API基础URL（可考虑移至环境配置文件中）
-const API_BASE_URL = 'http://localhost:3001/dev';
+// const API_BASE_URL = 'http://localhost:3001/dev';
+
+const API_BASE_URL = 'https://v9yt1y1qe6.execute-api.us-east-2.amazonaws.com/dev';
 
 // 用户接口
 interface User {
