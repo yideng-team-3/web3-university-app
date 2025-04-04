@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import ParticlesBackground from '@components/effects/ParticlesBackground';
 import CursorTracker from '@components/effects/CursorTracker';
 
-const CyberpunkPageNotFoundView = () => {
+const PageNotFoundView = () => {
   const router = useRouter();
   const [glitchEffect, setGlitchEffect] = useState(false);
   
@@ -141,4 +141,4 @@ const CyberpunkPageNotFoundView = () => {
   );
 };
 
-export default CyberpunkPageNotFoundView;
+export default PageNotFoundView;

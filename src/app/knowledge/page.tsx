@@ -20,7 +20,7 @@ interface Article {
   image?: string;
 }
 
-const CyberpunkKnowledgeBasePage = () => {
+const KnowledgeBasePage = () => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -353,4 +353,4 @@ const CyberpunkKnowledgeBasePage = () => {
   );
 };
 
-export default CyberpunkKnowledgeBasePage;
+export default KnowledgeBasePage;

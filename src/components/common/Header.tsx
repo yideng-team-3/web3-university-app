@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { walletConnectedAtom } from '@/stores/walletStore';
 
-const CyberpunkHeader = () => {
+const Header = () => {
   const { t } = useLanguage();
   const pathname = usePathname();
   const { isConnected } = useAccount();
@@ -101,6 +101,16 @@ const CyberpunkHeader = () => {
               >
                 {t('nav.videos') || '视频'}
               </Link>
+              <Link 
+                href="/market"
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                  isActive('/market') 
+                    ? 'text-neon-blue border-neon-blue' 
+                    : 'text-gray-400 border-transparent hover:text-neon-pink hover:border-neon-pink'
+                }`}
+              >
+                {t('nav.market') || '模拟市场'}
+              </Link>
             </nav>
           </div>
 
@@ -172,6 +182,16 @@ const CyberpunkHeader = () => {
             >
               {t('nav.videos') || '视频'}
             </Link>
+            <Link 
+              href="/market"
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                isActive('/market') 
+                  ? 'bg-neon-blue bg-opacity-10 text-neon-blue' 
+                  : 'text-gray-400 hover:bg-dark-bg hover:text-neon-pink'
+              }`}
+            >
+              {t('nav.market') || '模拟市场'}
+            </Link>
             <div className="pt-4 pb-2 border-t border-neon-blue border-opacity-20">
               <div className="flex items-center justify-between">
                 <LanguageSwitcher />
@@ -194,4 +214,4 @@ const CyberpunkHeader = () => {
   );
 };
 
-export default CyberpunkHeader;
+export default Header;

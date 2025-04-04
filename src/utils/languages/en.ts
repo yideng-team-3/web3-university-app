@@ -5,6 +5,7 @@ const enTranslations: TranslationDict = {
   "nav.home": "Home",
   "nav.knowledgeBase": "Knowledge Base",
   "nav.videos": "Videos",
+  "nav.market": "Simulation Market",
   "button.connectWallet": "Connect Wallet",
 
   // Hero Section
@@ -100,6 +101,41 @@ const enTranslations: TranslationDict = {
   "kb.newsletterDesc": "Subscribe to our newsletter to receive the latest blockchain technology and industry developments",
   "kb.emailPlaceholder": "Enter your email address",
   "kb.subscribe": "Subscribe",
+
+  // Market Page
+  "market.title": "Simulation Market",
+  "market.subtitle": "Learn cryptocurrency market operations through our simulation environment without financial risk. Track real-time market data and test trading strategies.",
+  "market.stats.marketCap": "Market Cap",
+  "market.stats.tradingVolume": "24h Trading Volume",
+  "market.stats.totalCoins": "Total Coins",
+  "market.stats.exchanges": "Exchanges",
+  "market.popularCoins": "Popular Coins",
+  "market.learningResources": "Learning Resources",
+  "market.cryptoBasics": "Cryptocurrency Basics",
+  "market.tradingStrategies": "Trading Strategies",
+  "market.defiExplained": "DeFi Explained",
+  "market.coinInfo": "Coin Information",
+  "market.simulationTrading": "Simulation Trading",
+  "market.currentPrice": "Current Price",
+  "market.buy": "Buy",
+  "market.sell": "Sell",
+  "market.loginToTrade": "Login to trade with simulation funds",
+  "market.loginRegister": "Login / Register",
+  "market.marketAnalysis": "Market Analysis",
+  "market.support": "Support",
+  "market.resistance": "Resistance",
+  "market.relatedNews": "Related News",
+  "market.readMore": "Read More",
+  
+  // Chart Component
+  "chart.open": "Open",
+  "chart.close": "Close",
+  "chart.high": "High",
+  "chart.low": "Low",
+  "chart.volume": "Volume",
+  "chart.change": "Change",
+  "chart.marketCap": "Market Cap",
+  "chart.24hVol": "24h Vol",
 };
 
 export default enTranslations;

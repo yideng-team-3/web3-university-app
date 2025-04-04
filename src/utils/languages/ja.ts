@@ -5,6 +5,7 @@ const jaTranslations: TranslationDict = {
   "nav.home": "ホーム",
   "nav.knowledgeBase": "ナレッジベース",
   "nav.videos": "動画",
+  "nav.market": "シミュレーション市場",
   "button.connectWallet": "ウォレット接続",
 
   // ヒーローセクション
@@ -99,6 +100,41 @@ const jaTranslations: TranslationDict = {
   "kb.newsletterDesc": "ニュースレターを購読して、最新のブロックチェーン技術と業界の動向を受け取る",
   "kb.emailPlaceholder": "メールアドレスを入力",
   "kb.subscribe": "購読する",
+
+  // マーケットページ
+  "market.title": "シミュレーション市場",
+  "market.subtitle": "実際の金融リスクを負うことなく、シミュレーション環境で暗号通貨市場の操作を学びましょう。リアルタイムの市場データを追跡し、取引戦略をテストできます。",
+  "market.stats.marketCap": "時価総額",
+  "market.stats.tradingVolume": "24時間取引量",
+  "market.stats.totalCoins": "コイン総数",
+  "market.stats.exchanges": "取引所数",
+  "market.popularCoins": "人気のコイン",
+  "market.learningResources": "学習リソース",
+  "market.cryptoBasics": "暗号通貨の基礎",
+  "market.tradingStrategies": "取引戦略",
+  "market.defiExplained": "DeFiの解説",
+  "market.coinInfo": "コイン情報",
+  "market.simulationTrading": "シミュレーション取引",
+  "market.currentPrice": "現在価格",
+  "market.buy": "購入",
+  "market.sell": "売却",
+  "market.loginToTrade": "ログインしてシミュレーション資金で取引",
+  "market.loginRegister": "ログイン / 登録",
+  "market.marketAnalysis": "市場分析",
+  "market.support": "サポートライン",
+  "market.resistance": "レジスタンスライン",
+  "market.relatedNews": "関連ニュース",
+  "market.readMore": "もっと読む",
+  
+  // チャートコンポーネント
+  "chart.open": "始値",
+  "chart.close": "終値",
+  "chart.high": "高値",
+  "chart.low": "安値",
+  "chart.volume": "取引量",
+  "chart.change": "変動率",
+  "chart.marketCap": "時価総額",
+  "chart.24hVol": "24時間取引量",
 };
 
 export default jaTranslations;

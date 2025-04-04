@@ -5,6 +5,7 @@ const zhTranslations: TranslationDict = {
   "nav.home": "首页",
   "nav.knowledgeBase": "知识库",
   "nav.videos": "视频",
+  "nav.market": "模拟市场",
   "button.connectWallet": "连接钱包",
 
   // 英雄区块
@@ -94,6 +95,41 @@ const zhTranslations: TranslationDict = {
   "kb.newsletterDesc": "订阅我们的通讯，获取最新的区块链技术和行业发展动态",
   "kb.emailPlaceholder": "输入您的邮箱地址",
   "kb.subscribe": "订阅",
+
+  // 市场页面
+  "market.title": "模拟市场",
+  "market.subtitle": "通过我们的模拟交易环境，学习加密货币市场操作，无需承担实际财务风险。跟踪实时市场数据，测试交易策略。",
+  "market.stats.marketCap": "总市值",
+  "market.stats.tradingVolume": "24小时交易量",
+  "market.stats.totalCoins": "总币种数",
+  "market.stats.exchanges": "交易所数量",
+  "market.popularCoins": "热门币种",
+  "market.learningResources": "学习资源",
+  "market.cryptoBasics": "加密货币基础",
+  "market.tradingStrategies": "交易策略",
+  "market.defiExplained": "DeFi 详解",
+  "market.coinInfo": "币种介绍",
+  "market.simulationTrading": "模拟交易",
+  "market.currentPrice": "当前价格",
+  "market.buy": "买入",
+  "market.sell": "卖出",
+  "market.loginToTrade": "登录后使用模拟资金进行交易",
+  "market.loginRegister": "登录 / 注册",
+  "market.marketAnalysis": "市场分析",
+  "market.support": "支撑位",
+  "market.resistance": "阻力位",
+  "market.relatedNews": "相关资讯",
+  "market.readMore": "阅读更多",
+  
+  // 图表组件
+  "chart.open": "开盘价",
+  "chart.close": "收盘价",
+  "chart.high": "最高价",
+  "chart.low": "最低价",
+  "chart.volume": "成交量",
+  "chart.change": "涨跌幅",
+  "chart.marketCap": "市值",
+  "chart.24hVol": "24小时成交量",
 };
 
 export default zhTranslations;
