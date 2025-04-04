@@ -13,7 +13,7 @@ import {
   Line,
   Legend
 } from 'recharts';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@/components/language/Context';
 
 // 定义数据类型接口
 interface CoinDataPoint {

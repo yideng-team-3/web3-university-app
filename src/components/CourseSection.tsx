@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@/components/language/Context';
 import Link from 'next/link';
 
 interface CourseSectionProps {

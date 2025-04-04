@@ -1,84 +1,89 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { useLanguage } from '@components/common/LanguageContext';
-import CyberpunkHeader from '@components/common/Header';
+import { useLanguage } from '@components/language/Context';
+import Header from '@components/common/Header';
 import WalletAuthListener from '@components/wallet/WalletAuthListener';
 import ParticlesBackground from '@components/effects/ParticlesBackground';
 import CursorTracker from '@components/effects/CursorTracker';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-// 添加下划线前缀来表示它是被允许的未使用变量
-interface _RouteChangeEvent extends Event {
-  detail?: {
-    url: string;
-    prevPath: string;
-  };
-}
-
 const MainLayout = ({ children }: LayoutProps) => {
   const { t } = useLanguage();
-  // 为未使用的变量添加下划线前缀
-  const _router = useRouter();
+  const pathname = usePathname();
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
-  // 重命名未使用的状态变量
-  const [_prevPath, _setPrevPath] = useState<string | null>(null);
+  const [prevPath, setPrevPath] = useState<string | null>(null);
 
-  // 页面转场动画状态管理
+  // Page transition management - moved from NavigationEventsHandler
   useEffect(() => {
-    // 确保在挂载时加载样式
+    // Store previous path for comparison
+    if (prevPath !== pathname && prevPath !== null) {
+      // Transition effect
+      setIsPageTransitioning(true);
+      
+      // Create route change start event (replacing NavigationEventsHandler logic)
+      const routeChangeStart = new CustomEvent('nextjs:route-change-start', {
+        detail: {
+          url: pathname,
+          prevPath
+        },
+      });
+      document.dispatchEvent(routeChangeStart);
+      
+      // Simulate route change complete after a short delay
+      setTimeout(() => {
+        setIsPageTransitioning(false);
+        
+        const routeChangeComplete = new CustomEvent('nextjs:route-change-complete', {
+          detail: {
+            url: pathname,
+            prevPath
+          },
+        });
+        document.dispatchEvent(routeChangeComplete);
+      }, 300);
+    }
+    
+    // Update prevPath for the next comparison
+    setPrevPath(pathname);
+  }, [pathname, prevPath]);
+  
+  // Global theme setup - centralized here instead of per-page
+  useEffect(() => {
+    // Load global fonts
     const linkElement = document.createElement('link');
     linkElement.rel = 'stylesheet';
     linkElement.href = 'https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap';
     document.head.appendChild(linkElement);
     
-    // 设置全局cyberpunk主题
+    // Apply global cyberpunk theme - now only done once here
     document.body.classList.add('cyberpunk-theme');
-    
-    // 修改事件处理函数以接收 Event 类型
-    const handleRouteChangeStart = () => {
-      setIsPageTransitioning(true);
-      _setPrevPath(window.location.pathname);
-    };
-    
-    const handleRouteChangeComplete = () => {
-      // 延迟一点关闭转场动画状态，确保新页面内容已加载
-      setTimeout(() => {
-        setIsPageTransitioning(false);
-      }, 300);
-    };
-    
-    // 添加路由事件监听 (不再需要类型转换)
-    document.addEventListener('nextjs:route-change-start', handleRouteChangeStart);
-    document.addEventListener('nextjs:route-change-complete', handleRouteChangeComplete);
     
     return () => {
       document.head.removeChild(linkElement);
       document.body.classList.remove('cyberpunk-theme');
-      document.removeEventListener('nextjs:route-change-start', handleRouteChangeStart);
-      document.removeEventListener('nextjs:route-change-complete', handleRouteChangeComplete);
     };
   }, []);
 
   return (
     <div className="min-h-screen bg-dark-bg text-white relative">
       <WalletAuthListener />
-      <CyberpunkHeader />
+      <Header />
       
-      {/* 全局共享的背景效果 - 只初始化一次 */}
+      {/* Global shared background effects - now initialized only once */}
       <div className="fixed inset-0 pointer-events-none z-[-2]">
         <ParticlesBackground />
       </div>
       
-      {/* 全局共享的光标效果 - 只初始化一次 */}
+      {/* Global shared cursor effect - now initialized only once */}
       <CursorTracker />
       
-      {/* 页面转场动画层 */}
+      {/* Page transition animation layer */}
       {isPageTransitioning && (
         <div className="fixed inset-0 z-50 bg-darker-bg transition-opacity duration-300 pointer-events-none">
           <div className="w-full h-full flex items-center justify-center">
@@ -89,14 +94,19 @@ const MainLayout = ({ children }: LayoutProps) => {
         </div>
       )}
       
-      {/* 主要内容区域 */}
+      {/* Main content area */}
       <main className="relative">
         <div className={`transition-opacity duration-300 ${isPageTransitioning ? 'opacity-0' : 'opacity-100'}`}>
           {children}
         </div>
       </main>
       
-      {/* 页脚 */}
+      {/* Cyberpunk grid overlay - moved here to avoid duplicate creation */}
+      <div className="fixed inset-0 pointer-events-none z-[-1]">
+        <div className="cyber-grid"></div>
+      </div>
+      
+      {/* Footer */}
       <footer className="bg-darker-bg text-white py-12 relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -180,7 +190,7 @@ const MainLayout = ({ children }: LayoutProps) => {
             <div className="cyber-divider mb-6"></div>
             <p className="cyberpunk-glow text-neon-blue">{t('footer.copyright')}</p>
             
-            {/* 装饰性编码线 */}
+            {/* Decorative code lines */}
             <div className="mt-4 text-xs font-mono text-neon-green opacity-30 overflow-hidden">
               <div className="marquee">
                 <span>010101010 CYBR:// WEB3-UNIVERSITY 101010101 BLOCKCHAIN:// CONNECTION_ESTABLISHED 010101 DEFI:// ACCESS_GRANTED 101010</span>
@@ -189,12 +199,12 @@ const MainLayout = ({ children }: LayoutProps) => {
           </div>
         </div>
         
-        {/* 背景装饰 */}
+        {/* Background decoration */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-neon-blue to-transparent opacity-5"></div>
         <div className="absolute top-0 left-0 w-full h-px bg-neon-blue opacity-30"></div>
       </footer>
       
-      {/* 装饰性网格线 - 移到这里以避免重复创建 */}
+      {/* Decorative grid lines - moved here to avoid duplicate creation */}
       <div className="fixed inset-0 pointer-events-none z-[-1]">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -205,7 +215,7 @@ const MainLayout = ({ children }: LayoutProps) => {
         }}></div>
       </div>
       
-      {/* 装饰性扫描线 - 移到这里以避免重复创建 */}
+      {/* Decorative scan lines - moved here to avoid duplicate creation */}
       <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="scan-line"></div>

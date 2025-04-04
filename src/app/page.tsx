@@ -1,14 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useLanguage } from '@components/common/LanguageContext';
+import { useLanguage } from '@components/language/Context';
 import Link from 'next/link';
 import MainLayout from '@components/common/MainLayout';
-import ParticlesBackground from '@components/effects/ParticlesBackground';
-import CursorTracker from '@components/effects/CursorTracker';
-import YiDengCoinChart from '@components/charts/YiDengCoinChart';
 
-const CyberpunkHomePage = () => {
+const HomePage = () => {
   const { t } = useLanguage();
   
   // Add cyber styling to body
@@ -22,13 +19,6 @@ const CyberpunkHomePage = () => {
   
   return (
     <MainLayout>
-      {/* Background effects */}
-      <ParticlesBackground />
-      <CursorTracker />
-      
-      {/* Cyberpunk grid overlay */}
-      <div className="cyber-grid"></div>
-      
       {/* Hero section */}
       <section className="relative bg-dark-bg cyberpunk-overlay text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
@@ -55,9 +45,20 @@ const CyberpunkHomePage = () => {
                 </Link>
               </div>
             </div>
-            <div className="hidden md:block cyberpunk-border p-1 rounded-lg">
-              <div className="bg-darker-bg p-2 rounded-lg">
-                <YiDengCoinChart />
+            <div className="hidden md:block">
+              <div className="cyberpunk-border p-4 rounded-lg">
+                <div className="bg-darker-bg p-6 rounded-lg text-center">
+                  <h3 className="text-2xl font-bold text-neon-blue mb-3">Web3 学习平台</h3>
+                  <p className="text-gray-400 mb-4">探索区块链和Web3领域的最新知识与技术</p>
+                  <div className="flex justify-center">
+                    <Link 
+                      href="/market" 
+                      className="cyberpunk-button px-4 py-2 rounded-md"
+                    >
+                      访问模拟市场
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -304,4 +305,4 @@ const CyberpunkHomePage = () => {
   );
 };
 
-export default CyberpunkHomePage;
+export default HomePage;
