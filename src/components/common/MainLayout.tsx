@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState, useCallback } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@components/language/Context';
 import Header from '@components/common/Header';
@@ -19,14 +19,14 @@ const MainLayout = ({ children }: LayoutProps) => {
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const [prevPath, setPrevPath] = useState<string | null>(null);
 
-  // Page transition management - moved from NavigationEventsHandler
+  // Page transition management 
   useEffect(() => {
     // Store previous path for comparison
     if (prevPath !== pathname && prevPath !== null) {
       // Transition effect
       setIsPageTransitioning(true);
       
-      // Create route change start event (replacing NavigationEventsHandler logic)
+      // Create route change start event 
       const routeChangeStart = new CustomEvent('nextjs:route-change-start', {
         detail: {
           url: pathname,
