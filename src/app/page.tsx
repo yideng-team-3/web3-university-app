@@ -4,8 +4,6 @@ import React, { useEffect } from 'react';
 import { useLanguage } from '@components/language/Context';
 import Link from 'next/link';
 import MainLayout from '@components/common/MainLayout';
-import ParticlesBackground from '@components/effects/ParticlesBackground';
-import CursorTracker from '@components/effects/CursorTracker';
 
 const HomePage = () => {
   const { t } = useLanguage();
@@ -21,13 +19,6 @@ const HomePage = () => {
   
   return (
     <MainLayout>
-      {/* Background effects */}
-      <ParticlesBackground />
-      <CursorTracker />
-      
-      {/* Cyberpunk grid overlay */}
-      <div className="cyber-grid"></div>
-      
       {/* Hero section */}
       <section className="relative bg-dark-bg cyberpunk-overlay text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">

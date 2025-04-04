@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@components/language/Context';
 import MainLayout from '@components/common/MainLayout';
-import ParticlesBackground from '@components/effects/ParticlesBackground';
-import CursorTracker from '@components/effects/CursorTracker';
 
 // 定义知识库文章类型
 interface Article {
@@ -26,18 +24,15 @@ const KnowledgeBasePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [glitchEffect, setGlitchEffect] = useState(false);
   
-  // 赛博朋克效果
+  // Apply glitch effect periodically
   useEffect(() => {
-    document.body.classList.add('cyberpunk-theme');
-    
-    // 随机应用故障效果
+    // Random glitch effect
     const glitchInterval = setInterval(() => {
       setGlitchEffect(true);
       setTimeout(() => setGlitchEffect(false), 200);
     }, 5000);
     
     return () => {
-      document.body.classList.remove('cyberpunk-theme');
       clearInterval(glitchInterval);
     };
   }, []);
@@ -135,13 +130,6 @@ const KnowledgeBasePage = () => {
 
   return (
     <MainLayout>
-      {/* 背景效果 */}
-      <ParticlesBackground />
-      <CursorTracker />
-      
-      {/* 赛博格栅背景 */}
-      <div className="cyber-grid"></div>
-      
       {/* 知识库页面头部 */}
       <section className="relative bg-dark-bg text-white cyberpunk-overlay">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">

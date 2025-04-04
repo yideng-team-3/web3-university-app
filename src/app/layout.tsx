@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono as GeistMono, Rajdhani, Share_Tech_Mono as ShareTechMono } from "next/font/google";
 import { LanguageProvider } from "@components/language/Context";
 import { Web3Providers } from "@components/wallet/Providers";
-import NavigationEventsHandler from "@components/common/NavigationEventsHandler";
 
 import "./globals.css";
 import '@rainbow-me/rainbowkit/styles.css';
 
-// 导入字体并配置预加载
+// Import fonts and configure preloading
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -20,7 +19,7 @@ const geistMono = GeistMono({
   display: 'swap',
 });
 
-// 添加赛博朋克风格所需的字体
+// Add cyberpunk style fonts
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
   subsets: ["latin"],
@@ -28,7 +27,7 @@ const rajdhani = Rajdhani({
   display: 'swap',
 });
 
-// 加载 Share Tech Mono 字体（使用 Google Fonts）
+// Load Share Tech Mono font (from Google Fonts)
 const shareTechMono = ShareTechMono({
   weight: '400',
   subsets: ['latin'],
@@ -37,8 +36,8 @@ const shareTechMono = ShareTechMono({
 });
 
 export const metadata: Metadata = {
-  title: "web3-university",
-  description: "A defi app for web3-university with cyberpunk style",
+  title: "Web3 University",
+  description: "A Web3 learning platform with cyberpunk style",
 };
 
 export default function RootLayout({
@@ -53,8 +52,6 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <Web3Providers>
-            {/* 添加路由事件监听器 */}
-            <NavigationEventsHandler />
             {children}
           </Web3Providers>
         </LanguageProvider>

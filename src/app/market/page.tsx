@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '@components/language/Context';
 import MainLayout from '@components/common/MainLayout';
-import ParticlesBackground from '@components/effects/ParticlesBackground';
-import CursorTracker from '@components/effects/CursorTracker';
 import YiDengCoinChart from '@components/charts/YiDengCoinChart';
 import Link from 'next/link';
 import { CircleDollarSign, TrendingUp, Bookmark, BookOpen } from 'lucide-react';
@@ -13,16 +11,7 @@ const MarketPage = () => {
   const { t } = useLanguage();
   const [selectedCoin, setSelectedCoin] = useState('yideng');
   
-  // Add cyber styling to body
-  useEffect(() => {
-    document.body.classList.add('cyberpunk-theme');
-    
-    return () => {
-      document.body.classList.remove('cyberpunk-theme');
-    };
-  }, []);
-  
-  // 模拟虚拟货币列表
+  // Mock cryptocurrency list
   const mockCoins = [
     { id: 'yideng', name: 'YIDENG COIN', symbol: 'YDC', price: 270.23, change: -12.43 },
     { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', price: 3244.56, change: 2.41 },
@@ -33,13 +22,6 @@ const MarketPage = () => {
   
   return (
     <MainLayout>
-      {/* Background effects */}
-      <ParticlesBackground />
-      <CursorTracker />
-      
-      {/* Cyberpunk grid overlay */}
-      <div className="cyber-grid"></div>
-      
       {/* Hero section */}
       <section className="relative bg-dark-bg cyberpunk-overlay text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
