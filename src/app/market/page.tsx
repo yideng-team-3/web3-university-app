@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@components/language/Context';
-import MainLayout from '@components/common/MainLayout';
 import YiDengCoinChart from '@components/charts/YiDengCoinChart';
 import Link from 'next/link';
 import { CircleDollarSign, TrendingUp, Bookmark, BookOpen } from 'lucide-react';
@@ -10,7 +9,7 @@ import { CircleDollarSign, TrendingUp, Bookmark, BookOpen } from 'lucide-react';
 const MarketPage = () => {
   const { t } = useLanguage();
   const [selectedCoin, setSelectedCoin] = useState('yideng');
-  
+
   // Mock cryptocurrency list
   const mockCoins = [
     { id: 'yideng', name: 'YIDENG COIN', symbol: 'YDC', price: 270.23, change: -12.43 },
@@ -19,21 +18,24 @@ const MarketPage = () => {
     { id: 'solana', name: 'Solana', symbol: 'SOL', price: 157.32, change: 5.67 },
     { id: 'cardano', name: 'Cardano', symbol: 'ADA', price: 0.457, change: -2.34 },
   ];
-  
+
   return (
-    <MainLayout>
+    <section>
       {/* Hero section */}
       <section className="relative bg-dark-bg cyberpunk-overlay text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           <div className="text-center mb-8">
-            <h1 className="cyberpunk-title text-4xl md:text-5xl font-bold mb-4" data-text={t('market.title')}>
+            <h1
+              className="cyberpunk-title text-4xl md:text-5xl font-bold mb-4"
+              data-text={t('market.title')}
+            >
               {t('market.title')}
             </h1>
             <p className="cyberpunk-glow text-lg md:text-xl mb-8 text-neon-blue max-w-3xl mx-auto">
               {t('market.subtitle')}
             </p>
           </div>
-          
+
           {/* Market Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="cyberpunk-card p-4 rounded-lg">
@@ -83,7 +85,7 @@ const MarketPage = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Main market content */}
       <section className="bg-darker-bg py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,15 +93,17 @@ const MarketPage = () => {
             {/* Sidebar - Coin List */}
             <div className="lg:col-span-1">
               <div className="cyberpunk-card p-4 rounded-lg sticky top-24">
-                <h3 className="text-xl font-bold text-neon-blue mb-4">{t('market.popularCoins')}</h3>
+                <h3 className="text-xl font-bold text-neon-blue mb-4">
+                  {t('market.popularCoins')}
+                </h3>
                 <div className="space-y-2">
-                  {mockCoins.map((coin) => (
+                  {mockCoins.map(coin => (
                     <button
                       key={coin.id}
                       onClick={() => setSelectedCoin(coin.id)}
                       className={`w-full text-left p-3 rounded-md transition-colors flex justify-between items-center ${
-                        selectedCoin === coin.id 
-                          ? 'bg-neon-blue bg-opacity-10 border border-neon-blue' 
+                        selectedCoin === coin.id
+                          ? 'bg-neon-blue bg-opacity-10 border border-neon-blue'
                           : 'border border-transparent hover:bg-gray-800'
                       }`}
                     >
@@ -114,37 +118,84 @@ const MarketPage = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-white font-mono">${coin.price.toLocaleString()}</p>
-                        <p className={`text-xs ${coin.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                          {coin.change >= 0 ? '+' : ''}{coin.change}%
+                        <p
+                          className={`text-xs ${coin.change >= 0 ? 'text-green-400' : 'text-red-400'}`}
+                        >
+                          {coin.change >= 0 ? '+' : ''}
+                          {coin.change}%
                         </p>
                       </div>
                     </button>
                   ))}
                 </div>
-                
+
                 <div className="mt-6 pt-4 border-t border-gray-700">
-                  <h3 className="text-lg font-semibold text-neon-pink mb-3">{t('market.learningResources')}</h3>
+                  <h3 className="text-lg font-semibold text-neon-pink mb-3">
+                    {t('market.learningResources')}
+                  </h3>
                   <ul className="space-y-2">
                     <li>
-                      <Link href="/knowledge/crypto-basics" className="text-gray-400 hover:text-neon-blue transition-colors flex items-center">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <Link
+                        href="/knowledge/crypto-basics"
+                        className="text-gray-400 hover:text-neon-blue transition-colors flex items-center"
+                      >
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                         {t('market.cryptoBasics')}
                       </Link>
                     </li>
                     <li>
-                      <Link href="/knowledge/trading-strategies" className="text-gray-400 hover:text-neon-blue transition-colors flex items-center">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      <Link
+                        href="/knowledge/trading-strategies"
+                        className="text-gray-400 hover:text-neon-blue transition-colors flex items-center"
+                      >
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                          />
                         </svg>
                         {t('market.tradingStrategies')}
                       </Link>
                     </li>
                     <li>
-                      <Link href="/knowledge/defi-explained" className="text-gray-400 hover:text-neon-blue transition-colors flex items-center">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <Link
+                        href="/knowledge/defi-explained"
+                        className="text-gray-400 hover:text-neon-blue transition-colors flex items-center"
+                      >
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
                         </svg>
                         {t('market.defiExplained')}
                       </Link>
@@ -153,20 +204,23 @@ const MarketPage = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Main content - Chart */}
             <div className="lg:col-span-3">
               <div className="cyberpunk-card p-4 rounded-lg h-full">
                 <div className="h-[600px]">
                   <YiDengCoinChart />
                 </div>
-                
+
                 {/* Coin Info */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-xl font-bold text-neon-blue mb-4">{t('market.coinInfo')}</h3>
+                    <h3 className="text-xl font-bold text-neon-blue mb-4">
+                      {t('market.coinInfo')}
+                    </h3>
                     <p className="text-gray-400 mb-4">
-                      YIDENG COIN (YDC) 是Web3 University生态系统中的功能型代币，用于支付课程、奖励学习成果以及参与社区治理。通过持有YDC，用户可以获得平台独家内容的访问权限，以及参与决策投票的权力。
+                      YIDENG COIN (YDC) 是Web3
+                      University生态系统中的功能型代币，用于支付课程、奖励学习成果以及参与社区治理。通过持有YDC，用户可以获得平台独家内容的访问权限，以及参与决策投票的权力。
                     </p>
                     <div className="grid grid-cols-2 gap-4 mt-4">
                       <div>
@@ -183,13 +237,17 @@ const MarketPage = () => {
                       </div>
                       <div>
                         <p className="text-gray-400 text-sm">白皮书</p>
-                        <Link href="#" className="text-neon-blue hover:underline">查看白皮书</Link>
+                        <Link href="#" className="text-neon-blue hover:underline">
+                          查看白皮书
+                        </Link>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <h3 className="text-xl font-bold text-neon-pink mb-4">{t('market.simulationTrading')}</h3>
+                    <h3 className="text-xl font-bold text-neon-pink mb-4">
+                      {t('market.simulationTrading')}
+                    </h3>
                     <div className="bg-darker-bg p-4 rounded-lg border border-gray-700">
                       <div className="mb-4">
                         <p className="text-gray-400 text-sm mb-1">{t('market.currentPrice')}</p>
@@ -205,14 +263,19 @@ const MarketPage = () => {
                       </div>
                       <div className="text-center text-gray-400 text-sm">
                         <p>{t('market.loginToTrade')}</p>
-                        <Link href="/login" className="text-neon-blue hover:underline mt-2 inline-block">
+                        <Link
+                          href="/login"
+                          className="text-neon-blue hover:underline mt-2 inline-block"
+                        >
                           {t('market.loginRegister')}
                         </Link>
                       </div>
                     </div>
-                    
+
                     <div className="mt-4 bg-darker-bg p-4 rounded-lg border border-gray-700">
-                      <h4 className="text-lg font-semibold text-white mb-3">{t('market.marketAnalysis')}</h4>
+                      <h4 className="text-lg font-semibold text-white mb-3">
+                        {t('market.marketAnalysis')}
+                      </h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-400">{t('market.support')} 1</span>
@@ -239,26 +302,45 @@ const MarketPage = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Related News Section */}
       <section className="bg-dark-bg py-12 border-t border-neon-blue border-opacity-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="cyberpunk-title text-2xl font-bold mb-8" data-text={t('market.relatedNews')}>
+          <h2
+            className="cyberpunk-title text-2xl font-bold mb-8"
+            data-text={t('market.relatedNews')}
+          >
             {t('market.relatedNews')}
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
+            {[1, 2, 3].map(item => (
               <div key={item} className="cyberpunk-card p-4 rounded-lg">
                 <div className="text-xs text-neon-blue mb-2">2023-12-{10 + item}</div>
-                <h3 className="text-lg font-semibold text-white mb-2">加密货币市场周分析：波动加剧，机构入场</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  加密货币市场周分析：波动加剧，机构入场
+                </h3>
                 <p className="text-gray-400 text-sm mb-3">
                   本周比特币价格经历了显著波动，从高点回落后又有所反弹。与此同时，更多的机构投资者正在进入这一市场...
                 </p>
-                <Link href="#" className="text-neon-pink hover:underline text-sm inline-flex items-center">
+                <Link
+                  href="#"
+                  className="text-neon-pink hover:underline text-sm inline-flex items-center"
+                >
                   {t('market.readMore')}
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </Link>
               </div>
@@ -266,7 +348,7 @@ const MarketPage = () => {
           </div>
         </div>
       </section>
-    </MainLayout>
+    </section>
   );
 };
 
