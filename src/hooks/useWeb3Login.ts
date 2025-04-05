@@ -28,15 +28,15 @@ interface AuthState {
  */
 const useWeb3Auth = () => {
   // 使用现有的useWallet hook
-  const { 
-    isActive, 
-    isActivating, 
-    connect: connectWallet, 
+  const {
+    isActive,
+    isActivating,
+    connect: connectWallet,
     disconnect: disconnectWallet,
-    account, 
+    account,
     chainId,
     provider,
-    formatAddress
+    formatAddress,
   } = useWallet();
 
   const [state, setState] = useState<AuthState>({
@@ -49,59 +49,64 @@ const useWeb3Auth = () => {
   // API服务 - 仅保留认证相关功能
   const apiService = {
     // 获取nonce
-    fetchNonce: async (address: string): Promise<{nonce: string, signMessage: string}> => {
+    fetchNonce: async (address: string): Promise<{ nonce: string; signMessage: string }> => {
       const response = await fetch(`${API_BASE_URL}/auth/nonce`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ walletAddress: address })
+        body: JSON.stringify({ walletAddress: address }),
       });
-      
+
       if (!response.ok) {
         throw new Error('获取nonce失败');
       }
-      
-      return await response.json();
+
+      return response.json();
     },
-    
+
     // 验证签名
-    verifySignature: async (address: string, signature: string, nonce: string, ensName?: string | null): Promise<{accessToken: string, user: User}> => {
+    verifySignature: async (
+      address: string,
+      signature: string,
+      nonce: string,
+      ensName?: string | null,
+    ): Promise<{ accessToken: string; user: User }> => {
       const response = await fetch(`${API_BASE_URL}/auth/web3-login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           walletAddress: address,
           signature,
           nonce,
-          ensName
-        })
+          ensName,
+        }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || '登录失败');
       }
-      
-      return await response.json();
+
+      return response.json();
     },
-    
+
     // 检查登录状态
     checkLoginStatus: async (token: string): Promise<User> => {
       const response = await fetch(`${API_BASE_URL}/auth/profile`, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-      
+
       if (!response.ok) {
         throw new Error('Token invalid');
       }
-      
+
       return (await response.json()).user;
-    }
+    },
   };
 
   // 初始化 - 检查本地存储中的令牌
@@ -110,8 +115,9 @@ const useWeb3Auth = () => {
     const token = localStorage.getItem('auth_token');
     if (token) {
       setState(prev => ({ ...prev, isLoading: true }));
-      
-      apiService.checkLoginStatus(token)
+
+      apiService
+        .checkLoginStatus(token)
         .then(user => {
           setState(prev => ({
             ...prev,
@@ -137,21 +143,21 @@ const useWeb3Auth = () => {
 
     try {
       await connectWallet();
-      
+
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: null
+        error: null,
       }));
-      
+
       return true;
     } catch (error) {
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: (error as Error)?.message || '连接钱包失败，请重试！'
+        error: (error as Error)?.message || '连接钱包失败，请重试！',
       }));
-      
+
       return false;
     }
   }, [connectWallet]);
@@ -166,7 +172,7 @@ const useWeb3Auth = () => {
     if (!account) {
       setState(prev => ({
         ...prev,
-        error: '未找到钱包地址'
+        error: '未找到钱包地址',
       }));
       return null;
     }
@@ -176,14 +182,14 @@ const useWeb3Auth = () => {
     try {
       // 1. 获取nonce
       const { nonce, signMessage } = await apiService.fetchNonce(account);
-      
+
       // 2. 签名消息
       if (!provider) {
         throw new Error('获取签名器失败');
       }
-      
+
       const signature = await provider.getSigner().signMessage(signMessage);
-      
+
       // 3. 获取ENS名称(如果有)
       let ensName = null;
       try {
@@ -193,34 +199,34 @@ const useWeb3Auth = () => {
       } catch (e) {
         console.log('获取ENS名称失败');
       }
-      
+
       // 4. 验证签名
       const { accessToken, user } = await apiService.verifySignature(
         account,
         signature,
         nonce,
-        ensName
+        ensName,
       );
-      
+
       // 5. 保存token
       localStorage.setItem('auth_token', accessToken);
-      
+
       setState(prev => ({
         ...prev,
         isLoading: false,
         isLoggedIn: true,
         user,
       }));
-      
+
       return user;
     } catch (error) {
       console.error('登录失败:', error);
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: (error as Error)?.message || '登录失败，请重试！'
+        error: (error as Error)?.message || '登录失败，请重试！',
       }));
-      
+
       return null;
     }
   }, [account, isActive, provider, connect]);
@@ -229,7 +235,7 @@ const useWeb3Auth = () => {
   const checkLoginStatus = useCallback(async (): Promise<boolean> => {
     const token = localStorage.getItem('auth_token');
     if (!token) return false;
-    
+
     try {
       const user = await apiService.checkLoginStatus(token);
       setState(prev => ({
@@ -252,7 +258,7 @@ const useWeb3Auth = () => {
   // 登出
   const logout = useCallback(() => {
     localStorage.removeItem('auth_token');
-    
+
     setState(prev => ({
       ...prev,
       isLoggedIn: false,
