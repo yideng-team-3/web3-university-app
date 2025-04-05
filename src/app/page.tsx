@@ -3,7 +3,6 @@
 import React from 'react';
 import { useLanguage } from '@components/language/Context';
 import Link from 'next/link';
-// import MainLayout from '@components/common/MainLayout';
 
 const HomePage = () => {
   const { t } = useLanguage();
