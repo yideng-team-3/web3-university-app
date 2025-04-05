@@ -1,0 +1,52 @@
+/* 赛博朋克主题变量 */
+:root {
+    /* 赛博朋克颜色 */
+    --neon-pink: #ff2a6d;
+    --neon-blue: #05d9e8;
+    --neon-purple: #d300c5;
+    --neon-green: #39ff14;
+    --dark-bg: #0d0221;
+    --darker-bg: #0a0118;
+    
+    /* 赛博朋克渐变和效果 */
+    --cyberpunk-gradient: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+    --glitch-shadow: 0 0 10px var(--neon-pink), 0 0 20px rgba(255, 42, 109, 0.5);
+    
+    /* 赛博朋克字体 */
+    --terminal-font: var(--font-share-tech-mono), var(--font-geist-mono), monospace;
+  
+    /* RainbowKit 变量 */
+    --rk-colors-accentColor: var(--neon-blue);
+    --rk-colors-accentColorForeground: #0d0221;
+    --rk-colors-actionButtonBorder: rgba(5, 217, 232, 0.3);
+    --rk-colors-actionButtonBorderMobile: rgba(5, 217, 232, 0.4);
+    --rk-radii-actionButton: 4px;
+    --rk-fonts-body: var(--terminal-font), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  /* 启用赛博朋克主题时的样式 */
+  body.cyberpunk-theme {
+    background-color: var(--dark-bg);
+    color: #ffffff;
+    font-family: var(--terminal-font), var(--font-rajdhani), var(--font-geist-sans), sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* 赛博朋克主题滚动条 */
+  body.cyberpunk-theme::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  body.cyberpunk-theme::-webkit-scrollbar-track {
+    background: var(--darker-bg);
+  }
+  
+  body.cyberpunk-theme::-webkit-scrollbar-thumb {
+    background: var(--neon-blue);
+    border-radius: 3px;
+  }
+  
+  body.cyberpunk-theme::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-pink);
+  }
