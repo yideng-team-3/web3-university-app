@@ -47,6 +47,8 @@
     "wagmi": "^2.14.16"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@eslint/eslintrc": "^3",
     "@opennextjs/cloudflare": "^0.3.8",
     "@svgr/webpack": "^8.1.0",

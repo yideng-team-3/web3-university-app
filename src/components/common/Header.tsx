@@ -117,11 +117,11 @@ const Header = () => {
           {/* 右侧操作区: 语言切换 + 自定义连接钱包按钮 */}
           <div className="hidden md:flex items-center space-x-3 flex-shrink-0">
             <LanguageSwitcher />
-            <div className="cyberpunk-border rounded-md">
+            <div className="rounded-md">
               <CustomConnectButton />
             </div>
             {effectivelyConnected && (
-              <div className="cyberpunk-border rounded-md">
+              <div className="rounded-md">
                 <BuyTokenButton />
               </div>
             )}
