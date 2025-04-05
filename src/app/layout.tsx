@@ -1,29 +1,35 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono as GeistMono, Rajdhani, Share_Tech_Mono as ShareTechMono } from "next/font/google";
-import { LanguageProvider } from "@components/language/Context";
-import { Web3Providers } from "@components/wallet/Providers";
+import type { Metadata } from 'next';
+import {
+  Geist,
+  Geist_Mono as GeistMono,
+  Rajdhani,
+  Share_Tech_Mono as ShareTechMono,
+} from 'next/font/google';
+import { LanguageProvider } from '@components/language/Context';
+import { Web3Providers } from '@components/wallet/Providers';
 
-import "./globals.css";
+import './globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
+import MainLayout from '@/components/common/MainLayout';
 
 // Import fonts and configure preloading
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
   display: 'swap',
 });
 
 const geistMono = GeistMono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
   display: 'swap',
 });
 
 // Add cyberpunk style fonts
 const rajdhani = Rajdhani({
-  variable: "--font-rajdhani",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  variable: '--font-rajdhani',
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -36,8 +42,8 @@ const shareTechMono = ShareTechMono({
 });
 
 export const metadata: Metadata = {
-  title: "Web3 University",
-  description: "A Web3 learning platform with cyberpunk style",
+  title: 'Web3 University',
+  description: 'A Web3 learning platform with cyberpunk style',
 };
 
 export default function RootLayout({
@@ -52,7 +58,7 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <Web3Providers>
-            {children}
+            <MainLayout>{children}</MainLayout>
           </Web3Providers>
         </LanguageProvider>
       </body>
