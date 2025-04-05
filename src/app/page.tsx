@@ -1,21 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLanguage } from '@components/language/Context';
 import Link from 'next/link';
-// import MainLayout from '@components/common/MainLayout';
 
 const HomePage = () => {
   const { t } = useLanguage();
-
-  // Add cyber styling to body
-  useEffect(() => {
-    document.body.classList.add('cyberpunk-theme');
-
-    return () => {
-      document.body.classList.remove('cyberpunk-theme');
-    };
-  }, []);
 
   return (
     <section>
