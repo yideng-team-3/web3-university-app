@@ -46,6 +46,8 @@ export default [
       'open-next.config.js',
       'tailwind.config.js',
       'postcss.config.js',
+      'eslint.config.js',     // 添加对当前配置文件的忽略
+      '.eslintrc.js',         // 添加对可能存在的旧配置文件的忽略
       'src/types/ethers-contracts/**',
       'src/utils/languages/*.ts',
     ],
@@ -78,11 +80,11 @@ export default [
       
       // React 相关规则
       'react/react-in-jsx-scope': 0, // Next.js 不需要导入 React
-      'jsx-runtime': 0, // 添加这个规则
+      // 移除无效的 jsx-runtime 规则
       'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
       'react/prop-types': 0, // 使用 TypeScript 类型替代
       'react/require-default-props': 0, // TypeScript 处理这个
-      'react/no-unescaped-entities': 'warn', // 将未转义实体的错误降级为警告
+      // 删除与后面冲突的 react/no-unescaped-entities 规则
       
       // TypeScript 相关规则
       '@typescript-eslint/no-explicit-any': 'warn', // 降低为警告级别
@@ -110,10 +112,7 @@ export default [
       }],
       'no-underscore-dangle': 0,
       'no-use-before-define': 0,
-      'no-unused-vars': ['warn', { 
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_'
-      }],
+      // TypeScript项目中移除普通的no-unused-vars，使用@typescript-eslint/no-unused-vars代替
       'no-shadow': 'warn', // 降级为警告
       'no-plusplus': 'warn', // 降级为警告
       'no-nested-ternary': 'warn', // 降级为警告

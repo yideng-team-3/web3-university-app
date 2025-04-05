@@ -1,35 +1,26 @@
 @import 'tailwindcss';
-@import './performance-optimizations.css';
+/* 赛博朋克主题变量会在 themes/cyberpunk/theme.css 中定义 */
+@import '../styles/cyberpunk-theme.css';
+@import '../styles/cyberpunk-components.css';
+@import '../styles/cyberpunk-effects.css';
+@import '../styles/cyberpunk-animations.css';
+
+@import '../styles/performance-optimizations.css';
+
 
 :root {
   --color-primary: var(--color-green-500);
-  /* 原始变量 */
+  /* 基础颜色变量 */
   --background: #ffffff;
   --foreground: #171717;
 
-  /* 赛博朋克主题变量 */
-  --neon-pink: #ff2a6d;
-  --neon-blue: #05d9e8;
-  --neon-purple: #d300c5;
-  --neon-green: #39ff14;
-  --dark-bg: #0d0221;
-  --darker-bg: #0a0118;
-  --cyberpunk-gradient: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-  --glitch-shadow: 0 0 10px var(--neon-pink), 0 0 20px rgba(255, 42, 109, 0.5);
-  --terminal-font: var(--font-share-tech-mono), var(--font-geist-mono), monospace;
-
-  /* rainbowkit */
-  --rk-colors-accentColor: var(--neon-blue); /* 更改为霓虹蓝 */
-  --rk-colors-accentColorForeground: #0d0221;
-  --rk-colors-actionButtonBorder: rgba(5, 217, 232, 0.3);
-  --rk-colors-actionButtonBorderMobile: rgba(5, 217, 232, 0.4);
-  --rk-radii-actionButton: 4px;
-  --rk-fonts-body: var(--terminal-font), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* 字体变量 */
+  --font-primary: Arial, Helvetica, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: var(--dark-bg);
+    --background: #0d0221;
     --foreground: #ededed;
   }
 }
@@ -38,306 +29,23 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-primary);
 }
 
-/* 启用赛博朋克主题时的样式 */
-body.cyberpunk-theme {
-  background-color: var(--dark-bg);
-  color: #ffffff;
-  font-family: var(--terminal-font), var(--font-rajdhani), var(--font-geist-sans), sans-serif;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* 自定义滚动条 */
-body.cyberpunk-theme::-webkit-scrollbar {
-  width: 6px;
-}
-
-body.cyberpunk-theme::-webkit-scrollbar-track {
-  background: var(--darker-bg);
-}
-
-body.cyberpunk-theme::-webkit-scrollbar-thumb {
-  background: var(--neon-blue);
-  border-radius: 3px;
-}
-
-body.cyberpunk-theme::-webkit-scrollbar-thumb:hover {
-  background: var(--neon-pink);
-}
-
-/* 赛博朋克发光文字效果 */
-.cyberpunk-glow {
-  text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
-  letter-spacing: 1px;
-}
-
-/* 赛博朋克标题 */
-.cyberpunk-title {
-  font-weight: 700;
-  text-transform: uppercase;
-  background: var(--cyberpunk-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  letter-spacing: 2px;
-}
-
-.cyberpunk-title::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 2px;
-  top: 0;
-  color: var(--neon-pink);
-  background: none;
-  -webkit-text-fill-color: var(--neon-pink);
-  opacity: 0.3;
-  z-index: -1;
-}
-
-/* 霓虹边框效果 */
-.cyberpunk-border {
-  border: 1px solid var(--neon-blue);
-  box-shadow: 0 0 10px var(--neon-blue);
-  transition: all 0.3s ease;
-}
-
-.cyberpunk-border:hover {
-  border-color: var(--neon-pink);
-  box-shadow: 0 0 15px var(--neon-pink);
-}
-
-/* 赛博朋克按钮 */
-.cyberpunk-button {
-  background: transparent;
-  color: var(--neon-blue);
-  border: 1px solid var(--neon-blue);
-  box-shadow: 0 0 5px var(--neon-blue);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  z-index: 1;
-}
-
-.cyberpunk-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(5, 217, 232, 0.4), transparent);
-  transition: all 0.4s ease;
-  z-index: -1;
-}
-
-.cyberpunk-button:hover {
-  color: #ffffff;
-  border-color: var(--neon-pink);
-  box-shadow: 0 0 10px var(--neon-pink);
-}
-
-.cyberpunk-button:hover::before {
-  left: 100%;
-}
-
-/* 赛博朋克卡片 */
-.cyberpunk-card {
-  background: rgba(13, 2, 33, 0.8);
-  border: 1px solid var(--neon-blue);
-  box-shadow: 0 0 15px rgba(5, 217, 232, 0.2);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.cyberpunk-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--neon-purple);
-  box-shadow: 0 0 20px rgba(211, 0, 197, 0.4);
-}
-
-/* 覆盖层风格 */
-.cyberpunk-overlay {
-  position: relative;
-}
-
-.cyberpunk-overlay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(10, 1, 24, 0.1),
-    rgba(10, 1, 24, 0.1) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* 故障效果动画 */
-@keyframes glitch {
-  0% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  75% {
-    transform: translateX(-2px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.cyberpunk-glitch {
-  animation: glitch 0.5s infinite;
-}
-
-/* 赛博分隔线 */
-.cyber-divider {
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--neon-blue), transparent);
-  position: relative;
-  margin: 20px 0;
-}
-
-/* 背景网格线 */
-.cyber-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-size: 40px 40px;
-  background-image:
-    linear-gradient(to right, rgba(5, 217, 232, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(5, 217, 232, 0.1) 1px, transparent 1px);
-  z-index: -1;
-}
-
-/* Three.js 粒子画布 */
-#particles-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-  pointer-events: none;
-}
-
-/* 光标追踪元素 */
-.cursor-follower {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  background: var(--neon-blue);
-  border-radius: 50%;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  z-index: 9999;
-  opacity: 0.7;
-}
-
-.cursor-circle {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--neon-pink);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0.5;
-}
-
-/* 扫描线动画 */
-.scan-line {
-  position: absolute;
-  width: 100%;
-  height: 5px;
-  background: linear-gradient(to right,
-    rgba(255, 42, 109, 0) 0%,
-    rgba(255, 42, 109, 0.3) 50%,
-    rgba(255, 42, 109, 0) 100%
-  );
-  box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
-  top: -5px;
-  animation: scan-line 8s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes scan-line {
-  0% {
-    top: -5px;
-  }
-  100% {
-    top: 100%;
-  }
-}
-
-/* 噪点效果 */
-.bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 150px;
-}
-
-/* 文字闪烁效果 */
-.text-flicker {
-  animation: text-flicker 3s linear infinite;
-}
-
-@keyframes text-flicker {
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
-    opacity: 1;
-  }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
-    opacity: 0.2;
-  }
-}
-
-/* 跑马灯效果 */
-@keyframes marquee {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 15s linear infinite;
-}
-
-/* 终端闪烁光标 */
-.terminal-cursor {
-  display: inline-block;
+/* 通用滚动条样式 */
+::-webkit-scrollbar {
   width: 8px;
-  height: 16px;
-  background-color: var(--neon-green);
-  animation: terminal-blink 1s step-end infinite;
 }
 
-@keyframes terminal-blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }

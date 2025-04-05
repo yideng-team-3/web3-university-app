@@ -1,0 +1,100 @@
+/* 赛博朋克发光文字效果 */
+.cyberpunk-glow {
+  text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+  letter-spacing: 1px;
+}
+
+/* 覆盖层风格 */
+.cyberpunk-overlay {
+  position: relative;
+}
+
+.cyberpunk-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(10, 1, 24, 0.1),
+    rgba(10, 1, 24, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 背景网格线 */
+.cyber-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(5, 217, 232, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(5, 217, 232, 0.1) 1px, transparent 1px);
+  z-index: -1;
+}
+
+/* Three.js 粒子画布 */
+#particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* 光标追踪元素 */
+.cursor-follower {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: var(--neon-blue);
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 9999;
+  opacity: 0.7;
+}
+
+.cursor-circle {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--neon-pink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.5;
+}
+
+/* 扫描线 */
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right,
+    rgba(255, 42, 109, 0) 0%,
+    rgba(255, 42, 109, 0.3) 50%,
+    rgba(255, 42, 109, 0) 100%
+  );
+  box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
+  top: -5px;
+  animation: scan-line 8s linear infinite;
+  pointer-events: none;
+}
+
+/* 噪点效果 */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 150px;
+}

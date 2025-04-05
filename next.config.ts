@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
       resolveAlias: {
         '@components': resolve('src/components'),
         '@hooks': resolve('src/hooks'),
-        '@pages': resolve('src/pages'),
         '@layouts': resolve('src/layouts'),
         '@assets': resolve('src/assets'),
         '@states': resolve('src/states'),
