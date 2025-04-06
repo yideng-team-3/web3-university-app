@@ -237,13 +237,6 @@ const MainLayout = ({ children }: LayoutProps) => {
           }}
         ></div>
       </div>
-
-      {/* Decorative scan lines - moved here to avoid duplicate creation */}
-      <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="scan-line"></div>
-        </div>
-      </div>
     </div>
   );
 };
