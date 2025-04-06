@@ -89,14 +89,14 @@ const MainLayout = ({ children }: LayoutProps) => {
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/" className="text-gray-400 hover:text-neon-pink transition-colors">
+                  <Link href="/" className="text-gray-400 hover:text-indigo-600 transition-colors">
                     {t('footer.home')}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/knowledge"
-                    className="text-gray-400 hover:text-neon-pink transition-colors"
+                    className="text-gray-400 hover:text-indigo-600 transition-colors"
                   >
                     {t('footer.courses')}
                   </Link>
@@ -104,7 +104,7 @@ const MainLayout = ({ children }: LayoutProps) => {
                 <li>
                   <Link
                     href="/about"
-                    className="text-gray-400 hover:text-neon-pink transition-colors"
+                    className="text-gray-400 hover:text-indigo-600 transition-colors"
                   >
                     {t('footer.about')}
                   </Link>
@@ -112,7 +112,7 @@ const MainLayout = ({ children }: LayoutProps) => {
                 <li>
                   <Link
                     href="/contact"
-                    className="text-gray-400 hover:text-neon-pink transition-colors"
+                    className="text-gray-400 hover:text-indigo-600 transition-colors"
                   >
                     {t('footer.contact')}
                   </Link>

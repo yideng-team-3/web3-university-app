@@ -76,7 +76,7 @@ const Header = () => {
                 className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
                   isActive('/') 
                     ? 'text-neon-blue border-neon-blue' 
-                    : 'text-gray-400 border-transparent hover:text-neon-pink hover:border-neon-pink'
+                    : 'text-gray-400 border-transparent hover:text-indigo-600'
                 }`}
               >
                 {t('nav.home') || '首页'}
@@ -86,27 +86,27 @@ const Header = () => {
                 className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
                   isActive('/knowledge') 
                     ? 'text-neon-blue border-neon-blue' 
-                    : 'text-gray-400 border-transparent hover:text-neon-pink hover:border-neon-pink'
+                    : 'text-gray-400 border-transparent hover:text-indigo-600'
                 }`}
               >
                 {t('nav.knowledgeBase') || '知识库'}
               </Link>
-              <Link 
+              {/* <Link 
                 href="/videos"
                 className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
                   isActive('/videos') 
                     ? 'text-neon-blue border-neon-blue' 
-                    : 'text-gray-400 border-transparent hover:text-neon-pink hover:border-neon-pink'
+                    : 'text-gray-400 border-transparent hover:text-indigo-600'
                 }`}
               >
                 {t('nav.videos') || '视频'}
-              </Link>
+              </Link> */}
               <Link 
                 href="/market"
                 className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
                   isActive('/market') 
                     ? 'text-neon-blue border-neon-blue' 
-                    : 'text-gray-400 border-transparent hover:text-neon-pink hover:border-neon-pink'
+                    : 'text-gray-400 border-transparent hover:text-indigo-600'
                 }`}
               >
                 {t('nav.market') || '模拟市场'}

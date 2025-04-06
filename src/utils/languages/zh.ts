@@ -11,8 +11,6 @@ const zhTranslations: TranslationDict = {
   // 英雄区块
   "hero.welcome": "欢迎来到Web3 University",
   "hero.subtitle": "探索区块链技术的前沿知识，提升您的专业技能",
-  "hero.browseCourses": "浏览课程",
-  "hero.resources": "学习资源",
 
   // 特色课程
   "courses.title": "特色课程",
@@ -45,12 +43,6 @@ const zhTranslations: TranslationDict = {
   // 合作伙伴
   "partners.title": "合作伙伴",
   "partners.subtitle": "与行业领先的区块链企业和机构合作",
-
-  // 学习资源区块
-  "resources.title": "探索我们的学习资源",
-  "resources.subtitle":
-    "丰富的视频教程、技术文档和项目案例，助您掌握区块链技术",
-  "resources.browse": "浏览资源库",
 
   // 页脚
   "footer.about": "关于我们",

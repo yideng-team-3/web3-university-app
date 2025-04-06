@@ -23,20 +23,6 @@ const HomePage = () => {
               <p className="cyberpunk-glow text-lg md:text-xl mb-8 text-neon-blue">
                 {t('hero.subtitle')}
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/courses"
-                  className="cyberpunk-button px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
-                >
-                  {t('hero.browseCourses')}
-                </Link>
-                <Link
-                  href="/resources"
-                  className="cyberpunk-button px-6 py-3 rounded-md transition-colors"
-                >
-                  {t('hero.resources')}
-                </Link>
-              </div>
             </div>
             <div className="hidden md:block">
               <div className="cyberpunk-border p-4 rounded-lg">
@@ -296,38 +282,6 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* 学习资源区块 */}
-      <section className="relative bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-16 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2
-              className="cyberpunk-title text-3xl font-bold mb-4"
-              data-text={t('resources.title')}
-            >
-              {t('resources.title')}
-            </h2>
-            <p className="text-neon-blue text-lg mb-8 cyberpunk-glow">{t('resources.subtitle')}</p>
-            <div className="flex justify-center">
-              <Link href="/resources" className="cyberpunk-button px-6 py-3 rounded-md">
-                {t('resources.browse')}
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* 背景网格装饰 */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black opacity-40"></div>
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'radial-gradient(circle, var(--neon-purple) 1px, transparent 1px)',
-              backgroundSize: '30px 30px',
-            }}
-          ></div>
         </div>
       </section>
     </section>

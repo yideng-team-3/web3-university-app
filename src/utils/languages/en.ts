@@ -12,8 +12,6 @@ const enTranslations: TranslationDict = {
   "hero.welcome": "Welcome to Web3 University",
   "hero.subtitle":
     "Explore cutting-edge blockchain knowledge and enhance your professional skills",
-  "hero.browseCourses": "Browse Courses",
-  "hero.resources": "Learning Resources",
 
   // Featured Courses
   "courses.title": "Featured Courses",
@@ -51,12 +49,6 @@ const enTranslations: TranslationDict = {
   "partners.title": "Our Partners",
   "partners.subtitle":
     "Collaborating with industry-leading blockchain companies and institutions",
-
-  // Resources Section
-  "resources.title": "Explore Our Learning Resources",
-  "resources.subtitle":
-    "Rich video tutorials, technical documentation and project cases to help you master blockchain technology",
-  "resources.browse": "Browse Resource Library",
 
   // Footer
   "footer.about": "About Us",
