@@ -21,16 +21,6 @@
   animation: glitch 0.5s infinite;
 }
 
-/* 扫描线动画 */
-@keyframes scan-line {
-  0% {
-    top: -5px;
-  }
-  100% {
-    top: 100%;
-  }
-}
-
 /* 文字闪烁效果 */
 @keyframes text-flicker {
   0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
