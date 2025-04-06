@@ -6,7 +6,6 @@ import { useLanguage } from '@components/language/Context';
 import Header from '@components/common/Header';
 import WalletAuthListener from '@components/wallet/WalletAuthListener';
 import ParticlesBackground from '@components/effects/ParticlesBackground';
-import CursorTracker from '@components/effects/CursorTracker';
 import { usePathname } from 'next/navigation';
 
 interface LayoutProps {
@@ -63,9 +62,6 @@ const MainLayout = ({ children }: LayoutProps) => {
       <div className="fixed inset-0 pointer-events-none z-[-2]">
         <ParticlesBackground />
       </div>
-
-      {/* Global shared cursor effect - now initialized only once */}
-      <CursorTracker />
 
       {/* Main content area */}
       <main className="relative">{children}</main>

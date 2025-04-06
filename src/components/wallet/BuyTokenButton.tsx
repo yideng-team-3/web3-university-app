@@ -2,7 +2,15 @@
 
 import React, { useState } from 'react';
 import { parseEther } from 'viem';
-import { useAccount, useBalance, useWriteContract, useChainId, useWaitForTransactionReceipt, useSwitchChain, useReadContract } from 'wagmi';
+import {
+  useAccount,
+  useBalance,
+  useWriteContract,
+  useChainId,
+  useWaitForTransactionReceipt,
+  useSwitchChain,
+  useReadContract,
+} from 'wagmi';
 import YiDengTokenABI from '@/contracts/abis/YiDengToken.json';
 import { toast } from 'react-hot-toast';
 import { getContractAddress } from '@/config/contracts';
@@ -18,10 +26,10 @@ export const BuyTokenButton: React.FC = () => {
   const { switchChain } = useSwitchChain();
   const [walletConnected] = useAtom(walletConnectedAtom);
   const [storedChainId] = useAtom(chainIdAtom);
-  
+
   // Use stored chainId if available, otherwise use the one from Wagmi
   const effectiveChainId = chainId || storedChainId;
-  
+
   // 获取用户 ETH 余额
   const { data: balance } = useBalance({
     address,
@@ -31,7 +39,9 @@ export const BuyTokenButton: React.FC = () => {
   const isCorrectNetwork = effectiveChainId === sepolia.id;
 
   // 获取当前网络的合约地址
-  const contractAddress = effectiveChainId ? getContractAddress(effectiveChainId).YIDENG_TOKEN : null;
+  const contractAddress = effectiveChainId
+    ? getContractAddress(effectiveChainId).YIDENG_TOKEN
+    : null;
 
   // 读取 YiDeng 代币余额
   const { data: ydBalance } = useReadContract({
@@ -122,12 +132,10 @@ export const BuyTokenButton: React.FC = () => {
         <div className="absolute right-0 mt-2 w-72 rounded-lg bg-white shadow-lg py-2 z-50">
           <div className="px-4 py-3">
             <h3 className="text-lg font-medium text-gray-900">购买 YiDeng 代币</h3>
-            
+
             {!isCorrectNetwork ? (
               <div className="mt-4">
-                <div className="text-sm text-red-600 mb-4">
-                  请切换到 Sepolia 测试网进行购买
-                </div>
+                <div className="text-sm text-red-600 mb-4">请切换到 Sepolia 测试网进行购买</div>
                 <button
                   onClick={handleSwitchNetwork}
                   className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -141,9 +149,7 @@ export const BuyTokenButton: React.FC = () => {
                   <p className="text-sm text-gray-500">
                     ETH 余额: {balance?.formatted} {balance?.symbol}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    YD 余额: {formattedYdBalance} YD
-                  </p>
+                  <p className="text-sm text-gray-500">YD 余额: {formattedYdBalance} YD</p>
                 </div>
                 <div className="mt-4">
                   <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
@@ -154,7 +160,7 @@ export const BuyTokenButton: React.FC = () => {
                       type="number"
                       id="amount"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={e => setAmount(e.target.value)}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       placeholder="输入 ETH 数量"
                       min="0"
@@ -169,7 +175,7 @@ export const BuyTokenButton: React.FC = () => {
                   <button
                     onClick={handleBuy}
                     disabled={isDisabled}
-                    className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
                   >
                     {buttonText}
                   </button>
