@@ -9,7 +9,6 @@ import Link from 'next/link';
 
 // 导入合约 ABI
 import YiDengTokenABI from '@/contracts/abis/YiDengToken.json';
-import CourseCertificateABI from '@/contracts/abis/AccessControl.json';
 import CourseMarketABI from '@/contracts/abis/CourseMarket.json';
 
 // 定义一个自定义类型来处理区块链错误
@@ -29,7 +28,6 @@ const ContractTestPage = () => {
   // 状态管理
   const [tokenBalance, setTokenBalance] = useState<string>('0');
   const [ydCoin, setYdCoin] = useState<string>('0x41cb388B29EfC443d5aC1dD511B186249bD0fe45');
-  const [certificateAddress, _setCertificateAddress] = useState<string>('');
   const [txHash, setTxHash] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -46,16 +44,13 @@ const ContractTestPage = () => {
   const [tokenPrice, setTokenPrice] = useState<string>('0');
   const [tokenOwner, setTokenOwner] = useState<string>('');
   const [courseName, setCourseName] = useState<string>('');
-  const [courseDescription, setCourseDescription] = useState<string>('');
   const [coursePrice, setCoursePrice] = useState<string>('100');
-  const [courseId, setCourseId] = useState<string>('');
-  const [_courseInfo, setCourseInfo] = useState<any>(null);
   const [marketAddress, setMarketAddress] = useState<string>(
     '0x436CbE7D8DC5593B3B7B137698a37212f4a4227a',
   );
   const [web2CourseId, setWeb2CourseId] = useState<string>('');
   const [marketCourseId, setMarketCourseId] = useState<string>('');
-  const [marketCourseInfo, setMarketCourseInfo] = useState<any>(null);
+  const [marketCourseInfo] = useState<any>(null);
   const [studentAddress, setStudentAddress] = useState<string>('');
   const [allCourses, setAllCourses] = useState<any[]>([]);
   const [purchaseAmount, setPurchaseAmount] = useState<string>('0.01');
@@ -245,36 +240,6 @@ const ContractTestPage = () => {
     }
   };
 
-  // 检查证书合约角色
-  const checkCertificateRole = async () => {
-    if (!account || !certificateAddress || !provider) {
-      setError('请先连接钱包并输入证书合约地址');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const certificateContract = new Contract(
-        certificateAddress,
-        CourseCertificateABI.abi,
-        provider,
-      );
-
-      // 检查DEFAULT_ADMIN_ROLE
-      const DEFAULT_ADMIN_ROLE = await certificateContract.DEFAULT_ADMIN_ROLE();
-      const hasAdminRole = await certificateContract.hasRole(DEFAULT_ADMIN_ROLE, account);
-
-      addLog(`地址 ${account} ${hasAdminRole ? '拥有' : '没有'} 管理员角色`);
-    } catch (err) {
-      setError('检查证书角色失败');
-      addLog(`检查证书角色失败: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // 初始化代币合约信息
   const initTokenInfo = async () => {
     if (!ydCoin || !provider) {
@@ -350,125 +315,6 @@ const ContractTestPage = () => {
     } catch (err) {
       setError('转账失败');
       addLog(`转账失败: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 添加课程
-  const addCourse = async () => {
-    if (!account || !certificateAddress || !provider || !courseName || !courseDescription) {
-      setError('请先连接钱包并填写课程信息');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const signer = provider.getSigner();
-      const certificateContract = new Contract(
-        certificateAddress,
-        CourseCertificateABI.abi,
-        signer,
-      );
-
-      // 检查是否有管理员权限
-      const DEFAULT_ADMIN_ROLE = await certificateContract.DEFAULT_ADMIN_ROLE();
-      const hasAdminRole = await certificateContract.hasRole(DEFAULT_ADMIN_ROLE, account);
-
-      if (!hasAdminRole) {
-        throw new Error('您没有管理员权限，无法添加课程');
-      }
-
-      addLog(`准备添加课程: ${courseName}`);
-
-      // 添加课程
-      const tx = await certificateContract.addCourse(
-        courseName,
-        courseDescription,
-        parseEther(coursePrice), // 价格转换为 wei
-        {
-          gasLimit: 300000,
-        },
-      );
-
-      setTxHash(tx.hash);
-      addLog(`添加课程交易已发送: ${tx.hash}`);
-
-      // 等待交易确认
-      addLog('等待交易确认...');
-      const receipt = await tx.wait();
-
-      if (receipt.status === 0) {
-        throw new Error('交易执行失败，可能是合约函数调用出错');
-      }
-
-      // 尝试从事件中获取课程ID
-      const event = receipt.events?.find((e: any) => e.event === 'CourseAdded');
-      if (event && event.args) {
-        const newCourseId = event.args.courseId.toString();
-        setCourseId(newCourseId);
-        addLog(`课程添加成功，ID: ${newCourseId}`);
-      } else {
-        addLog('课程添加成功，但无法获取课程ID');
-      }
-
-      // 清空表单
-      setCourseName('');
-      setCourseDescription('');
-      setCoursePrice('100');
-    } catch (error) {
-      const err = error as BlockchainError;
-      console.error('添加课程错误:', err);
-
-      if (err.code === 'ACTION_REJECTED') {
-        setError('用户拒绝了交易');
-        addLog('用户拒绝了交易');
-      } else {
-        setError('添加课程失败');
-        addLog(`添加课程失败: ${err instanceof Error ? err.message : String(err)}`);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 获取课程信息
-  const getCourseInfo = async () => {
-    if (!provider || !certificateAddress || !courseId) {
-      setError('请先输入证书合约地址和课程ID');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const certificateContract = new Contract(
-        certificateAddress,
-        CourseCertificateABI.abi,
-        provider,
-      );
-
-      // 获取课程信息
-      const course = await certificateContract.getCourse(courseId);
-
-      // 格式化课程信息
-      const courseData = {
-        id: courseId,
-        name: course.name,
-        description: course.description,
-        price: formatUnits(course.price, 18),
-        active: course.active,
-        owner: course.owner,
-      };
-
-      setCourseInfo(courseData);
-      addLog(`获取到课程信息: ${courseData.name}`);
-    } catch (err) {
-      setError('获取课程信息失败');
-      addLog(`获取课程信息失败: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
@@ -864,9 +710,7 @@ const ContractTestPage = () => {
             {account && (
               <div className="flex items-center">
                 <span className="text-sm text-gray-600 mr-2">当前代币余额:</span>
-                <span className="text-sm font-mono p-1 rounded">
-                  {tokenBalance || '0'} YD
-                </span>
+                <span className="text-sm font-mono p-1 rounded">{tokenBalance || '0'} YD</span>
               </div>
             )}
           </div>
