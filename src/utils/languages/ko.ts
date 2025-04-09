@@ -55,7 +55,6 @@ const koTranslations: TranslationDict = {
   "footer.quickLinks": "빠른 링크",
   "footer.home": "홈",
   "footer.courses": "코스",
-  "footer.about": "회사 소개",
   "footer.contact": "문의하기",
   "footer.contactInfo": "연락처 정보",
   "footer.email": "이메일: info@ydu.edu",

@@ -51,7 +51,6 @@ const zhTranslations: TranslationDict = {
   "footer.quickLinks": "快速链接",
   "footer.home": "首页",
   "footer.courses": "课程",
-  "footer.about": "关于我们",
   "footer.contact": "联系我们",
   "footer.contactInfo": "联系方式",
   "footer.email": "邮箱: info@ydu.edu",
