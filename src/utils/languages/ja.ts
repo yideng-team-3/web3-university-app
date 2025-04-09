@@ -56,7 +56,6 @@ const jaTranslations: TranslationDict = {
   "footer.quickLinks": "クイックリンク",
   "footer.home": "ホーム",
   "footer.courses": "コース",
-  "footer.about": "私たちについて",
   "footer.contact": "お問い合わせ",
   "footer.contactInfo": "連絡先情報",
   "footer.email": "メール: info@ydu.edu",

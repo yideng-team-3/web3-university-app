@@ -57,7 +57,6 @@ const enTranslations: TranslationDict = {
   "footer.quickLinks": "Quick Links",
   "footer.home": "Home",
   "footer.courses": "Courses",
-  "footer.about": "About Us",
   "footer.contact": "Contact Us",
   "footer.contactInfo": "Contact Information",
   "footer.email": "Email: info@ydu.edu",
