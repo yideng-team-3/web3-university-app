@@ -16,6 +16,11 @@
 
   /* 字体变量 */
   --font-primary: Arial, Helvetica, sans-serif;
+
+  --font-geist-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-rajdhani: system-ui, sans-serif;
+  --font-share-tech-mono: monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,7 +34,12 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-primary);
+  font-family: var(--font-geist-sans);
+  /* font-family: var(--font-primary); */
+}
+
+code, pre {
+  font-family: var(--font-geist-mono);
 }
 
 /* 通用滚动条样式 */
