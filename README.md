@@ -102,6 +102,13 @@ yarn format
 1. 确保配置了有效的 `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
 2. 重启开发服务器以应用环境变量更改
 
+### deploy:cf部署不成功
+
+```bash
+# 修改执行命令
+"deploy:cf": "ESLINT_NO_DEV_ERRORS=true CI=false yarn run pages:build && wrangler pages deploy"
+```
+
 ## 项目结构
 
 ```
