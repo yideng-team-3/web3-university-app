@@ -3,6 +3,7 @@
 import React from 'react';
 import { useLanguage } from '@components/language/Context';
 import Link from 'next/link';
+import { TokenExchange } from '@components/token/TokenExchange';
 
 const HomePage = () => {
   const { t } = useLanguage();
@@ -36,6 +37,11 @@ const HomePage = () => {
                 >
                   {t('hero.resources')}
                 </Link>
+              </div>
+              
+              {/* 添加代币交易组件 */}
+              <div className="mt-8">
+                <TokenExchange />
               </div>
             </div>
             <div className="hidden md:block">
