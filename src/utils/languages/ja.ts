@@ -12,8 +12,6 @@ const jaTranslations: TranslationDict = {
   "hero.welcome": "Web3 Universityへようこそ",
   "hero.subtitle":
     "最先端のブロックチェーン知識を探求し、専門スキルを向上させましょう",
-  "hero.browseCourses": "コースを閲覧",
-  "hero.resources": "学習リソース",
 
   // 注目のコース
   "courses.title": "注目のコース",
@@ -51,12 +49,6 @@ const jaTranslations: TranslationDict = {
   "partners.title": "パートナー",
   "partners.subtitle": "業界をリードするブロックチェーン企業や機関との協力",
 
-  // リソースセクション
-  "resources.title": "学習リソースを探る",
-  "resources.subtitle":
-    "充実した動画チュートリアル、技術文書、プロジェクト事例でブロックチェーン技術の習得をサポート",
-  "resources.browse": "リソースライブラリを閲覧",
-
   // フッター
   "footer.about": "私たちについて",
   "footer.aboutDesc":
@@ -64,7 +56,6 @@ const jaTranslations: TranslationDict = {
   "footer.quickLinks": "クイックリンク",
   "footer.home": "ホーム",
   "footer.courses": "コース",
-  "footer.about": "私たちについて",
   "footer.contact": "お問い合わせ",
   "footer.contactInfo": "連絡先情報",
   "footer.email": "メール: info@ydu.edu",

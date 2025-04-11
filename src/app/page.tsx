@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useLanguage } from '@components/language/Context';
+import CourseSection from '@/components/courses/CourseSection';
 import Link from 'next/link';
 import { TokenExchange } from '@components/token/TokenExchange';
 
@@ -24,25 +25,6 @@ const HomePage = () => {
               <p className="cyberpunk-glow text-lg md:text-xl mb-8 text-neon-blue">
                 {t('hero.subtitle')}
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/courses"
-                  className="cyberpunk-button px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
-                >
-                  {t('hero.browseCourses')}
-                </Link>
-                <Link
-                  href="/resources"
-                  className="cyberpunk-button px-6 py-3 rounded-md transition-colors"
-                >
-                  {t('hero.resources')}
-                </Link>
-              </div>
-              
-              {/* 添加代币交易组件 */}
-              <div className="mt-8">
-                <TokenExchange />
-              </div>
             </div>
             <div className="hidden md:block">
               <div className="cyberpunk-border p-4 rounded-lg">
@@ -74,68 +56,7 @@ const HomePage = () => {
       </section>
 
       {/* Course section with cyberpunk styling */}
-      <section className="bg-darker-bg relative py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className="cyberpunk-title text-3xl font-bold mb-8 text-center"
-            data-text={t('courses.title')}
-          >
-            {t('courses.title')}
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* 课程卡片示例 */}
-            {[1, 2, 3].map(item => (
-              <div
-                key={item}
-                className="cyberpunk-card rounded-lg overflow-hidden transition-transform hover:translate-y-[-4px]"
-              >
-                <div className="h-48 bg-indigo-900 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-neon-blue to-neon-purple opacity-50"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="h-16 w-16 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  </div>
-                  <div className="absolute top-4 right-4 bg-neon-pink text-white px-2 py-1 text-xs rounded-md">
-                    热门
-                  </div>
-                </div>
-
-                <div className="p-5">
-                  <h3 className="text-xl font-semibold text-neon-blue mb-2">
-                    区块链高级开发课程 {item}
-                  </h3>
-                  <p className="text-gray-400 mb-4">
-                    掌握智能合约开发、DeFi协议架构和安全审计技能，成为区块链专业开发者。
-                  </p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-neon-green font-semibold">¥{1999 + item * 1000}</span>
-                    <button className="cyberpunk-button px-3 py-1 text-sm rounded">立即学习</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Link href="/courses" className="cyberpunk-button px-6 py-3 rounded-md inline-block">
-              查看全部课程
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CourseSection />
 
       {/* 统计数据 */}
       <section className="bg-dark-bg py-16 relative overflow-hidden cyberpunk-overlay">
@@ -302,38 +223,6 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* 学习资源区块 */}
-      <section className="relative bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-16 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2
-              className="cyberpunk-title text-3xl font-bold mb-4"
-              data-text={t('resources.title')}
-            >
-              {t('resources.title')}
-            </h2>
-            <p className="text-neon-blue text-lg mb-8 cyberpunk-glow">{t('resources.subtitle')}</p>
-            <div className="flex justify-center">
-              <Link href="/resources" className="cyberpunk-button px-6 py-3 rounded-md">
-                {t('resources.browse')}
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* 背景网格装饰 */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black opacity-40"></div>
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'radial-gradient(circle, var(--neon-purple) 1px, transparent 1px)',
-              backgroundSize: '30px 30px',
-            }}
-          ></div>
         </div>
       </section>
     </section>

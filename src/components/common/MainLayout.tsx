@@ -6,7 +6,6 @@ import { useLanguage } from '@components/language/Context';
 import Header from '@components/common/Header';
 import WalletAuthListener from '@components/wallet/WalletAuthListener';
 import ParticlesBackground from '@components/effects/ParticlesBackground';
-import CursorTracker from '@components/effects/CursorTracker';
 import { usePathname } from 'next/navigation';
 
 interface LayoutProps {
@@ -64,9 +63,6 @@ const MainLayout = ({ children }: LayoutProps) => {
         <ParticlesBackground />
       </div>
 
-      {/* Global shared cursor effect - now initialized only once */}
-      <CursorTracker />
-
       {/* Main content area */}
       <main className="relative">{children}</main>
 
@@ -89,14 +85,14 @@ const MainLayout = ({ children }: LayoutProps) => {
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/" className="text-gray-400 hover:text-neon-pink transition-colors">
+                  <Link href="/" className="text-gray-400 hover:text-indigo-600 transition-colors">
                     {t('footer.home')}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/knowledge"
-                    className="text-gray-400 hover:text-neon-pink transition-colors"
+                    className="text-gray-400 hover:text-indigo-600 transition-colors"
                   >
                     {t('footer.courses')}
                   </Link>
@@ -104,7 +100,7 @@ const MainLayout = ({ children }: LayoutProps) => {
                 <li>
                   <Link
                     href="/about"
-                    className="text-gray-400 hover:text-neon-pink transition-colors"
+                    className="text-gray-400 hover:text-indigo-600 transition-colors"
                   >
                     {t('footer.about')}
                   </Link>
@@ -112,7 +108,7 @@ const MainLayout = ({ children }: LayoutProps) => {
                 <li>
                   <Link
                     href="/contact"
-                    className="text-gray-400 hover:text-neon-pink transition-colors"
+                    className="text-gray-400 hover:text-indigo-600 transition-colors"
                   >
                     {t('footer.contact')}
                   </Link>
@@ -240,13 +236,6 @@ const MainLayout = ({ children }: LayoutProps) => {
             backgroundSize: '40px 40px',
           }}
         ></div>
-      </div>
-
-      {/* Decorative scan lines - moved here to avoid duplicate creation */}
-      <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="scan-line"></div>
-        </div>
       </div>
     </div>
   );

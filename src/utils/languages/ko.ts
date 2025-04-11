@@ -11,8 +11,6 @@ const koTranslations: TranslationDict = {
   // 히어로 섹션
   "hero.welcome": "Web3 University에 오신 것을 환영합니다",
   "hero.subtitle": "최첨단 블록체인 지식을 탐색하고 전문 기술을 향상시키세요",
-  "hero.browseCourses": "코스 둘러보기",
-  "hero.resources": "학습 자료",
 
   // 추천 코스
   "courses.title": "추천 코스",
@@ -50,12 +48,6 @@ const koTranslations: TranslationDict = {
   "partners.title": "파트너",
   "partners.subtitle": "업계 선도적인 블록체인 기업 및 기관과 협력",
 
-  // 리소스 섹션
-  "resources.title": "학습 자료 탐색",
-  "resources.subtitle":
-    "풍부한 비디오 튜토리얼, 기술 문서 및 프로젝트 사례로 블록체인 기술 습득 지원",
-  "resources.browse": "자료 라이브러리 탐색",
-
   // 푸터
   "footer.about": "회사 소개",
   "footer.aboutDesc":
@@ -63,7 +55,6 @@ const koTranslations: TranslationDict = {
   "footer.quickLinks": "빠른 링크",
   "footer.home": "홈",
   "footer.courses": "코스",
-  "footer.about": "회사 소개",
   "footer.contact": "문의하기",
   "footer.contactInfo": "연락처 정보",
   "footer.email": "이메일: info@ydu.edu",

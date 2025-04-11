@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { resolve } from "path";
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -31,7 +32,9 @@ const nextConfig: NextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    unoptimized: true, // Cloudflare Pages需要
   },
+  output: 'standalone', // 添加output配置用于Cloudflare部署
 
   // 改进的Webpack配置
   webpack: (config, { dev }) => {
@@ -55,7 +58,7 @@ const nextConfig: NextConfig = {
         cacheGroups: {
           ...config.optimization?.splitChunks?.cacheGroups,
           animations: {
-            test: /[\\/]node_modules[\\/](three|gsap|framer-motion)[\\/]/,
+            test: /[\\/]node_modules[\\/](three|framer-motion)[\\/]/,
             name: 'animations',
             priority: 10,
             chunks: 'all',
@@ -83,5 +86,11 @@ const nextConfig: NextConfig = {
     ];
   },
 };
+
+(async () => {
+  if (process.env.NODE_ENV === 'development') {
+    await setupDevPlatform();
+  }
+})();
 
 export default nextConfig;

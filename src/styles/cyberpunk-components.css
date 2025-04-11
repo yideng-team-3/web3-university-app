@@ -93,11 +93,3 @@
   margin: 20px 0;
 }
 
-/* 终端光标 */
-.terminal-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 16px;
-  background-color: var(--neon-green);
-  animation: terminal-blink 1s step-end infinite;
-}
