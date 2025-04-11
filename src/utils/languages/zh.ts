@@ -121,6 +121,22 @@ const zhTranslations: TranslationDict = {
   "chart.change": "涨跌幅",
   "chart.marketCap": "市值",
   "chart.24hVol": "24小时成交量",
+
+  // 代币交易
+  "tokenExchange.title": "代币交易",
+  "tokenExchange.connectWallet": "请先连接钱包以进行交易",
+  "tokenExchange.switchNetwork": "请切换到 Sepolia 测试网",
+  "tokenExchange.switchToSepolia": "切换到 Sepolia",
+  "tokenExchange.buyYD": "购买 YD 代币",
+  "tokenExchange.exchangeETH": "兑换 ETH",
+  "tokenExchange.ethBalance": "ETH 余额",
+  "tokenExchange.ydBalance": "YD 余额",
+  "tokenExchange.ethAmount": "ETH 数量",
+  "tokenExchange.ydAmount": "YD 数量",
+  "tokenExchange.estimated": "预计获得",
+  "tokenExchange.confirm": "确认",
+  "tokenExchange.confirming": "确认交易...",
+  "tokenExchange.processing": "处理中...",
 };
 
 export default zhTranslations;

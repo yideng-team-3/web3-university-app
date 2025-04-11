@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import LanguageSwitcher from '@components/language/Switcher';
 import { useLanguage } from '@components/language/Context';
 import {CustomConnectButton} from '@components/wallet/CustomConnectButton';
-import { BuyTokenButton } from '@components/wallet/BuyTokenButton';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -120,11 +119,6 @@ const Header = () => {
             <div className="rounded-md">
               <CustomConnectButton />
             </div>
-            {effectivelyConnected && (
-              <div className="rounded-md">
-                <BuyTokenButton />
-              </div>
-            )}
           </div>
 
           {/* 移动端菜单按钮 - 仅在小屏幕显示 */}
@@ -199,13 +193,6 @@ const Header = () => {
                   <CustomConnectButton />
                 </div>
               </div>
-              {effectivelyConnected && (
-                <div className="mt-3">
-                  <div className="cyberpunk-border rounded-md w-full">
-                    <BuyTokenButton />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

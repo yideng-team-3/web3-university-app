@@ -127,6 +127,22 @@ const enTranslations: TranslationDict = {
   "chart.change": "Change",
   "chart.marketCap": "Market Cap",
   "chart.24hVol": "24h Vol",
+
+  // Token Exchange
+  "tokenExchange.title": "Token Exchange",
+  "tokenExchange.connectWallet": "Please connect your wallet to trade",
+  "tokenExchange.switchNetwork": "Please switch to Sepolia Testnet",
+  "tokenExchange.switchToSepolia": "Switch to Sepolia",
+  "tokenExchange.buyYD": "Buy YD Token",
+  "tokenExchange.exchangeETH": "Exchange ETH",
+  "tokenExchange.ethBalance": "ETH Balance",
+  "tokenExchange.ydBalance": "YD Balance",
+  "tokenExchange.ethAmount": "ETH Amount",
+  "tokenExchange.ydAmount": "YD Amount",
+  "tokenExchange.estimated": "Estimated to receive",
+  "tokenExchange.confirm": "Confirm",
+  "tokenExchange.confirming": "Confirming...",
+  "tokenExchange.processing": "Processing...",
 };
 
 export default enTranslations;
