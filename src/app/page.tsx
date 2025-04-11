@@ -40,6 +40,7 @@ const HomePage = () => {
               </div>
             </div>
           </div>
+          <TokenExchange />
         </div>
 
         {/* Diagonal divider */}
