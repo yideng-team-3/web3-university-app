@@ -11,6 +11,7 @@ import { useAtom } from 'jotai';
 import { walletConnectedAtom, chainIdAtom } from '@/stores/walletStore';
 import { CustomConnectButton } from '../wallet/CustomConnectButton';
 import { useTokenExchange } from '@/hooks/useTokenExchange';
+import { useLanguage } from '@/components/language/Context';
 
 // 添加数字滚动动画组件
 const AnimatedNumber: React.FC<{ value: number | string; duration?: number; format?: 'integer' | 'decimal' }> = ({ 
@@ -56,6 +57,7 @@ const AnimatedNumber: React.FC<{ value: number | string; duration?: number; form
 
 export const TokenExchange: React.FC = () => {
   const [walletConnected] = useAtom(walletConnectedAtom);
+  const { t } = useLanguage();
   const {
     address,
     amount,
@@ -79,8 +81,8 @@ export const TokenExchange: React.FC = () => {
         <div className="absolute inset-0 rounded-3xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)] shadow-[0_0_20px_rgba(0,255,255,0.3)]"></div>
         
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-6">代币交易</h2>
-          <p className="text-gray-300 mb-6">请先连接钱包以进行交易</p>
+          <h2 className="text-2xl font-bold text-white mb-6">{t('tokenExchange.title')}</h2>
+          <p className="text-gray-300 mb-6">{t('tokenExchange.connectWallet')}</p>
           <div className="flex justify-center">
             <CustomConnectButton />
           </div>
@@ -96,14 +98,14 @@ export const TokenExchange: React.FC = () => {
         <div className="absolute inset-0 rounded-3xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)] shadow-[0_0_20px_rgba(0,255,255,0.3)]"></div>
         
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-6">代币交易</h2>
-          <p className="text-gray-300 mb-6">请切换到 Sepolia 测试网</p>
+          <h2 className="text-2xl font-bold text-white mb-6">{t('tokenExchange.title')}</h2>
+          <p className="text-gray-300 mb-6">{t('tokenExchange.switchNetwork')}</p>
           <div className="flex justify-center">
             <button
               onClick={handleSwitchNetwork}
               className="px-6 py-2 rounded text-white bg-transparent border border-[#00ffff] hover:border-[#ff00ff] shadow-[0_0_10px_rgba(0,255,255,0.3)] hover:shadow-[0_0_10px_rgba(255,0,255,0.3)] transition-all duration-300"
             >
-              切换到 Sepolia
+              {t('tokenExchange.switchToSepolia')}
             </button>
           </div>
         </div>
@@ -118,12 +120,12 @@ export const TokenExchange: React.FC = () => {
       
       <div className="relative z-10">
         <h2 className="text-2xl font-bold text-white mb-6">
-          {isBuying ? '购买 YD 代币' : '兑换 ETH'}
+          {isBuying ? t('tokenExchange.buyYD') : t('tokenExchange.exchangeETH')}
         </h2>
 
         <div className="flex justify-between items-center mb-6">
           <div className="text-gray-300">
-            <p>ETH 余额 <AnimatedNumber value={ethBalance} format="decimal" /></p>
+            <p>{t('tokenExchange.ethBalance')} <AnimatedNumber value={ethBalance} format="decimal" /></p>
           </div>
           <button
             onClick={() => {
@@ -135,13 +137,13 @@ export const TokenExchange: React.FC = () => {
             ⇄
           </button>
           <div className="text-gray-300">
-            <p>YD 余额 <AnimatedNumber value={parseInt(ydBalance as string, 10)} format="integer" /></p>
+            <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={parseInt(ydBalance as string, 10)} format="integer" /></p>
           </div>
         </div>
 
         <div className="flex items-center justify-between mb-6">
           <div className="flex-1 flex items-center">
-            <label className="block text-gray-300 whitespace-nowrap">{isBuying ? 'ETH 数量' : 'YD 数量'}</label>
+            <label className="block text-gray-300 whitespace-nowrap">{isBuying ? t('tokenExchange.ethAmount') : t('tokenExchange.ydAmount')}</label>
             <div className="relative flex items-center">
               <input
                 type="number"
@@ -169,7 +171,7 @@ export const TokenExchange: React.FC = () => {
           </div>
           <div className="flex-1 text-right">
             <p className="text-[#00ffff] group-hover:text-[#ff00ff] transition-colors duration-300">
-              预计获得: {amount ? (isBuying ? (Number(amount) * 1000).toFixed(0) : (Number(amount) / 1000).toFixed(3)) : '0'} {isBuying ? 'YD' : 'ETH'}
+              {t('tokenExchange.estimated')}: {amount ? (isBuying ? (Number(amount) * 1000).toFixed(0) : (Number(amount) / 1000).toFixed(3)) : '0'} {isBuying ? 'YD' : 'ETH'}
             </p>
           </div>
         </div>
@@ -195,7 +197,7 @@ export const TokenExchange: React.FC = () => {
           >
             <div className="absolute inset-0 rounded-xl transition-all duration-300 group-hover:shadow-[0_0_10px_rgba(255,0,255,0.3)] shadow-[0_0_10px_rgba(0,255,255,0.3)]"></div>
             <span className="relative z-10">
-              {isPending ? '确认交易...' : isConfirming ? '处理中...' : '确认'}
+              {isPending ? t('tokenExchange.confirming') : isConfirming ? t('tokenExchange.processing') : t('tokenExchange.confirm')}
             </span>
           </button>
         </div>
