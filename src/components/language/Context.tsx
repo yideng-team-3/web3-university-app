@@ -30,7 +30,7 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     }
 
     // 默认语言
-    return "zh";
+    return "en";
   };
 
   const [language, setLanguage] = useState<Language>(getInitialLanguage());
