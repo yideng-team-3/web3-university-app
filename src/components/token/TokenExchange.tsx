@@ -137,7 +137,7 @@ export const TokenExchange: React.FC = () => {
             ⇄
           </button>
           <div className="text-gray-300">
-            <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={parseInt(ydBalance as string, 10)} format="integer" /></p>
+            <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0} format="integer" /></p>
           </div>
         </div>
 
