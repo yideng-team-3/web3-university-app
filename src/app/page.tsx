@@ -15,14 +15,16 @@ const HomePage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="flex flex-col justify-between h-full">
-              <div>
+              <div className="flex-1 flex flex-col items-center justify-center">
                 <h1
-                  className="cyberpunk-title text-5xl font-bold mb-6 mt-4"
+                  className="cyberpunk-title text-6xl font-bold mb-4 "
                   data-text={t('hero.welcome')}
                 >
                   {t('hero.welcome')}
                 </h1>
-                <p className="cyberpunk-glow text-lg md:text-xl mb-8 text-neon-blue">{t('hero.subtitle')}</p>
+                <p className="cyberpunk-glow text-lg md:text-4xl mb-8 text-neon-blue">
+                  {t('hero.subtitle')}
+                </p>
               </div>
               <TokenExchange />
             </div>
