@@ -88,7 +88,7 @@ AnimatedNumber.displayName = 'AnimatedNumber';
 
 // 提取NeonCard组件
 const NeonCard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="relative p-6 rounded-xl bg-transparent border border-[#00ffff] shadow-lg transition-all duration-300 hover:border-[#ff00ff] group w-full mb-4">
+  <div className="relative p-6 rounded-xl bg-transparent border border-[#00ffff] shadow-lg transition-all duration-300 hover:border-[#ff00ff] group w-full mb-6">
     <div className="absolute inset-0 rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.3)]"></div>
     <div className="relative z-10">{children}</div>
   </div>
