@@ -4,6 +4,7 @@ import React from 'react';
 import { useLanguage } from '@components/language/Context';
 import CourseSection from '@/components/courses/CourseSection';
 import Link from 'next/link';
+import { TokenExchange } from '@components/token/TokenExchange';
 
 const HomePage = () => {
   const { t } = useLanguage();
@@ -39,6 +40,7 @@ const HomePage = () => {
               </div>
             </div>
           </div>
+          <TokenExchange />
         </div>
 
         {/* Diagonal divider */}
