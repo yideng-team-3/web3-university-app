@@ -253,16 +253,21 @@ export const TokenExchange: React.FC = () => {
           </p>
         </div>
         <button
-          onClick={handleToggleMode}
+          onClick={() => {
+            setIsBuying(!isBuying);
+            setAmount('');
+          }}
           className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-4xl group-hover:text-[#ff00ff] "
-          aria-label={isBuying ? t('tokenExchange.switchToSell') : t('tokenExchange.switchToBuy')}
         >
           ⇄
         </button>
         <div className="text-gray-300 text-2xl">
           <p>
             {t('tokenExchange.ydBalance')}{' '}
-            <AnimatedNumber value={getSafeYdBalance(ydBalance)} format="integer" />
+            <AnimatedNumber
+              value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0}
+              format="integer"
+            />
           </p>
         </div>
       </div>
