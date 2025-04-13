@@ -26575,7 +26575,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-03-31T14:23:49.312Z",
+  "updatedAt": "2025-04-13T01:47:13.502Z",
   "devdoc": {
     "details": "易登课程证书NFT合约，用于发放课程完成证书 实现了ERC721标准和访问控制功能",
     "events": {

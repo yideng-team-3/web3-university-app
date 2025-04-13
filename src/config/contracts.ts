@@ -3,6 +3,8 @@ export const CONTRACT_ADDRESSES = {
   // Sepolia 测试网
   SEPOLIA: {
     YIDENG_TOKEN: '0x41cb388B29EfC443d5aC1dD511B186249bD0fe45', // 需要替换为实际部署的合约地址
+    COURSE_MARKET: '0xFFb0902206Ea061C5a83aeAD9EaD815d53EaC53A', // 课程合约
+    DEPOSIT_CONTRACT: '', // 
   },
   // 主网
   MAINNET: {

@@ -5,6 +5,7 @@ import { Web3Providers } from '@components/wallet/Providers';
 import './globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import MainLayout from '@/components/common/MainLayout';
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: 'Web3 University',
@@ -22,7 +23,8 @@ export default function RootLayout({
         <LanguageProvider>
           <Web3Providers>
             <MainLayout>{children}</MainLayout>
-          </Web3Providers>
+            </Web3Providers>
+            <Toaster />
         </LanguageProvider>
       </body>
     </html>

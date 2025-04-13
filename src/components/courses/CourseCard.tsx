@@ -1,9 +1,46 @@
-export default function CourseCard(props: { item: number }) {
+import { useMemo } from 'react';
+import { Course } from '@/types/courses';
+import { useAtom } from 'jotai';
+import { purchaseCourseAction,updateCourseAction } from '@/stores/courseStore';
+import { useCourseContract } from '@/hooks/useCourseContract';
+import { toast } from "sonner"
+
+
+export default function CourseCard(props: { item: Course }) {
   const { item } = props;
+  const [,purchaseCourseWeb2] = useAtom(purchaseCourseAction);
+  const [,updateCourse] = useAtom(updateCourseAction);
+  const { purchaseCourse: purchaseCourseWeb3,getAllCourses,isLoading } = useCourseContract();
+
+  const handlePurchase = async (web2CourseId: string) => {
+    try {
+      // 乐观更新
+      purchaseCourseWeb2(web2CourseId);
+      const res = await purchaseCourseWeb3(web2CourseId);
+      // 乐观更新
+      toast.success('shop success');
+      // 刷新课程列表
+      getAllCourses();
+    } catch (error) {
+      toast.error('shop failed');
+      // 回滚
+      updateCourse(web2CourseId, { ...item, isPurchased: false });
+    }
+  };
+
+  const buttonText = useMemo(() => {
+    if (isLoading) {
+      return 'loading...';
+    }
+    if (item.isPurchased) {
+      return 'purchased';
+    }
+    return 'shop';
+  }, [item.isPurchased, isLoading]);
 
   return (
     <div
-      key={item}
+      key={item.web2CourseId}
       className="cyberpunk-card rounded-lg overflow-hidden transition-transform hover:translate-y-[-4px]"
     >
       <div className="h-48 bg-indigo-900 relative overflow-hidden">
@@ -30,13 +67,18 @@ export default function CourseCard(props: { item: number }) {
       </div>
 
       <div className="p-5">
-        <h3 className="text-xl font-semibold text-neon-blue mb-2">区块链高级开发课程 {item}</h3>
+        <h3 className="text-xl font-semibold text-neon-blue mb-2">{item.name}</h3>
         <p className="text-gray-400 mb-4">
-          掌握智能合约开发、DeFi协议架构和安全审计技能，成为区块链专业开发者。
+            {item.description}
         </p>
         <div className="flex justify-between items-center">
-          <span className="text-neon-green font-semibold">¥{1999 + item * 1000}</span>
-          <button className="cyberpunk-button px-3 py-1 text-sm rounded">立即学习</button>
+          <span className="text-neon-green font-semibold">YD{item.price}</span>
+          <button className={`cyberpunk-button px-3 py-1 text-sm rounded ${item.isPurchased ? 'opacity-50 cursor-not-allowed' : ''}`} 
+          onClick={() => handlePurchase(item.web2CourseId)} 
+          disabled={ isLoading || item.isPurchased}
+          >
+            {buttonText}
+          </button>
         </div>
       </div>
     </div>

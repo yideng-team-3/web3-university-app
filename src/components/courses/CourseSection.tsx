@@ -1,7 +1,9 @@
 import React from 'react';
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useLanguage } from '@/components/language/Context';
 import CourseCard from '@/components/courses/CourseCard';
+import { coursesAtom} from '@/stores/courseStore';
 
 interface CourseSectionProps {
   className?: string;
@@ -9,6 +11,9 @@ interface CourseSectionProps {
 
 const CourseSection: React.FC<CourseSectionProps> = () => {
   const { t } = useLanguage();
+  const [courses] = useAtom(coursesAtom);
+
+  
 
   return (
     <section className="bg-darker-bg relative py-12">
@@ -19,18 +24,11 @@ const CourseSection: React.FC<CourseSectionProps> = () => {
         >
           {t('courses.title')}
         </h2>
-
         {/* 课程卡片示例 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[1, 2, 3].map(item => (
-            <CourseCard key={item} item={item}></CourseCard>
+          {courses.map(item => (
+            <CourseCard key={item.web2CourseId} item={item}></CourseCard>
           ))}
-        </div>
-
-        <div className="text-center mt-8">
-          <Link href="/courses" className="cyberpunk-button px-6 py-3 rounded-md inline-block">
-            查看全部课程
-          </Link>
         </div>
       </div>
     </section>
