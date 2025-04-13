@@ -71,6 +71,7 @@ export default function CountUp({
                 clearTimeout(durationTimeoutId);
             };
         }
+        return undefined;
     }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
 
     // Update text content with formatted number on spring value change

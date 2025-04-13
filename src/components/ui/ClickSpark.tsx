@@ -20,6 +20,9 @@ interface Spark {
   startTime: number;
 }
 
+// Define Timeout type if NodeJS namespace is not available
+type TimeoutId = ReturnType<typeof setTimeout>;
+
 const ClickSpark: React.FC<ClickSparkProps> = ({
   sparkColor = "#fff",
   sparkSize = 10,
@@ -28,7 +31,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   duration = 400,
   easing = "ease-out",
   extraScale = 1.0,
-    children
+  children
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]); // Stores spark data
@@ -36,12 +39,12 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
 
     const parent = canvas.parentElement;
-    if (!parent) return;
+    if (!parent) return undefined;
 
-    let resizeTimeout : NodeJS.Timeout | null;
+    let resizeTimeout: TimeoutId | undefined;
 
     const resizeCanvas = () => {
       const { width, height } = parent.getBoundingClientRect();
@@ -52,7 +55,9 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     };
 
     const handleResize = () => {
-      clearTimeout(resizeTimeout);
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
       resizeTimeout = setTimeout(resizeCanvas, 100); // Debounce by 100ms
     };
 
@@ -66,32 +71,34 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     // Cleanup
     return () => {
       ro.disconnect();
-      clearTimeout(resizeTimeout);
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
     };
   }, []);
 
 
   const easeFunc = useCallback(
-      (t: number) => {
-        switch (easing) {
-          case "linear":
-            return t;
-          case "ease-in":
-            return t * t;
-          case "ease-in-out":
-            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-          default:
-            return t * (2 - t);
-        }
-      },
-      [easing]
+    (t: number) => {
+      switch (easing) {
+        case "linear":
+          return t;
+        case "ease-in":
+          return t * t;
+        case "ease-in-out":
+          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        default:
+          return t * (2 - t);
+      }
+    },
+    [easing]
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) return undefined;
 
     let animationId: number;
 
@@ -99,7 +106,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
       if (!startTimeRef.current) {
         startTimeRef.current = timestamp; // store initial time
       }
-      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       sparksRef.current = sparksRef.current.filter((spark: Spark) => {
         const elapsed = timestamp - spark.startTime;
@@ -135,15 +142,15 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     };
 
     animationId = requestAnimationFrame(draw);
-    // @ts-check
+    
     return () => {
       cancelAnimationFrame(animationId);
     };
   }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
 
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -157,20 +164,21 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     }));
 
     sparksRef.current.push(...newSparks);
+    return undefined;
   };
 
-    return (
-        <div
-          className="relative w-full h-full"
-          onClick={handleClick}
-        >
-            <canvas
-                ref={canvasRef}
-                className="absolute inset-0 pointer-events-none"
-            />
-            {children}
-        </div>
-    );
+  return (
+    <div
+      className="relative w-full h-full"
+      onClick={handleClick}
+    >
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 pointer-events-none"
+      />
+      {children}
+    </div>
+  );
 };
 
 export default ClickSpark;
