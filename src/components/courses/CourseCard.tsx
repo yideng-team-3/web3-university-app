@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { purchaseCourseAction,updateCourseAction } from '@/stores/courseStore';
 import { useCourseContract } from '@/hooks/useCourseContract';
 import { toast } from "sonner"
-
+import ClickSpark from '@/components/ui/ClickSpark';
 
 export default function CourseCard(props: { item: Course }) {
   const { item } = props;
@@ -30,7 +30,7 @@ export default function CourseCard(props: { item: Course }) {
 
   const buttonText = useMemo(() => {
     if (isLoading) {
-      return 'loading...';
+      return 'shop';
     }
     if (item.isPurchased) {
       return 'purchased';
@@ -77,7 +77,15 @@ export default function CourseCard(props: { item: Course }) {
           onClick={() => handlePurchase(item.web2CourseId)} 
           disabled={ isLoading || item.isPurchased}
           >
+            <ClickSpark
+            sparkColor='#fff'
+            sparkSize={10}
+            sparkRadius={15}
+            sparkCount={8}
+            duration={400}
+          >
             {buttonText}
+            </ClickSpark>
           </button>
         </div>
       </div>

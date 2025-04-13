@@ -4,6 +4,7 @@ import React from 'react';
 import { useLanguage } from '@components/language/Context';
 import CourseSection from '@/components/courses/CourseSection';
 import { TokenExchange } from '@components/token/TokenExchange';
+import CountUp from '@/components/ui/CountUp';
 
 const HomePage = () => {
   const { t } = useLanguage();
@@ -51,19 +52,59 @@ const HomePage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-pink mb-2 cyberpunk-glow">5000+</div>
+              <div className="text-4xl font-bold text-neon-pink mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={5000}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                +
+              </div>
               <div className="text-gray-400">{t('stats.students')}</div>
             </div>
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-blue mb-2 cyberpunk-glow">50+</div>
+              <div className="text-4xl font-bold text-neon-blue mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={50}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                +
+              </div>
               <div className="text-gray-400">{t('stats.courses')}</div>
             </div>
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-purple mb-2 cyberpunk-glow">30+</div>
+              <div className="text-4xl font-bold text-neon-purple mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={30}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                +
+              </div>
               <div className="text-gray-400">{t('stats.instructors')}</div>
             </div>
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-green mb-2 cyberpunk-glow">95%</div>
+              <div className="text-4xl font-bold text-neon-green mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={95}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                %
+              </div>
               <div className="text-gray-400">{t('stats.employmentRate')}</div>
             </div>
           </div>
@@ -188,7 +229,7 @@ const HomePage = () => {
       </section>
 
       {/* 合作伙伴 */}
-      <section className="bg-dark-bg py-16 border-t border-neon-blue border-opacity-20">
+      {/* <section className="bg-dark-bg py-16 border-t border-neon-blue border-opacity-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="cyberpunk-title text-3xl font-bold mb-4" data-text={t('partners.title')}>
@@ -205,7 +246,7 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </section>
   );
 };
