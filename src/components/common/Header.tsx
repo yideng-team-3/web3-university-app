@@ -70,7 +70,7 @@ const Header = () => {
                     : 'text-gray-400 border-transparent hover:text-indigo-600'
                 }`}
               >
-                {t('nav.home') || '首页'}
+                {t('nav.home') || 'home'}
               </Link>
               <Link 
                 href="/knowledge"
@@ -146,7 +146,7 @@ const Header = () => {
                   : 'text-gray-400 hover:bg-dark-bg hover:text-neon-pink'
               }`}
             >
-              {t('nav.home') || '首页'}
+              {t('nav.home') || 'home'}
             </Link>
             <Link 
               href="/knowledge"

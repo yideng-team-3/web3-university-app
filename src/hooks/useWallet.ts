@@ -1,23 +1,23 @@
-import { useCallback, useEffect } from 'react';
-import { hooks, metaMask } from '@connectors/metaMask';
-
-const { useChainId, useAccounts, useIsActive, useProvider } = hooks;
+import { useCallback } from 'react';
+import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 
 export function useWallet() {
-  const chainId = useChainId();
-  const accounts = useAccounts();
-  const isActive = useIsActive();
-  const provider = useProvider();
+  const { address, chainId, isConnected } = useAccount();
+  const { connectAsync, connectors } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const { signMessageAsync } = useSignMessage();
+  const publicClient = usePublicClient();
 
   // 获取后端生成的nonce
-  const fetchNonce = async (address: string): Promise<Record<string, unknown>> => {
+  const fetchNonce = async (walletAddress: string): Promise<Record<string, unknown>> => {
     try {
       const response = await fetch(`http://localhost:3001/auth/nonce`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ walletAddress: address }),
+        body: JSON.stringify({ walletAddress }),
       });
       if (!response.ok) {
         throw new Error('获取nonce失败');
@@ -32,7 +32,7 @@ export function useWallet() {
 
   // 验证签名登录
   const verifySignature = async (
-    address: string,
+    walletAddress: string,
     signature: string,
     nonce: string,
   ): Promise<{ accesstoken: string; user: Record<string, unknown> }> => {
@@ -42,7 +42,7 @@ export function useWallet() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ walletAddress: address, signature, nonce }),
+        body: JSON.stringify({ walletAddress, signature, nonce }),
       });
 
       if (!response.ok) {
@@ -57,11 +57,10 @@ export function useWallet() {
   };
 
   const checkLoginStatus = async (): Promise<boolean> => {
-    if (!isActive || !accounts?.[0] || !provider) {
+    if (!isConnected || !address) {
       throw new Error('钱包未连接');
     }
     try {
-      const address = accounts[0];
       const response = await fetch(
         `http://localhost:3001/auth/check-login-status?walletAddress=${address}`,
       );
@@ -85,19 +84,17 @@ export function useWallet() {
 
   // 签名登录
   const signIn = async (): Promise<boolean> => {
-    if (!isActive || !accounts?.[0] || !provider) {
+    if (!isConnected || !address) {
       throw new Error('钱包未连接');
     }
 
     try {
-      const address = accounts[0];
       const { nonce, signMessage } = await fetchNonce(address);
 
-      // 创建要签名的消息
-      // const message = `请签名以登录 Web3 University\n\nNonce: ${nonce}`;
-
       // 请求用户签名
-      const signature = await provider.getSigner().signMessage(signMessage as string);
+      const signature = await signMessageAsync({
+        message: signMessage as string,
+      });
 
       // 验证签名
       const { accesstoken, user } = await verifySignature(address, signature, nonce as string);
@@ -118,98 +115,43 @@ export function useWallet() {
     localStorage.removeItem('auth_token');
   };
 
-  useEffect(() => {
-    void metaMask.connectEagerly().catch(() => {
-      console.debug('Failed to connect eagerly to metamask');
-    });
-  }, []);
-
-  // useEffect(() => {
-  //   if (isActive) {
-  //     // 连接成功后，验证签名
-  //     checkLoginStatus().then((isLoggedIn) => {
-  //       if (!isLoggedIn) {
-  //         console.log('用户未登录');
-  //         // 这里可以调用 signIn() 方法进行登录
-  //         signIn();
-  //       }
-  //     });
-  //   }
-  // }, [isActive]);
-
   const formatAddress = useCallback(
-    (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`,
+    (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`,
     [],
   );
 
   const connect = async () => {
-    const resetWalletState = async () => {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { ethereum } = window as any;
-
-        // 先尝试直接处理掉待处理的请求
-        if (ethereum?.request) {
-          try {
-            // 直接请求账户，这会清除之前的待处理请求
-            await ethereum.request({
-              method: 'wallet_requestPermissions',
-              params: [{ eth_accounts: {} }],
-            });
-          } catch (permError) {
-            console.debug('Permission request failed:', permError);
-          }
-        }
-
-        // 清理所有监听器
-        if (provider?.removeAllListeners) {
-          provider.removeAllListeners();
-        }
-
-        if (ethereum?.removeAllListeners) {
-          ethereum.removeAllListeners('connect');
-          ethereum.removeAllListeners('accountsChanged');
-          ethereum.removeAllListeners('chainChanged');
-          ethereum.removeAllListeners('disconnect');
-        }
-        // 给 MetaMask 一点时间处理完所有请求
-        await new Promise(resolve => setTimeout(resolve, 100));
-      } catch (error) {
-        console.debug('Reset state failed:', error);
+    try {
+      // 查找 MetaMask 连接器
+      const metaMaskConnector = connectors.find(c => c.id === 'metaMask');
+      
+      if (!metaMaskConnector) {
+        throw new Error('找不到 MetaMask 连接器');
       }
-    };
-
-    const tryConnect = async () => {
-      try {
-        await metaMask.activate();
-      } catch (err: unknown) {
-        console.debug('MetaMask connection attempt failed:', (err as Error)?.message);
-
-        if ((err as Error)?.message.includes('Already processing eth_requestAccounts')) {
-          await resetWalletState();
-        }
-        throw err;
-      }
-    };
-
-    return tryConnect();
+      
+      await connectAsync({ connector: metaMaskConnector });
+      return true;
+    } catch (error) {
+      console.error('Connection error:', error);
+      throw error;
+    }
   };
 
-  const disconnect = () => {
-    if (metaMask?.deactivate) {
-      void metaMask.deactivate();
-    } else {
-      void metaMask.resetState();
+  const disconnect = async () => {
+    try {
+      await disconnectAsync();
+    } catch (error) {
+      console.error('Disconnect error:', error);
     }
   };
 
   return {
-    isActive,
+    isActive: isConnected,
     connect,
     disconnect,
-    account: accounts?.[0],
+    account: address,
     chainId,
-    provider,
+    provider: publicClient, // 注意：这不完全等同于 ethers provider
     formatAddress,
     signIn,
     signOut,

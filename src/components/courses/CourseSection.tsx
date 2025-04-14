@@ -1,9 +1,10 @@
+'use client';
+
 import React from 'react';
 import { useAtom } from 'jotai';
-import Link from 'next/link';
 import { useLanguage } from '@/components/language/Context';
 import CourseCard from '@/components/courses/CourseCard';
-import { coursesAtom} from '@/stores/courseStore';
+import { coursesAtom } from '@/stores/courseStore';
 
 interface CourseSectionProps {
   className?: string;
@@ -12,8 +13,6 @@ interface CourseSectionProps {
 const CourseSection: React.FC<CourseSectionProps> = () => {
   const { t } = useLanguage();
   const [courses] = useAtom(coursesAtom);
-
-  
 
   return (
     <section className="bg-darker-bg relative py-12">

@@ -94,6 +94,7 @@ export const useTokenExchange = () => {
           functionName: 'buyWithETH',
           value: parseEther(amount),
         });
+        toast.success('Redeem Successful');
       } else {
         // 检查用户代币余额
         const userBalance = ydBalance ? BigInt(ydBalance.toString()) : BigInt(0);
@@ -111,6 +112,7 @@ export const useTokenExchange = () => {
           functionName: 'sellTokens',
           args: [amountToSell],
         });
+        toast.success('Redeem Successful');
       }
     } catch (error: unknown) {
       const err = error as { message?: string };
