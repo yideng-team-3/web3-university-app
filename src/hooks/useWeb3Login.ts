@@ -1,27 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useWallet } from './useWallet';
+import { User, AuthState } from '@/types/wallet';
 
 // 定义API基础URL（可考虑移至环境配置文件中）
 // const API_BASE_URL = 'http://localhost:3001/dev';
 
 const API_BASE_URL = 'https://v9yt1y1qe6.execute-api.us-east-2.amazonaws.com/dev';
-
-// 用户接口
-interface User {
-  id: number;
-  walletAddress: string;
-  username: string;
-  avatarUrl?: string;
-  ensName?: string;
-}
-
-// 认证状态接口
-interface AuthState {
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  user: User | null;
-  error: string | null;
-}
 
 /**
  * Web3身份验证Hook - 使用useWallet做钱包连接
@@ -30,7 +14,6 @@ const useWeb3Auth = () => {
   // 使用现有的useWallet hook
   const {
     isActive,
-    isActivating,
     connect: connectWallet,
     disconnect: disconnectWallet,
     account,
@@ -274,7 +257,6 @@ const useWeb3Auth = () => {
     ...state,
     walletAddress: account || null,
     isActive,
-    isActivating,
     chainId,
     provider,
     connect,

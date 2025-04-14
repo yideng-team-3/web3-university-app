@@ -1,12 +1,11 @@
 import { useCallback, useEffect } from 'react';
 import { hooks, metaMask } from '@connectors/metaMask';
 
-const { useChainId, useAccounts, useIsActivating, useIsActive, useProvider } = hooks;
+const { useChainId, useAccounts, useIsActive, useProvider } = hooks;
 
 export function useWallet() {
   const chainId = useChainId();
   const accounts = useAccounts();
-  const isActivating = useIsActivating();
   const isActive = useIsActive();
   const provider = useProvider();
 
@@ -31,8 +30,12 @@ export function useWallet() {
     }
   };
 
-   // 验证签名登录
-   const verifySignature = async (address: string, signature: string, nonce: string): Promise<{ accesstoken: string; user: Record<string, unknown> }> => {
+  // 验证签名登录
+  const verifySignature = async (
+    address: string,
+    signature: string,
+    nonce: string,
+  ): Promise<{ accesstoken: string; user: Record<string, unknown> }> => {
     try {
       const response = await fetch('http://localhost:3001/auth/web3-login', {
         method: 'POST',
@@ -41,11 +44,11 @@ export function useWallet() {
         },
         body: JSON.stringify({ walletAddress: address, signature, nonce }),
       });
-      
+
       if (!response.ok) {
         throw new Error('验证签名失败');
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('验证签名出错:', error);
@@ -59,7 +62,9 @@ export function useWallet() {
     }
     try {
       const address = accounts[0];
-      const response = await fetch(`http://localhost:3001/auth/check-login-status?walletAddress=${  address}`);
+      const response = await fetch(
+        `http://localhost:3001/auth/check-login-status?walletAddress=${address}`,
+      );
 
       if (!response.ok) {
         throw new Error('检查登录状态失败');
@@ -69,11 +74,10 @@ export function useWallet() {
         console.log('用户已登录:', data.user);
         localStorage.setItem('auth_token', data.accesstoken);
         return true;
-      } 
-        console.log('用户未登录');
-        return false;
-      
-  } catch (error) {
+      }
+      console.log('用户未登录');
+      return false;
+    } catch (error) {
       console.error('检查登录状态出错:', error);
       throw error;
     }
@@ -88,20 +92,20 @@ export function useWallet() {
     try {
       const address = accounts[0];
       const { nonce, signMessage } = await fetchNonce(address);
-      
+
       // 创建要签名的消息
       // const message = `请签名以登录 Web3 University\n\nNonce: ${nonce}`;
-      
+
       // 请求用户签名
       const signature = await provider.getSigner().signMessage(signMessage as string);
-      
+
       // 验证签名
       const { accesstoken, user } = await verifySignature(address, signature, nonce as string);
 
       console.log('登录成功:', user);
-      
+
       localStorage.setItem('auth_token', accesstoken);
-      
+
       return true;
     } catch (error) {
       console.error('签名登录失败:', error);
@@ -133,13 +137,16 @@ export function useWallet() {
   //   }
   // }, [isActive]);
 
-  const formatAddress = useCallback((address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`, []);
+  const formatAddress = useCallback(
+    (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`,
+    [],
+  );
 
   const connect = async () => {
     const resetWalletState = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const {ethereum} = (window as any);
+        const { ethereum } = window as any;
 
         // 先尝试直接处理掉待处理的请求
         if (ethereum?.request) {
@@ -198,7 +205,6 @@ export function useWallet() {
 
   return {
     isActive,
-    isActivating,
     connect,
     disconnect,
     account: accounts?.[0],
@@ -207,6 +213,6 @@ export function useWallet() {
     formatAddress,
     signIn,
     signOut,
-    checkLoginStatus
+    checkLoginStatus,
   };
 }

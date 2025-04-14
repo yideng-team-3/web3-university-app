@@ -66,9 +66,6 @@ const MainLayout = ({ children }: LayoutProps) => {
       {/* Main content area */}
       <main className="relative">{children}</main>
 
-      {/* Cyberpunk grid overlay - moved here to avoid duplicate creation */}
-      {/* <div className="fixed inset-0 pointer-events-none z-[-1]"></div> */}
-
       {/* Footer */}
       <footer className="bg-darker-bg text-white py-12 relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
