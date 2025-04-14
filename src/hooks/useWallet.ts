@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
-import { usePublicClient } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useSignMessage, usePublicClient } from 'wagmi';
 
 export function useWallet() {
   const { address, chainId, isConnected } = useAccount();
@@ -124,11 +123,11 @@ export function useWallet() {
     try {
       // 查找 MetaMask 连接器
       const metaMaskConnector = connectors.find(c => c.id === 'metaMask');
-      
+
       if (!metaMaskConnector) {
         throw new Error('找不到 MetaMask 连接器');
       }
-      
+
       await connectAsync({ connector: metaMaskConnector });
       return true;
     } catch (error) {
