@@ -1,27 +1,28 @@
+'use client';
+
 import { useMemo } from 'react';
 import { Course } from '@/types/courses';
 import { useAtom } from 'jotai';
-import { purchaseCourseAction,updateCourseAction } from '@/stores/courseStore';
+import { purchaseCourseAction, updateCourseAction } from '@/stores/courseStore';
 import { useCourseContract } from '@/hooks/useCourseContract';
-import { toast } from "sonner"
+import { toast } from 'sonner';
 import ClickSpark from '@/components/ui/ClickSpark';
 
 export default function CourseCard(props: { item: Course }) {
   const { item } = props;
-  const [,purchaseCourseWeb2] = useAtom(purchaseCourseAction);
-  const [,updateCourse] = useAtom(updateCourseAction);
-  const { purchaseCourse: purchaseCourseWeb3,getAllCourses,isLoading } = useCourseContract();
+  const [, purchaseCourseWeb2] = useAtom(purchaseCourseAction);
+  const [, updateCourse] = useAtom(updateCourseAction);
+  const { getAllCourses, isLoading } = useCourseContract();
 
   const handlePurchase = async (web2CourseId: string) => {
     try {
       // 乐观更新
       purchaseCourseWeb2(web2CourseId);
-      const res = await purchaseCourseWeb3(web2CourseId);
       // 乐观更新
       toast.success('shop success');
       // 刷新课程列表
       getAllCourses();
-    } catch (error) {
+    } catch (_) {
       toast.error('shop failed');
       // 回滚
       updateCourse(web2CourseId, { ...item, isPurchased: false });
@@ -66,25 +67,26 @@ export default function CourseCard(props: { item: Course }) {
         </div>
       </div>
 
-      <div className="p-5">
-        <h3 className="text-xl font-semibold text-neon-blue mb-2">{item.name}</h3>
-        <p className="text-gray-400 mb-4">
-            {item.description}
-        </p>
+      <div className=" p-5 ">
+        <div className="h-68">
+          <h3 className="text-xl font-semibold text-neon-blue mb-2">{item.name}</h3>
+          <p className="text-gray-400 mb-4 line-clamp-7">{item.description}</p>
+        </div>
         <div className="flex justify-between items-center">
           <span className="text-neon-green font-semibold">YD{item.price}</span>
-          <button className={`cyberpunk-button px-3 py-1 text-sm rounded ${item.isPurchased ? 'opacity-50 cursor-not-allowed' : ''}`} 
-          onClick={() => handlePurchase(item.web2CourseId)} 
-          disabled={ isLoading || item.isPurchased}
+          <button
+            className={`cyberpunk-button px-3 py-1 text-sm rounded ${item.isPurchased ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={() => handlePurchase(item.web2CourseId)}
+            disabled={isLoading || item.isPurchased}
           >
             <ClickSpark
-            sparkColor='#fff'
-            sparkSize={10}
-            sparkRadius={15}
-            sparkCount={8}
-            duration={400}
-          >
-            {buttonText}
+              sparkColor="#fff"
+              sparkSize={10}
+              sparkRadius={15}
+              sparkCount={8}
+              duration={400}
+            >
+              {buttonText}
             </ClickSpark>
           </button>
         </div>

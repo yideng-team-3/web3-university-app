@@ -128,17 +128,6 @@ const NumberInputStyles = () => (
   `}</style>
 );
 
-// 辅助函数，避免嵌套三元表达式
-const getSafeYdBalance = (ydBalance: unknown): number => {
-  // 确保处理 unknown 类型的 ydBalance
-  if (ydBalance === undefined || ydBalance === null) {
-    return 0;
-  }
-
-  const parsed = parseInt(String(ydBalance), 10);
-  return Number.isNaN(parsed) ? 0 : parsed;
-};
-
 // 获取按钮文本辅助函数
 const getButtonText = (
   isPending: boolean,
@@ -187,12 +176,6 @@ export const TokenExchange: React.FC = () => {
     handleTransaction,
   } = useTokenExchange();
 
-  // 使用useCallback优化事件处理函数
-  const handleToggleMode = useCallback(() => {
-    setIsBuying(prev => !prev);
-    setAmount('');
-  }, [setIsBuying, setAmount]);
-
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setAmount(e.target.value);
@@ -201,7 +184,6 @@ export const TokenExchange: React.FC = () => {
   );
 
   const handleConfirmClick = useCallback(() => {
-    // 移除console.log，在生产环境中不应保留调试信息
     handleTransaction();
   }, [handleTransaction]);
 
