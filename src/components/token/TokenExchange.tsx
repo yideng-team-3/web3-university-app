@@ -1,53 +1,83 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useAtom } from 'jotai';
 import { walletConnectedAtom } from '@/stores/walletStore';
 import { useTokenExchange } from '@/hooks/useTokenExchange';
 import { useLanguage } from '@/components/language/Context';
+import CountUp from '@/components/ui/CountUp';
 
-// 添加数字滚动动画组件
-const AnimatedNumber: React.FC<{ value: number | string; duration?: number; format?: 'integer' | 'decimal' }> = ({ 
-  value, 
-  duration = 1000,
-  format = 'decimal'
-}) => {
-  const [displayValue, setDisplayValue] = useState(value);
-  const [isAnimating, setIsAnimating] = useState(false);
+// 提取NeonCard组件
+const NeonCard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="relative p-6 rounded-xl bg-transparent border border-[#00ffff] shadow-lg transition-all duration-300 hover:border-[#ff00ff] group w-full mb-6">
+    <div className="absolute inset-0 rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.3)]"></div>
+    <div className="relative z-10">{children}</div>
+  </div>
+);
 
-  useEffect(() => {
-    if (value !== displayValue) {
-      setIsAnimating(true);
-      const startValue = typeof displayValue === 'number' ? displayValue : parseFloat(displayValue);
-      const endValue = typeof value === 'number' ? value : parseFloat(value);
-      const startTime = performance.now();
-      
-      const animate = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        const currentValue = startValue + (endValue - startValue) * progress;
-        setDisplayValue(format === 'integer' ? Math.floor(currentValue).toString() : currentValue.toFixed(3));
-        
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          setDisplayValue(format === 'integer' ? Math.floor(endValue).toString() : value);
-          setIsAnimating(false);
-        }
-      };
-      
-      requestAnimationFrame(animate);
+// 提取NeonButton组件
+const NeonButton: React.FC<{
+  onClick: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}> = ({ onClick, disabled = false, children }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`relative px-8 py-2 rounded-md bg-transparent border transition-all duration-300
+      ${
+        disabled
+          ? 'border-gray-600 text-gray-500 opacity-50 cursor-not-allowed'
+          : 'border-[#3d0050] text-[#ff00ff] hover:border-[#ff00ff]'
+      }`}
+  >
+    <span className="relative z-10">{children}</span>
+  </button>
+);
+
+// 移除全局样式，使用styled-jsx
+const NumberInputStyles = () => (
+  <style jsx global>{`
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
-  }, [value, duration, format]);
+    input[type='number'] {
+      -moz-appearance: textfield;
+    }
+  `}</style>
+);
 
-  return (
-    <span className={`transition-all duration-300 ${isAnimating ? 'text-[#00ffff]' : ''}`}>
-      {displayValue}
-    </span>
-  );
+// 获取按钮文本辅助函数
+const getButtonText = (
+  isPending: boolean,
+  isConfirming: boolean,
+  t: (key: string) => string,
+): string => {
+  if (isPending) {
+    return t('tokenExchange.confirming');
+  }
+  if (isConfirming) {
+    return t('tokenExchange.processing');
+  }
+  return t('tokenExchange.confirm');
 };
 
+// 计算估算值辅助函数
+const calculateEstimatedValue = (amount: string, isBuying: boolean): string => {
+  if (!amount) {
+    return '0';
+  }
+
+  const numAmount = Number(amount);
+  if (isBuying) {
+    return (numAmount * 1000).toFixed(0);
+  }
+  return (numAmount / 1000).toFixed(3);
+};
+
+// 主组件
 export const TokenExchange: React.FC = () => {
   const [walletConnected] = useAtom(walletConnectedAtom);
   const { t } = useLanguage();
@@ -64,146 +94,160 @@ export const TokenExchange: React.FC = () => {
     isConfirming,
     contractAddress,
     handleSwitchNetwork,
-    handleTransaction
+    handleTransaction,
   } = useTokenExchange();
 
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setAmount(e.target.value);
+    },
+    [setAmount],
+  );
+
+  const handleConfirmClick = useCallback(() => {
+    handleTransaction();
+  }, [handleTransaction]);
+
+  // 计算估算值
+  const estimatedValue = calculateEstimatedValue(amount, isBuying);
+
+  // 按钮是否禁用
+  const isButtonDisabled = isPending || isConfirming || !amount || !address || !contractAddress;
+
+  // 渲染未连接钱包状态
   if (!walletConnected) {
     return null;
   }
 
+  // 渲染网络不正确状态
   if (!isCorrectNetwork) {
     return (
-      <div className="relative p-8 rounded-3xl bg-transparent border border-[#00ffff] shadow-lg transition-all duration-300 hover:border-[#ff00ff] group max-w-[480px]">
-        {/* 添加发光效果 */}
-        <div className="absolute inset-0 rounded-3xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)] shadow-[0_0_20px_rgba(0,255,255,0.3)]"></div>
-        
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-6">{t('tokenExchange.title')}</h2>
-          <p className="text-gray-300 mb-6">{t('tokenExchange.switchNetwork')}</p>
-          <div className="flex justify-center">
-            <button
-              onClick={handleSwitchNetwork}
-              className="px-6 py-2 rounded text-white bg-transparent border border-[#00ffff] hover:border-[#ff00ff] shadow-[0_0_10px_rgba(0,255,255,0.3)] hover:shadow-[0_0_10px_rgba(255,0,255,0.3)] transition-all duration-300"
-            >
-              {t('tokenExchange.switchToSepolia')}
-            </button>
-          </div>
+      <NeonCard>
+        <h2 className="text-2xl font-bold text-white mb-6">{t('tokenExchange.title')}</h2>
+        <p className="text-gray-300 mb-6">{t('tokenExchange.switchNetwork')}</p>
+        <div className="flex justify-center">
+          <NeonButton onClick={handleSwitchNetwork}>
+            {t('tokenExchange.switchToSepolia')}
+          </NeonButton>
         </div>
-      </div>
+      </NeonCard>
     );
   }
 
+  // 渲染主界面
   return (
-    <div className="relative p-8 rounded-3xl bg-transparent border border-[#00ffff] shadow-lg transition-all duration-300 hover:border-[#ff00ff] group max-w-[480px]">
-      {/* 添加发光效果 */}
-      <div className="absolute inset-0 rounded-3xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)] shadow-[0_0_20px_rgba(0,255,255,0.3)]"></div>
-      
-      <div className="relative z-10">
-        <h2 className="text-2xl font-bold text-white mb-6">
-          {isBuying ? t('tokenExchange.buyYD') : t('tokenExchange.exchangeETH')}
-        </h2>
+    <NeonCard>
+      <h2 className="text-4xl font-bold text-white mb-6">
+        {isBuying ? t('tokenExchange.buyYD') : t('tokenExchange.exchangeETH')}
+      </h2>
 
-        <div className="flex justify-between items-center mb-6">
-          {isBuying ? (
-            <>
-              <div className="text-gray-300">
-                <p>{t('tokenExchange.ethBalance')} <AnimatedNumber value={ethBalance} format="decimal" /></p>
-              </div>
-              <button
-                onClick={() => {
-                  setIsBuying(!isBuying);
-                  setAmount('');
-                }}
-                className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
-              >
-                ⇄
-              </button>
-              <div className="text-gray-300">
-                <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0} format="integer" /></p>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="text-gray-300">
-                <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0} format="integer" /></p>
-              </div>
-              <button
-                onClick={() => {
-                  setIsBuying(!isBuying);
-                  setAmount('');
-                }}
-                className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
-              >
-                ⇄
-              </button>
-              <div className="text-gray-300">
-                <p>{t('tokenExchange.ethBalance')} <AnimatedNumber value={ethBalance} format="decimal" /></p>
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex-1 flex items-center">
-            <label className="block text-gray-300 whitespace-nowrap">{isBuying ? t('tokenExchange.ethAmount') : t('tokenExchange.ydAmount')}</label>
-            <div className="relative flex items-center">
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                step={isBuying ? 0.01 : 10}
-                min="0"
-                className="w-32 p-2 ml-4 rounded bg-transparent text-white border border-[#00ffff] focus:outline-none focus:border-[#ff00ff] transition-all duration-300 group-hover:border-[#ff00ff] shadow-[0_0_10px_rgba(0,255,255,0.1)] group-hover:shadow-[0_0_10px_rgba(255,0,255,0.1)]"
-                style={{
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'textfield'
-                }}
-              />
+      <div className="flex justify-between items-center mb-6">
+        {isBuying ? (
+          <>
+            <div className="text-gray-300">
+              <p>
+                {t('tokenExchange.ethBalance')}{' '}
+                <CountUp
+                  to={Number(ethBalance)}
+                  duration={1}
+                  separator=","
+                  className="text-[#00ffff]"
+                  decimalPlaces={4}
+                />
+              </p>
             </div>
-            <style jsx global>{`
-              input::-webkit-outer-spin-button,
-              input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-              }
-              input[type=number] {
-                -moz-appearance: textfield;
-              }
-            `}</style>
-          </div>
-          <div className="flex-1 text-right">
-            <p className="text-[#00ffff] group-hover:text-[#ff00ff] transition-colors duration-300">
-              {t('tokenExchange.estimated')}: {amount ? (isBuying ? (Number(amount) * 1000).toFixed(0) : (Number(amount) / 1000).toFixed(3)) : '0'} {isBuying ? 'YD' : 'ETH'}
-            </p>
-          </div>
-        </div>
+            <button
+              onClick={() => {
+                setIsBuying(!isBuying);
+                setAmount('');
+              }}
+              className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
+            >
+              ⇄
+            </button>
+            <div className="text-gray-300">
+              <p>
+                {t('tokenExchange.ydBalance')}{' '}
+                <CountUp
+                  to={ydBalance ? parseInt(ydBalance.toString(), 10) : 0}
+                  duration={1}
+                  separator=","
+                  className="text-[#00ffff]"
+                />
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="text-gray-300">
+              <p>
+                {t('tokenExchange.ydBalance')}{' '}
+                <CountUp
+                  to={ydBalance ? parseInt(ydBalance.toString(), 10) : 0}
+                  duration={1}
+                  separator=","
+                  className="text-[#00ffff]"
+                />
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setIsBuying(!isBuying);
+                setAmount('');
+              }}
+              className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
+            >
+              ⇄
+            </button>
+            <div className="text-gray-300">
+              <p>
+                {t('tokenExchange.ethBalance')}{' '}
+                <CountUp
+                  to={Number(ethBalance)}
+                  duration={1}
+                  separator=","
+                  className="text-[#00ffff]"
+                  decimalPlaces={4}
+                />
+              </p>
+            </div>
+          </>
+        )}
+      </div>
 
-        <div className="flex justify-end">
-          <button
-            onClick={() => {
-              console.log('按钮被点击', {
-                isPending,
-                isConfirming,
-                amount,
-                address,
-                contractAddress
-              });
-              handleTransaction();
-            }}
-            disabled={isPending || isConfirming || !amount || !address || !contractAddress}
-            className={`relative px-6 py-2 rounded-xl text-white transition-all duration-300
-              ${(isPending || isConfirming || !amount || !address || !contractAddress)
-                ? 'bg-transparent border border-gray-600 opacity-50 cursor-not-allowed'
-                : 'bg-transparent border border-[#00ffff] hover:border-[#ff00ff] group-hover:border-[#ff00ff]'
-              }`}
-          >
-            <div className="absolute inset-0 rounded-xl transition-all duration-300 group-hover:shadow-[0_0_10px_rgba(255,0,255,0.3)] shadow-[0_0_10px_rgba(0,255,255,0.3)]"></div>
-            <span className="relative z-10">
-              {isPending ? t('tokenExchange.confirming') : isConfirming ? t('tokenExchange.processing') : t('tokenExchange.confirm')}
-            </span>
-          </button>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex-1 flex items-center">
+          <label htmlFor="amount-input" className="block text-gray-300 whitespace-nowrap text-2xl">
+            {isBuying ? t('tokenExchange.ethAmount') : t('tokenExchange.ydAmount')}
+          </label>
+          <div className="relative flex items-center">
+            <input
+              id="amount-input"
+              type="number"
+              value={amount}
+              onChange={handleInputChange}
+              step={isBuying ? 0.01 : 10}
+              min="0"
+              className="p-2 ml-4 rounded bg-transparent text-white border border-[#00ffff] focus:outline-none focus:border-[#ff00ff] transition-all duration-300 group-hover:border-[#ff00ff] shadow-[0_0_10px_rgba(0,255,255,0.1)] group-hover:shadow-[0_0_10px_rgba(255,0,255,0.1)]"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield',
+              }}
+              aria-label={isBuying ? t('tokenExchange.ethAmount') : t('tokenExchange.ydAmount')}
+            />
+          </div>
+          <NumberInputStyles />
         </div>
       </div>
-    </div>
+
+      <div className="flex justify-between items-center">
+        <p className="text-[#00ffff] group-hover:text-[#ff00ff] transition-colors duration-300">
+          {t('tokenExchange.estimated')}: {estimatedValue} {isBuying ? 'YD' : 'ETH'}
+        </p>
+        <NeonButton onClick={handleConfirmClick} disabled={isButtonDisabled}>
+          {getButtonText(isPending, isConfirming, t)}
+        </NeonButton>
+      </div>
+    </NeonCard>
   );
-}; 
+};

@@ -74,6 +74,15 @@ contract CourseMarket is Ownable {
         string name
     );
 
+    event CourseUpdated(
+        uint256 indexed courseId,
+        string oldWeb2CourseId,
+        string newWeb2CourseId,
+        string name,
+        uint256 price,
+        bool isActive
+    );
+
     /**
      * @dev 构造函数
      * @param _tokenAddress YiDeng代币合约地址
@@ -115,6 +124,47 @@ contract CourseMarket is Ownable {
         web2ToCourseId[web2CourseId] = courseCount;
 
         emit CourseAdded(courseCount, web2CourseId, name);
+    }
+
+    /**
+     * @dev 修改课程
+     * 只有合约所有者可以调用此函数
+     * @param oldWeb2CourseId 旧的Web2平台的课程ID
+     * @param newWeb2CourseId 新的Web2平台的课程ID
+     * @param name 课程名称
+     * @param price 课程价格(YD代币)
+     */
+    function updateCourse(
+        string memory oldWeb2CourseId,
+        string memory newWeb2CourseId,
+        string memory name,
+        uint256 price,
+        bool isActive
+    ) external onlyOwner {
+        require(
+            bytes(oldWeb2CourseId).length > 0,
+            "Old Web2 course ID cannot be empty"
+        );
+        require(
+            bytes(newWeb2CourseId).length > 0,
+            "New Web2 course ID cannot be empty"
+        );
+
+        uint256 courseId = web2ToCourseId[oldWeb2CourseId];
+        require(courseId > 0, "Course does not exist");
+
+        courses[courseId] = Course({
+            web2CourseId: newWeb2CourseId,
+            name: name,
+            price: price,
+            isActive: isActive,
+            creator: msg.sender
+        });
+
+        web2ToCourseId[oldWeb2CourseId] = 0;
+        web2ToCourseId[newWeb2CourseId] = courseId;
+
+        emit CourseUpdated(courseId, oldWeb2CourseId, newWeb2CourseId, name, price, isActive);
     }
 
     /**

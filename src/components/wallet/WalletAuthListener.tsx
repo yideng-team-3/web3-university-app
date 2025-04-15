@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useChainId, useConnect } from 'wagmi';
 import { toast } from 'react-hot-toast';
 import { useAtom } from 'jotai';
 import { isAuthenticatedAtom, walletAddressAtom, syncWalletStateAtom } from '@/stores/walletStore';
 import useWeb3Auth from '@/hooks/useWeb3Login';
+import { useCourseContract } from '@/hooks/useCourseContract';
 
 const WalletAuthListener = () => {
   const { isConnected, address } = useAccount();
@@ -14,6 +15,7 @@ const WalletAuthListener = () => {
   const [isAuthenticated, setIsAuthenticated] = useAtom(isAuthenticatedAtom);
   const [storedAddress] = useAtom(walletAddressAtom);
   const [, syncWalletState] = useAtom(syncWalletStateAtom);
+  const {getUserCourses } = useCourseContract();
 
   // 在监听钱包状态变化的 useEffect 中添加防抖处理
   useEffect(() => {
@@ -22,6 +24,8 @@ const WalletAuthListener = () => {
 
     if (isConnected && address) {
       console.log('【钱包监听器】检测到钱包已连接:', address);
+      // 获取用户课程
+      getUserCourses(address);
       // 使用防抖处理避免页面切换时出现状态抖动
       if (syncTimer) clearTimeout(syncTimer);
       syncTimer = setTimeout(() => {

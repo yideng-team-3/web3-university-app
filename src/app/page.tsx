@@ -3,8 +3,8 @@
 import React from 'react';
 import { useLanguage } from '@components/language/Context';
 import CourseSection from '@/components/courses/CourseSection';
-import Link from 'next/link';
 import { TokenExchange } from '@components/token/TokenExchange';
+import CountUp from '@/components/ui/CountUp';
 
 const HomePage = () => {
   const { t } = useLanguage();
@@ -15,44 +15,25 @@ const HomePage = () => {
       <section className="relative bg-dark-bg cyberpunk-overlay text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h1
-                className="cyberpunk-title text-4xl md:text-5xl font-bold mb-4"
-                data-text={t('hero.welcome')}
-              >
-                {t('hero.welcome')}
-              </h1>
-              <p className="cyberpunk-glow text-lg md:text-xl mb-8 text-neon-blue">
-                {t('hero.subtitle')}
-              </p>
+            <div className="flex flex-col justify-between h-full">
+              <div className="h-1/2 flex flex-col justify-center">
+                <h1 className="cyberpunk-title text-5xl font-bold mb-6 ">{t('hero.welcome')}</h1>
+                <p className="cyberpunk-glow text-lg md:text-2xl mb-4 text-neon-blue">
+                  {t('hero.subtitle')}
+                </p>
+              </div>
+              <TokenExchange />
             </div>
             <div className="hidden md:block">
-              <div className="cyberpunk-border p-4 rounded-lg">
-                <div className="bg-darker-bg p-6 rounded-lg text-center">
-                  <h3 className="text-2xl font-bold text-neon-blue mb-3">Web3 学习平台</h3>
-                  <p className="text-gray-400 mb-4">探索区块链和Web3领域的最新知识与技术</p>
-                  <div className="flex justify-center">
-                    <Link href="/market" className="cyberpunk-button px-4 py-2 rounded-md">
-                      访问模拟市场
-                    </Link>
-                  </div>
-                </div>
+              <div className="rounded-lg overflow-hidden">
+                <img
+                  className="opacity-45"
+                  src="/images/banner-homepage.jpeg"
+                  alt="banner-homepage"
+                />
               </div>
             </div>
           </div>
-          <TokenExchange />
-        </div>
-
-        {/* Diagonal divider */}
-        <div className="h-16 relative overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-bg) 50%, var(--darker-bg) 50%, var(--darker-bg) 100%)',
-              boxShadow: '0 -10px 20px rgba(5, 217, 232, 0.1)',
-            }}
-          ></div>
         </div>
       </section>
 
@@ -71,19 +52,59 @@ const HomePage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-pink mb-2 cyberpunk-glow">5000+</div>
+              <div className="text-4xl font-bold text-neon-pink mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={5000}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                +
+              </div>
               <div className="text-gray-400">{t('stats.students')}</div>
             </div>
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-blue mb-2 cyberpunk-glow">50+</div>
+              <div className="text-4xl font-bold text-neon-blue mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={50}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                +
+              </div>
               <div className="text-gray-400">{t('stats.courses')}</div>
             </div>
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-purple mb-2 cyberpunk-glow">30+</div>
+              <div className="text-4xl font-bold text-neon-purple mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={30}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                +
+              </div>
               <div className="text-gray-400">{t('stats.instructors')}</div>
             </div>
             <div className="cyberpunk-card p-6 rounded-lg">
-              <div className="text-4xl font-bold text-neon-green mb-2 cyberpunk-glow">95%</div>
+              <div className="text-4xl font-bold text-neon-green mb-2 cyberpunk-glow">
+                <CountUp
+                  from={0}
+                  to={95}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+                %
+              </div>
               <div className="text-gray-400">{t('stats.employmentRate')}</div>
             </div>
           </div>
@@ -208,7 +229,7 @@ const HomePage = () => {
       </section>
 
       {/* 合作伙伴 */}
-      <section className="bg-dark-bg py-16 border-t border-neon-blue border-opacity-20">
+      {/* <section className="bg-dark-bg py-16 border-t border-neon-blue border-opacity-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="cyberpunk-title text-3xl font-bold mb-4" data-text={t('partners.title')}>
@@ -225,7 +246,7 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </section>
   );
 };

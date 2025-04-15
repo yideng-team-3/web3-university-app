@@ -36,6 +36,7 @@ export interface CourseMarketInterface extends Interface {
       | "web2ToCourseId"
       | "yiDengToken"
       | "addCourse"
+      | "updateCourse"
       | "purchaseCourse"
       | "verifyCourseCompletion"
       | "batchVerifyCourseCompletion"
@@ -47,6 +48,7 @@ export interface CourseMarketInterface extends Interface {
       | "CourseAdded"
       | "CourseCompleted"
       | "CoursePurchased"
+      | "CourseUpdated"
       | "OwnershipTransferred"
   ): EventFragment;
 
@@ -86,6 +88,10 @@ export interface CourseMarketInterface extends Interface {
   encodeFunctionData(
     functionFragment: "addCourse",
     values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCourse",
+    values: [string, string, string, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "purchaseCourse",
@@ -135,6 +141,10 @@ export interface CourseMarketInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "addCourse", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCourse",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "purchaseCourse",
     data: BytesLike
@@ -209,6 +219,37 @@ export namespace CoursePurchasedEvent {
     buyer: string;
     courseId: bigint;
     web2CourseId: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace CourseUpdatedEvent {
+  export type InputTuple = [
+    courseId: BigNumberish,
+    oldWeb2CourseId: string,
+    newWeb2CourseId: string,
+    name: string,
+    price: BigNumberish,
+    isActive: boolean
+  ];
+  export type OutputTuple = [
+    courseId: bigint,
+    oldWeb2CourseId: string,
+    newWeb2CourseId: string,
+    name: string,
+    price: bigint,
+    isActive: boolean
+  ];
+  export interface OutputObject {
+    courseId: bigint;
+    oldWeb2CourseId: string;
+    newWeb2CourseId: string;
+    name: string;
+    price: bigint;
+    isActive: boolean;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -332,6 +373,25 @@ export interface CourseMarket extends BaseContract {
   >;
 
   /**
+   * 修改课程 只有合约所有者可以调用此函数
+   * @param name 课程名称
+   * @param newWeb2CourseId 新的Web2平台的课程ID
+   * @param oldWeb2CourseId 旧的Web2平台的课程ID
+   * @param price 课程价格(YD代币)
+   */
+  updateCourse: TypedContractMethod<
+    [
+      oldWeb2CourseId: string,
+      newWeb2CourseId: string,
+      name: string,
+      price: BigNumberish,
+      isActive: boolean
+    ],
+    [void],
+    "nonpayable"
+  >;
+
+  /**
    * 用户购买课程 用户需要先授权合约使用其YD代币
    * @param web2CourseId Web2平台的课程ID
    */
@@ -429,6 +489,19 @@ export interface CourseMarket extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "updateCourse"
+  ): TypedContractMethod<
+    [
+      oldWeb2CourseId: string,
+      newWeb2CourseId: string,
+      name: string,
+      price: BigNumberish,
+      isActive: boolean
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "purchaseCourse"
   ): TypedContractMethod<[web2CourseId: string], [void], "nonpayable">;
   getFunction(
@@ -475,6 +548,13 @@ export interface CourseMarket extends BaseContract {
     CoursePurchasedEvent.OutputObject
   >;
   getEvent(
+    key: "CourseUpdated"
+  ): TypedContractEvent<
+    CourseUpdatedEvent.InputTuple,
+    CourseUpdatedEvent.OutputTuple,
+    CourseUpdatedEvent.OutputObject
+  >;
+  getEvent(
     key: "OwnershipTransferred"
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
@@ -514,6 +594,17 @@ export interface CourseMarket extends BaseContract {
       CoursePurchasedEvent.InputTuple,
       CoursePurchasedEvent.OutputTuple,
       CoursePurchasedEvent.OutputObject
+    >;
+
+    "CourseUpdated(uint256,string,string,string,uint256,bool)": TypedContractEvent<
+      CourseUpdatedEvent.InputTuple,
+      CourseUpdatedEvent.OutputTuple,
+      CourseUpdatedEvent.OutputObject
+    >;
+    CourseUpdated: TypedContractEvent<
+      CourseUpdatedEvent.InputTuple,
+      CourseUpdatedEvent.OutputTuple,
+      CourseUpdatedEvent.OutputObject
     >;
 
     "OwnershipTransferred(address,address)": TypedContractEvent<

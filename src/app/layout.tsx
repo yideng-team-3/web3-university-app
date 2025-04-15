@@ -5,6 +5,8 @@ import { Web3Providers } from '@components/wallet/Providers';
 import './globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import MainLayout from '@/components/common/MainLayout';
+import { Toaster } from '@/components/ui/sonner';
+import { Provider as JotaiProvider } from 'jotai';
 
 export const metadata: Metadata = {
   title: 'Web3 University',
@@ -19,11 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LanguageProvider>
-          <Web3Providers>
-            <MainLayout>{children}</MainLayout>
-          </Web3Providers>
-        </LanguageProvider>
+        <JotaiProvider>
+          <LanguageProvider>
+            <Web3Providers>
+              <MainLayout>{children}</MainLayout>
+            </Web3Providers>
+            <Toaster />
+          </LanguageProvider>
+        </JotaiProvider>
       </body>
     </html>
   );

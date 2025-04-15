@@ -1,27 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useWallet } from './useWallet';
+import { User, AuthState } from '@/types/wallet';
+import { useSignMessage } from 'wagmi';
+import { getEnsName } from 'viem/ens';
 
 // 定义API基础URL（可考虑移至环境配置文件中）
 // const API_BASE_URL = 'http://localhost:3001/dev';
 
+// 定义API基础URL（可考虑移至环境配置文件中）
 const API_BASE_URL = 'https://v9yt1y1qe6.execute-api.us-east-2.amazonaws.com/dev';
-
-// 用户接口
-interface User {
-  id: number;
-  walletAddress: string;
-  username: string;
-  avatarUrl?: string;
-  ensName?: string;
-}
-
-// 认证状态接口
-interface AuthState {
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  user: User | null;
-  error: string | null;
-}
 
 /**
  * Web3身份验证Hook - 使用useWallet做钱包连接
@@ -30,14 +17,16 @@ const useWeb3Auth = () => {
   // 使用现有的useWallet hook
   const {
     isActive,
-    isActivating,
     connect: connectWallet,
     disconnect: disconnectWallet,
     account,
     chainId,
-    provider,
+    provider, // 注意：这现在是一个viem的publicClient
     formatAddress,
   } = useWallet();
+  
+  // 使用 wagmi 的 signMessage hook
+  const { signMessageAsync } = useSignMessage();
 
   const [state, setState] = useState<AuthState>({
     isLoading: false,
@@ -164,7 +153,7 @@ const useWeb3Auth = () => {
 
   // 登录
   const login = useCallback(async () => {
-    if (!isActive || !account || !provider) {
+    if (!isActive || !account) {
       const connected = await connect();
       if (!connected) return null;
     }
@@ -183,21 +172,22 @@ const useWeb3Auth = () => {
       // 1. 获取nonce
       const { nonce, signMessage } = await apiService.fetchNonce(account);
 
-      // 2. 签名消息
-      if (!provider) {
-        throw new Error('获取签名器失败');
-      }
-
-      const signature = await provider.getSigner().signMessage(signMessage);
+      // 2. 使用wagmi的signMessage签名消息
+      const signature = await signMessageAsync({ 
+        message: signMessage 
+      });
 
       // 3. 获取ENS名称(如果有)
       let ensName = null;
       try {
         if (provider && account) {
-          ensName = await provider.lookupAddress(account);
+          // 使用viem获取ENS名称
+          ensName = await getEnsName(provider, {
+            address: account as `0x${string}`
+          });
         }
       } catch (e) {
-        console.log('获取ENS名称失败');
+        console.log('获取ENS名称失败:', e);
       }
 
       // 4. 验证签名
@@ -229,7 +219,7 @@ const useWeb3Auth = () => {
 
       return null;
     }
-  }, [account, isActive, provider, connect]);
+  }, [account, isActive, provider, connect, signMessageAsync]);
 
   // 检查登录状态
   const checkLoginStatus = useCallback(async (): Promise<boolean> => {
@@ -274,7 +264,6 @@ const useWeb3Auth = () => {
     ...state,
     walletAddress: account || null,
     isActive,
-    isActivating,
     chainId,
     provider,
     connect,

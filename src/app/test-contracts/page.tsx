@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Contract } from '@ethersproject/contracts';
-import { formatUnits, parseEther } from '@ethersproject/units';
+import { formatUnits, parseEther, parseUnits } from '@ethersproject/units';
 import { Web3ReactProvider, useWeb3React, initializeConnector } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import Link from 'next/link';
 // 导入合约 ABI
 import YiDengTokenABI from '@/contracts/abis/YiDengToken.json';
 import CourseMarketABI from '@/contracts/abis/CourseMarket.json';
-
+import { CONTRACT_ADDRESSES } from '@/config/contracts';
 // 定义一个自定义类型来处理区块链错误
 interface BlockchainError extends Error {
   code?: string;
@@ -27,7 +27,7 @@ const ContractTestPage = () => {
 
   // 状态管理
   const [tokenBalance, setTokenBalance] = useState<string>('0');
-  const [ydCoin, setYdCoin] = useState<string>('0x41cb388B29EfC443d5aC1dD511B186249bD0fe45');
+  const [ydCoin, setYdCoin] = useState<string>(CONTRACT_ADDRESSES.SEPOLIA.YIDENG_TOKEN);
   const [txHash, setTxHash] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -45,9 +45,7 @@ const ContractTestPage = () => {
   const [tokenOwner, setTokenOwner] = useState<string>('');
   const [courseName, setCourseName] = useState<string>('');
   const [coursePrice, setCoursePrice] = useState<string>('100');
-  const [marketAddress, setMarketAddress] = useState<string>(
-    '0x436CbE7D8DC5593B3B7B137698a37212f4a4227a',
-  );
+  const [marketAddress, setMarketAddress] = useState<string>(CONTRACT_ADDRESSES.SEPOLIA.COURSE_MARKET);
   const [web2CourseId, setWeb2CourseId] = useState<string>('');
   const [marketCourseId, setMarketCourseId] = useState<string>('');
   const [marketCourseInfo] = useState<any>(null);
@@ -343,10 +341,15 @@ const ContractTestPage = () => {
       addLog(`准备添加课程到市场: ${courseName} (Web2 ID: ${web2CourseId})`);
 
       // 修复参数顺序和类型，确保与合约定义匹配
+      console.log('coursePrice', coursePrice);
+      console.log('web2CourseId', web2CourseId);
+      console.log('courseName', courseName);
+      console.log('coursePrice1', parseEther(coursePrice));
+      console.log('coursePrice2', parseUnits(coursePrice,0));
       const tx = await marketContract.addCourse(
         web2CourseId, // web2CourseId - 第一个参数
         courseName, // name - 第二个参数
-        parseEther(coursePrice), // price - 第三个参数，转换为wei
+        parseUnits(coursePrice,0), // 第二个参数是格式化小数
         {
           gasLimit: 300000,
         },
@@ -394,10 +397,11 @@ const ContractTestPage = () => {
 
   // 购买课程
   const purchaseCourse = async () => {
-    if (!account || !marketAddress || !provider || !web2CourseId) {
+    if (!account || !marketAddress || !provider) {
       setError('请先连接钱包并输入Web2课程ID');
       return;
     }
+    let web2CourseId = '1';
 
     setLoading(true);
     setError('');
@@ -537,10 +541,14 @@ const ContractTestPage = () => {
 
   // 检查用户是否已购买课程
   const checkUserCourse = async () => {
-    if (!provider || !marketAddress || !web2CourseId || !studentAddress) {
+    if (!provider || !marketAddress) {
       setError('请先输入市场合约地址、Web2课程ID和学生地址');
       return;
     }
+    let web2CourseId = '1';
+    let studentAddress = account;
+    console.log('web2CourseId', web2CourseId);
+    console.log('studentAddress', studentAddress);
 
     setLoading(true);
     setError('');
@@ -642,6 +650,87 @@ const ContractTestPage = () => {
       initTokenInfo();
     }
   }, [ydCoin, provider]);
+
+
+  // 1. 在状态管理部分添加新状态
+const [oldWeb2CourseId, setOldWeb2CourseId] = useState<string>('');
+const [newWeb2CourseId, setNewWeb2CourseId] = useState<string>('');
+const [courseActive, setCourseActive] = useState<boolean>(true);
+
+// 2. 添加updateCourse函数
+// 修改课程
+const updateCourse = async () => {
+  if (!account || !marketAddress || !provider || !courseName || !oldWeb2CourseId || !newWeb2CourseId) {
+    setError('请先连接钱包并填写完整的课程信息');
+    return;
+  }
+
+  setLoading(true);
+  setError('');
+
+  try {
+    const signer = provider.getSigner();
+    const marketContract = new Contract(marketAddress, CourseMarketABI.abi, signer);
+
+    // 检查是否是合约所有者
+    const owner = await marketContract.owner();
+    if (owner.toLowerCase() !== account.toLowerCase()) {
+      throw new Error('您不是合约所有者，无法修改课程');
+    }
+
+    addLog(`准备修改课程: 旧ID=${oldWeb2CourseId}, 新ID=${newWeb2CourseId}, 名称=${courseName}`);
+
+    // 执行修改课程操作
+    const tx = await marketContract.updateCourse(
+      oldWeb2CourseId,
+      newWeb2CourseId,
+      courseName,
+      parseUnits(coursePrice, 0),
+      courseActive,
+      {
+        gasLimit: 300000,
+      }
+    );
+
+    setTxHash(tx.hash);
+    addLog(`修改课程交易已发送: ${tx.hash}`);
+
+    // 等待交易确认
+    addLog('等待交易确认...');
+    const receipt = await tx.wait();
+
+    if (receipt.status === 0) {
+      throw new Error('交易执行失败，可能是合约函数调用出错');
+    }
+
+    // 尝试从事件中获取更新信息
+    const event = receipt.events?.find((e: any) => e.event === 'CourseUpdated');
+    if (event && event.args) {
+      const courseId = event.args.courseId.toString();
+      addLog(`课程修改成功，ID: ${courseId}`);
+    } else {
+      addLog('课程修改成功');
+    }
+
+    // 清空旧的课程ID输入
+    setOldWeb2CourseId('');
+    setNewWeb2CourseId('');
+  } catch (error) {
+    const err = error as BlockchainError;
+    console.error('修改课程错误:', err);
+
+    if (err.code === 'ACTION_REJECTED') {
+      setError('用户拒绝了交易');
+      addLog('用户拒绝了交易');
+    } else {
+      setError('修改课程失败');
+      addLog(`修改课程失败: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
@@ -931,6 +1020,68 @@ const ContractTestPage = () => {
                 添加课程到市场
               </button>
             </div>
+{/* 修改课程 - 表单 */}
+<div className="mt-6 p-3 border border-gray-200 rounded-md">
+  <h3 className="text-md font-medium mb-3">修改课程</h3>
+  <div className="space-y-3">
+    <div>
+      <label className="block text-xs text-gray-600 mb-1">旧的Web2课程ID</label>
+      <input
+        type="text"
+        value={oldWeb2CourseId}
+        onChange={e => setOldWeb2CourseId(e.target.value)}
+        placeholder="输入旧的Web2课程ID"
+        className="w-full p-2 text-sm border border-gray-300 rounded"
+      />
+    </div>
+    <div>
+      <label className="block text-xs text-gray-600 mb-1">新的Web2课程ID</label>
+      <input
+        type="text"
+        value={newWeb2CourseId}
+        onChange={e => setNewWeb2CourseId(e.target.value)}
+        placeholder="输入新的Web2课程ID"
+        className="w-full p-2 text-sm border border-gray-300 rounded"
+      />
+    </div>
+    <div>
+      <label className="block text-xs text-gray-600 mb-1">课程名称</label>
+      <input
+        type="text"
+        value={courseName}
+        onChange={e => setCourseName(e.target.value)}
+        placeholder="输入课程名称"
+        className="w-full p-2 text-sm border border-gray-300 rounded"
+      />
+    </div>
+    <div>
+      <label className="block text-xs text-gray-600 mb-1">课程价格 (YD代币)</label>
+      <input
+        type="number"
+        value={coursePrice}
+        onChange={e => setCoursePrice(e.target.value)}
+        min="0"
+        className="w-full p-2 text-sm border border-gray-300 rounded"
+      />
+    </div>
+    <div className="flex items-center">
+      <input
+        type="checkbox"
+        checked={courseActive}
+        onChange={e => setCourseActive(e.target.checked)}
+        className="mr-2"
+      />
+      <label className="text-xs text-gray-600">课程是否可购买</label>
+    </div>
+    <button
+      onClick={updateCourse}
+      disabled={!account || loading || !courseName || !oldWeb2CourseId || !newWeb2CourseId || !marketAddress}
+      className="w-full px-3 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 disabled:bg-gray-400 text-sm"
+    >
+      修改课程
+    </button>
+  </div>
+</div>
           </div>
 
           <div className="mb-4">
@@ -1016,10 +1167,10 @@ const ContractTestPage = () => {
             查询所有课程
           </button>
           {allCourses.length > 0 && (
-            <div className="mt-4 p-3 bg-gray-50 rounded-md">
+            <div className="mt-4 p-3 rounded-md">
               <h3 className="text-md font-medium mb-2">课程列表</h3>
               <div className="space-y-2">
-                {allCourses.map((course, index) => (
+                {allCourses.map((course, index:number) => (
                   <div key={index} className="text-sm">
                     {course.name} - {course.price} YD
                   </div>

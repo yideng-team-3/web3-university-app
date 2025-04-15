@@ -4,17 +4,12 @@ import React, { useState, useEffect } from 'react';
 import LanguageSwitcher from '@components/language/Switcher';
 import { useLanguage } from '@components/language/Context';
 import {CustomConnectButton} from '@components/wallet/CustomConnectButton';
-import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAtom } from 'jotai';
-import { walletConnectedAtom } from '@/stores/walletStore';
 
 const Header = () => {
   const { t } = useLanguage();
   const pathname = usePathname();
-  const { isConnected } = useAccount();
-  const [walletConnected] = useAtom(walletConnectedAtom);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [glitchLogo, setGlitchLogo] = useState(false);
@@ -42,9 +37,6 @@ const Header = () => {
   
   // 判断当前路径是否激活
   const isActive = (path: string) => pathname === path;
-  
-  // Use either wagmi's isConnected or our persisted walletConnected state
-  const effectivelyConnected = isConnected || walletConnected;
   
   return (
     <header className={`bg-darker-bg border-b border-neon-blue border-opacity-30 sticky top-0 z-20 transition-all duration-300 ${isScrolled ? 'shadow-lg shadow-neon-blue/10' : ''}`}>
@@ -78,7 +70,7 @@ const Header = () => {
                     : 'text-gray-400 border-transparent hover:text-indigo-600'
                 }`}
               >
-                {t('nav.home') || '首页'}
+                {t('nav.home') || 'home'}
               </Link>
               <Link 
                 href="/knowledge"
@@ -154,7 +146,7 @@ const Header = () => {
                   : 'text-gray-400 hover:bg-dark-bg hover:text-neon-pink'
               }`}
             >
-              {t('nav.home') || '首页'}
+              {t('nav.home') || 'home'}
             </Link>
             <Link 
               href="/knowledge"
