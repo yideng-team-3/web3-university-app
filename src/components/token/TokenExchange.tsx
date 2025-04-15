@@ -1,15 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { parseEther, formatEther } from 'viem';
-import { useAccount, useBalance, useWriteContract, useChainId, useWaitForTransactionReceipt, useSwitchChain, useReadContract } from 'wagmi';
-import YiDengTokenABI from '@/contracts/abis/YiDengToken.json';
-import { toast } from 'react-hot-toast';
-import { getContractAddress } from '@/config/contracts';
-import { sepolia } from 'wagmi/chains';
 import { useAtom } from 'jotai';
-import { walletConnectedAtom, chainIdAtom } from '@/stores/walletStore';
-import { CustomConnectButton } from '../wallet/CustomConnectButton';
+import { walletConnectedAtom } from '@/stores/walletStore';
 import { useTokenExchange } from '@/hooks/useTokenExchange';
 import { useLanguage } from '@/components/language/Context';
 
@@ -75,20 +68,7 @@ export const TokenExchange: React.FC = () => {
   } = useTokenExchange();
 
   if (!walletConnected) {
-    return (
-      <div className="relative p-8 rounded-3xl bg-transparent border border-[#00ffff] shadow-lg transition-all duration-300 hover:border-[#ff00ff] group max-w-[480px]">
-        {/* 添加发光效果 */}
-        <div className="absolute inset-0 rounded-3xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)] shadow-[0_0_20px_rgba(0,255,255,0.3)]"></div>
-        
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-6">{t('tokenExchange.title')}</h2>
-          <p className="text-gray-300 mb-6">{t('tokenExchange.connectWallet')}</p>
-          <div className="flex justify-center">
-            <CustomConnectButton />
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (!isCorrectNetwork) {
@@ -124,21 +104,43 @@ export const TokenExchange: React.FC = () => {
         </h2>
 
         <div className="flex justify-between items-center mb-6">
-          <div className="text-gray-300">
-            <p>{t('tokenExchange.ethBalance')} <AnimatedNumber value={ethBalance} format="decimal" /></p>
-          </div>
-          <button
-            onClick={() => {
-              setIsBuying(!isBuying);
-              setAmount('');
-            }}
-            className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
-          >
-            ⇄
-          </button>
-          <div className="text-gray-300">
-            <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0} format="integer" /></p>
-          </div>
+          {isBuying ? (
+            <>
+              <div className="text-gray-300">
+                <p>{t('tokenExchange.ethBalance')} <AnimatedNumber value={ethBalance} format="decimal" /></p>
+              </div>
+              <button
+                onClick={() => {
+                  setIsBuying(!isBuying);
+                  setAmount('');
+                }}
+                className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
+              >
+                ⇄
+              </button>
+              <div className="text-gray-300">
+                <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0} format="integer" /></p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-gray-300">
+                <p>{t('tokenExchange.ydBalance')} <AnimatedNumber value={ydBalance ? parseInt(ydBalance.toString(), 10) : 0} format="integer" /></p>
+              </div>
+              <button
+                onClick={() => {
+                  setIsBuying(!isBuying);
+                  setAmount('');
+                }}
+                className="text-[#00ffff] mx-4 hover:text-[#ff00ff] transition-all duration-300 text-2xl group-hover:text-[#ff00ff]"
+              >
+                ⇄
+              </button>
+              <div className="text-gray-300">
+                <p>{t('tokenExchange.ethBalance')} <AnimatedNumber value={ethBalance} format="decimal" /></p>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex items-center justify-between mb-6">
